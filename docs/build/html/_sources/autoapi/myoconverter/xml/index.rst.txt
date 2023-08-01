@@ -1,0 +1,34 @@
+:py:mod:`myoconverter.xml`
+==========================
+
+.. py:module:: myoconverter.xml
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   bodies/index.rst
+   constraints/index.rst
+   forces/index.rst
+   joints/index.rst
+   markers/index.rst
+   path_points/index.rst
+   path_wraps/index.rst
+   wrap_objects/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   config/index.rst
+   converter/index.rst
+   parsers/index.rst
+   utils/index.rst
+
+

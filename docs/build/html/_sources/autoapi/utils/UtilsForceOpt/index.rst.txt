@@ -1,0 +1,62 @@
+:py:mod:`utils.UtilsForceOpt`
+=============================
+
+.. py:module:: utils.UtilsForceOpt
+
+.. autoapi-nested-parse::
+
+   Created on Wed Jul 28 12:54:25 2021
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   utils.UtilsForceOpt.objFMMuscle
+   utils.UtilsForceOpt.getMuscleForceDiff
+   utils.UtilsForceOpt.fmOptPSO_cust
+
+
+
+.. py:function:: objFMMuscle(x, osim_fm, mjc_model_path, muscle, joints, jnt_arr, act_arr)
+
+   Calculate the muscle force differences between osim and mjc models.
+
+   INPUTS:
+       x: vector
+           optimizing parameters
+       osim_fm: vector/mat
+           muscle force vector/matrix of a given muscle
+       mjcModel: mujoco model
+           mujoco model
+       muscle: string
+           muscle name
+       joints: list of string
+           a list of unique coordinate that affecting the muscle length
+       jnt_arr: list
+           a list of joint angle values for the above unique coordinates
+       act_arr: list
+           a list of muscle activation values
+
+   OUTPUTS:
+       rms_fm: double
+           the RMS value of muscle force map differences
+
+
+.. py:function:: getMuscleForceDiff(mjcModel, muscles, joints, jnt_arr, act_arr, osim_fp_muscle_joints)
+
+   Check if the muscle force differences between the osim and mjc models are beyond
+   thresholds
+
+
+.. py:function:: fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr, osim_fm, optParam_lb, optParam_ub, cost_org, speedy=False)
+
+

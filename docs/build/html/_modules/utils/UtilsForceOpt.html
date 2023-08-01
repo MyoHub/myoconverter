@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsForceOpt &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.UtilsForceOpt</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.UtilsForceOpt</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Wed Jul 28 12:54:25 2021</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsMujoco</span> <span class="kn">import</span> <span class="n">getMuscleForceLengthCurvesSim</span><span class="p">,</span> <span class="n">updateMuscleForceProperties</span>
+
+<span class="kn">import</span> <span class="nn">cma</span>
+<span class="kn">import</span> <span class="nn">pyswarms</span> <span class="k">as</span> <span class="nn">ps</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">differential_evolution</span> <span class="k">as</span> <span class="n">de</span>
+
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">import</span> <span class="nn">opensim</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">import</span> <span class="nn">mujoco_py</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+
+<span class="nd">@logger</span><span class="o">.</span><span class="n">catch</span>
+<div class="viewcode-block" id="objFMMuscle"><a class="viewcode-back" href="../../autoapi/utils/UtilsForceOpt/index.html#utils.UtilsForceOpt.objFMMuscle">[docs]</a><span class="k">def</span> <span class="nf">objFMMuscle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">osim_fm</span><span class="p">,</span> <span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the muscle force differences between osim and mjc models.</span>
+<span class="sd">    </span>
+<span class="sd">    INPUTS:</span>
+<span class="sd">        x: vector</span>
+<span class="sd">            optimizing parameters</span>
+<span class="sd">        osim_fm: vector/mat</span>
+<span class="sd">            muscle force vector/matrix of a given muscle</span>
+<span class="sd">        mjcModel: mujoco model</span>
+<span class="sd">            mujoco model</span>
+<span class="sd">        muscle: string</span>
+<span class="sd">            muscle name</span>
+<span class="sd">        joints: list of string</span>
+<span class="sd">            a list of unique coordinate that affecting the muscle length</span>
+<span class="sd">        jnt_arr: list</span>
+<span class="sd">            a list of joint angle values for the above unique coordinates</span>
+<span class="sd">        act_arr: list</span>
+<span class="sd">            a list of muscle activation values</span>
+
+<span class="sd">    OUTPUTS:</span>
+<span class="sd">        rms_fm: double</span>
+<span class="sd">            the RMS value of muscle force map differences</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span>
+
+    <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">updateMuscleForceProperties</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">mjc_fm</span><span class="p">,</span> <span class="n">length_mtu</span> <span class="o">=</span> <span class="n">getMuscleForceLengthCurvesSim</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">)</span>
+    
+    <span class="c1"># calculate moment arm differences, osim and mjc has opposite sign in MA</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">osim_fm</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mjc_fm</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mjc_fm</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span> </div>
+
+<span class="nd">@logger</span><span class="o">.</span><span class="n">catch</span>
+<div class="viewcode-block" id="getMuscleForceDiff"><a class="viewcode-back" href="../../autoapi/utils/UtilsForceOpt/index.html#utils.UtilsForceOpt.getMuscleForceDiff">[docs]</a><span class="k">def</span> <span class="nf">getMuscleForceDiff</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscles</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">,</span> <span class="n">osim_fp_muscle_joints</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Check if the muscle force differences between the osim and mjc models are beyond</span>
+<span class="sd">    thresholds</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">err_ind</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="n">force_mtu</span><span class="p">,</span> <span class="n">length_mtu</span> <span class="o">=</span> <span class="n">getMuscleForceLengthCurvesSim</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscles</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">)</span>
+    
+    <span class="c1"># change ndarray to array</span>
+    <span class="n">osim_fp_muscles_joints_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">osim_fp_muscle_joints</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">mjc_fp_muscles_joints_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">force_mtu</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">osim_fp_muscles_joints_array</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mjc_fp_muscles_joints_array</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;osim and mjc models have different moment arm sizes&quot;</span><span class="p">)</span>
+        <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;osim and mjc models have different moment arm sizes&#39;</span><span class="p">)</span>
+    
+    <span class="n">obj_org</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">osim_fp_muscles_joints_array</span> <span class="o">+</span> <span class="n">mjc_fp_muscles_joints_array</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">mjc_fp_muscles_joints_array</span><span class="p">))</span>
+        
+    <span class="c1"># absolute and relative errors</span>
+    <span class="n">abs_err</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">osim_fp_muscles_joints_array</span> <span class="o">+</span> <span class="n">mjc_fp_muscles_joints_array</span><span class="p">)</span>
+    
+    <span class="n">osim_fp_muscles_joints_array_nonzeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">osim_fp_muscles_joints_array</span><span class="p">),</span> <span class="mf">1e-3</span><span class="p">)</span>
+    
+    <span class="n">rel_err</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">osim_fp_muscles_joints_array</span> <span class="o">+</span> <span class="n">mjc_fp_muscles_joints_array</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">osim_fp_muscles_joints_array_nonzeros</span><span class="p">))</span>
+    
+    <span class="c1"># check if absolulte error larger than 0.001 and relative error larger than 5%</span>
+    <span class="n">err_ind</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">abs_err</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rel_err</span> <span class="o">&gt;</span> <span class="mf">0.05</span><span class="p">)[</span><span class="mi">0</span><span class="p">])))</span>
+    
+    <span class="k">return</span> <span class="n">err_ind</span><span class="p">,</span> <span class="n">length_mtu</span><span class="p">,</span> <span class="n">obj_org</span></div>
+
+
+<span class="c1"># optimize muscle forces using the self-developed PSO Optimizer</span>
+<span class="nd">@logger</span><span class="o">.</span><span class="n">catch</span>
+<div class="viewcode-block" id="fmOptPSO_cust"><a class="viewcode-back" href="../../autoapi/utils/UtilsForceOpt/index.html#utils.UtilsForceOpt.fmOptPSO_cust">[docs]</a><span class="k">def</span> <span class="nf">fmOptPSO_cust</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">,</span>\
+                      <span class="n">osim_fm</span><span class="p">,</span> <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span><span class="p">,</span> <span class="n">cost_org</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    
+    <span class="c1"># make sure the boundaries are array</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">optParam_lb</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">optParam_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">optParam_lb</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">optParam_ub</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">optParam_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">optParam_ub</span><span class="p">)</span>
+
+    <span class="c1"># PSO options</span>
+    <span class="n">c1</span>  <span class="o">=</span> <span class="mf">0.3</span>   <span class="c1"># inherit rate from the best of the current particle itself</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># inherit rate from the global best particle</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mf">0.25</span>   <span class="c1"># inherit rate from the previous velocity</span>
+    
+    <span class="n">dimensions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">optParam_lb</span><span class="p">)</span>  <span class="c1"># optimizing parameter demensions</span>
+    
+    <span class="k">if</span> <span class="n">speedy</span><span class="p">:</span>
+        <span class="n">n_particles</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">dimensions</span>
+        <span class="n">iteration_max</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="n">break_threshold</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># when more than #% particles have the same values, then stop the optimization,</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n_particles</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">dimensions</span>  <span class="c1"># particle number is set to be 20 times the parameter demensions</span>
+        <span class="n">iteration_max</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">break_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+    
+    <span class="c1"># initilize the optimization variables randomly inside the bounds</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">optParam_lb</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>\
+             <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_particles</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">optParam_ub</span> <span class="o">-</span> <span class="n">optParam_lb</span><span class="p">)</span>
+        
+    <span class="c1"># initilize the velocities randomly inside the bounds</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">optParam_lb</span> <span class="o">-</span> <span class="n">optParam_ub</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>\
+             <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_particles</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">optParam_ub</span> <span class="o">-</span> <span class="n">optParam_lb</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span>
+        
+    <span class="c1"># the best cost function for each particle is initilized as 0</span>
+    <span class="n">obj_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_particles</span><span class="p">)</span>
+    
+    <span class="n">p</span> <span class="o">=</span> <span class="n">x</span>  <span class="c1"># assign the particle values</span>
+
+    <span class="n">obj_g</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># initilize an empty global cost function value</span>
+    <span class="n">obj_g_old</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># old cost function value</span>
+    <span class="n">obj_g_iter</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># number of iterations that contain the same obj_g</span>
+
+    <span class="n">itera</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># interation starts</span>
+    
+    <span class="n">similar_particles</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of similar particles, this will be used as an cretiria to stop the optimization</span>
+
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">()</span>
+    
+    <span class="k">while</span> <span class="n">itera</span> <span class="o">&lt;</span> <span class="n">iteration_max</span><span class="p">:</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;        PSO iteration: </span><span class="si">{</span><span class="n">itera</span><span class="si">}</span><span class="s2"> ; </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">similar_particles</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">n_particles</span><span class="p">)</span><span class="si">}</span><span class="s2"> percentage similarities; Best obj: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">obj_g</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+        <span class="c1"># Apply parallel computing using multiprocessing</span>
+        <span class="c1"># Right now, the mujoco sim cannot be pickled and transfer to objective function</span>
+        <span class="c1"># To solve this, mujoco file name need to transfer to objective function and load over there.</span>
+        <span class="c1"># This will change the entire strucutre of the optimization process, not a day of work. </span>
+
+        <span class="c1"># prepare function inputs</span>
+        <span class="n">x_input</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">x_input</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ix</span><span class="p">,</span> <span class="n">osim_fm</span><span class="p">,</span> <span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">))</span>
+
+        <span class="n">obj_list</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">objFMMuscle</span><span class="p">,</span> <span class="n">x_input</span><span class="p">)</span>
+        
+        <span class="c1"># update the local and global optimal</span>
+        <span class="k">if</span> <span class="n">itera</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">obj_b</span> <span class="o">=</span> <span class="n">obj_list</span>
+            <span class="n">obj_g</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">obj_list</span><span class="p">)</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">obj_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">obj_g</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">iobj</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">obj_list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">obj</span> <span class="o">&lt;</span> <span class="n">obj_b</span><span class="p">[</span><span class="n">iobj</span><span class="p">]:</span>
+                    <span class="n">obj_b</span><span class="p">[</span><span class="n">iobj</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+                    <span class="n">p</span><span class="p">[</span><span class="n">iobj</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">iobj</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">obj</span> <span class="o">&lt;</span> <span class="n">obj_g</span><span class="p">:</span>
+                    <span class="n">obj_g</span> <span class="o">=</span> <span class="n">obj</span>
+                    <span class="n">g</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">iobj</span><span class="p">]</span>
+    
+        <span class="c1"># two random values to increase intersection between particles</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">v</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">v</span> <span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">r1</span><span class="o">*</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">c2</span><span class="o">*</span><span class="n">r2</span><span class="o">*</span><span class="p">(</span><span class="n">g</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>  <span class="c1"># calculate velocities</span>
+        
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">v</span>  <span class="c1"># change to next iteration positions</span>
+        
+        <span class="c1"># make sure they are within boundaries</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">optParam_lb</span><span class="p">),</span> <span class="n">optParam_ub</span><span class="p">)</span>
+            
+        <span class="n">itera</span> <span class="o">=</span> <span class="n">itera</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># increase the iteration number</span>
+        
+        <span class="n">similar_particles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">obj_b</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">obj_b</span><span class="p">))</span><span class="o">/</span><span class="nb">min</span><span class="p">(</span><span class="n">obj_b</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            
+        <span class="c1"># break if certain percentage of particles have similar objective values</span>
+        <span class="k">if</span> <span class="n">similar_particles</span> <span class="o">&gt;</span> <span class="n">break_threshold</span><span class="o">*</span><span class="n">n_particles</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;        Break the optimization, since certain number of similar particles reached&quot;</span><span class="p">)</span>  
+            <span class="k">break</span>
+
+        <span class="c1"># break if the obj_g is the same value for more than 10 iterations</span>
+        <span class="k">if</span> <span class="n">obj_g</span> <span class="o">==</span> <span class="n">obj_g_old</span><span class="p">:</span>
+            <span class="n">obj_g_iter</span> <span class="o">=</span> <span class="n">obj_g_iter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj_g_iter</span> <span class="o">=</span> <span class="mi">0</span>
+            
+        <span class="n">obj_g_old</span> <span class="o">=</span> <span class="n">obj_g</span>
+
+        <span class="k">if</span> <span class="n">obj_g_iter</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;        Break the optimization, since global obj maintained the same value for certain iterations&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+
+
+    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        
+    <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span>
+    <span class="c1"># update mjc model with new muscle parameters</span>
+    <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">updateMuscleForceProperties</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+    
+    <span class="c1"># save optimized results    </span>
+    <span class="n">opt_results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cost_org&quot;</span><span class="p">:</span> <span class="n">cost_org</span><span class="p">,</span> <span class="s2">&quot;cost_opt&quot;</span><span class="p">:</span> <span class="n">obj_g</span><span class="p">,</span> <span class="s2">&quot;res_opt&quot;</span><span class="p">:</span> <span class="n">g</span><span class="p">}</span>
+        
+    <span class="k">return</span> <span class="n">opt_results</span><span class="p">,</span> <span class="n">mjcModel</span></div>
+    
+
+
+        
+            
+        
+        
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

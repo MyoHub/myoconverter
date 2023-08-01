@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.path_points.ConditionalPathPoint &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.path_points.ConditionalPathPoint</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.path_points.ConditionalPathPoint</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.parsers</span> <span class="kn">import</span> <span class="n">IParser</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">str2vec</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.path_points.PathPoint</span> <span class="kn">import</span> <span class="n">PathPoint</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.path_points.MovingPathPoint</span> <span class="kn">import</span> <span class="n">MovingPathPoint</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;TkAgg&quot;</span><span class="p">)</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">ioff</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ConditionalPathPoint"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_points/ConditionalPathPoint/index.html#myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint">[docs]</a><span class="k">class</span> <span class="nc">ConditionalPathPoint</span><span class="p">(</span><span class="n">IParser</span><span class="p">):</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pathpoint</span> <span class="o">=</span> <span class="n">PathPoint</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">moving_pathpoint</span> <span class="o">=</span> <span class="n">MovingPathPoint</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ConditionalPathPoint.parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_points/ConditionalPathPoint/index.html#myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint.parse">[docs]</a>  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">tendon</span><span class="p">,</span> <span class="n">force_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This is a difficult one. We need to &#39;anchor&#39; the conditional path point to a normal path point, and treat it</span>
+<span class="sd">    like a moving path point (move from &#39;anchor&#39; to its actual position when the independent coordinate is inside</span>
+<span class="sd">    valid range)</span>
+
+<span class="sd">    We approximate the above movement behaviour with either a step function or a rectangular function. In case of a step</span>
+<span class="sd">    function the movement is further approximated with a linear function, and in case of a rectangular function the</span>
+<span class="sd">    movement is approximated with a quadratic function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if we should treat conditional path points as normal path points</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TREAT_AS_NORMAL_PATH_POINT</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Treating ConditionalPathPoint </span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, as a normal PathPoint&quot;</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">pathpoint</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="n">tendon</span><span class="p">,</span> <span class="n">force_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+      <span class="k">return</span>
+
+    <span class="c1"># Get socket parent frame</span>
+    <span class="n">socket_parent_frame</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_parent_frame&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="c1"># Get parent (all path_points)</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+
+    <span class="c1"># Find index of this ConditionalPathPoint</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">getchildren</span><span class="p">()</span>
+    <span class="n">this_idx</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+
+    <span class="c1"># Check if previous PathPoint exists and is located in the same body</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_previous</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">this_idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">socket_parent_frame</span><span class="p">)</span>
+
+    <span class="c1"># If not, check if next PathPoint exists and is located in the same body</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+      <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_next</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="n">this_idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">socket_parent_frame</span><span class="p">)</span>
+
+    <span class="c1"># Check again if a suitable anchor was found (idx &gt;= 0)</span>
+    <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+
+      <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Suitable &#39;anchor&#39; PathPoint was not found for ConditionalPathPoint </span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+                     <span class="s2">&quot;treating this as a normal PathPoint.&quot;</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">pathpoint</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="n">tendon</span><span class="p">,</span> <span class="n">force_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+      <span class="k">return</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="c1"># Create an output dir for plots (if it doesn&#39;t exist)</span>
+      <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_PLOT_FOLDER</span><span class="p">,</span> <span class="s2">&quot;conditional_path_points&quot;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+      <span class="c1"># Estimate the movement of this conditional path point in x, y, and z coordinates</span>
+      <span class="n">anchor_pos</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">cond_pos</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="nb">range</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+      <span class="n">coord_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">]</span>
+      <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+      <span class="k">for</span> <span class="n">coord</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coord_names</span><span class="p">):</span>
+
+        <span class="c1"># Find the independent coordinate</span>
+        <span class="n">independent_coordinate</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_coordinate&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Get range of independent_coordinate</span>
+        <span class="n">joint</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//joint[@name=&#39;</span><span class="si">{</span><span class="n">independent_coordinate</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+        <span class="n">independent_joint_range</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">joint</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Get the ideal function to represent the movement of the conditional path point in this coordinate</span>
+        <span class="n">x_ideal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">y_ideal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_ideal</span><span class="p">)</span><span class="o">*</span><span class="n">anchor_pos</span><span class="p">[</span><span class="n">coord</span><span class="p">]</span>
+        <span class="n">y_ideal</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_ideal</span><span class="o">-</span><span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x_ideal</span><span class="o">-</span><span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cond_pos</span><span class="p">[</span><span class="n">coord</span><span class="p">]</span>
+
+        <span class="c1"># Get range of the dependent &quot;joint&quot; (i.e., conditional path point) movement</span>
+        <span class="n">dependent_joint_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">)])</span>
+
+        <span class="c1"># A super simple check whether the conditional path point should be modelled as a step function or a</span>
+        <span class="c1"># rectangular function</span>
+        <span class="n">rectangular</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_ideal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">rectangular</span><span class="p">:</span>
+
+          <span class="c1"># If rectangular function, approximate with a quadratic polynomial; note that this approach is agnostic to</span>
+          <span class="c1"># the actual location of the rectangle, we just assume it is in the middle of the independent joint range</span>
+          <span class="n">x_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                           <span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+          <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">)</span>
+          <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">)</span>
+          <span class="n">y_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y_ideal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ymax</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">y_ideal</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ymax</span><span class="p">)</span> <span class="k">else</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">y_ideal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+          <span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">Polynomial</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_points</span><span class="p">,</span> <span class="n">y_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+          <span class="c1"># Get the polycoef representing the approximation</span>
+          <span class="n">polycoef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,))</span>
+          <span class="n">polycoef</span><span class="p">[:</span><span class="n">fit</span><span class="o">.</span><span class="n">coef</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">convert</span><span class="p">()</span><span class="o">.</span><span class="n">coef</span>
+
+          <span class="c1"># For plotting</span>
+          <span class="n">y_approx</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">x_ideal</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+          <span class="c1"># If step function, approximate with a linear polynomial; note that this approach is agnostic to where the</span>
+          <span class="c1"># actual step happens, we just linearly interpolate the movement from min to max of independent joint range</span>
+          <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_ideal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_ideal</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+          <span class="n">c</span> <span class="o">=</span> <span class="n">y_ideal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="o">*</span><span class="n">independent_joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+          <span class="c1"># Get the polycoef representing the approximation</span>
+          <span class="n">polycoef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+          <span class="c1"># For plotting</span>
+          <span class="n">y_approx</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="n">x_ideal</span> <span class="o">+</span> <span class="n">c</span>
+
+        <span class="c1"># Plot and save a figure of the approximation</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_figure</span><span class="p">(</span><span class="n">x_ideal</span><span class="p">,</span> <span class="n">y_ideal</span><span class="p">,</span> <span class="n">y_approx</span><span class="p">,</span> <span class="n">independent_coordinate</span><span class="p">,</span> <span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span>
+                               <span class="n">rectangular</span><span class="p">)</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.svg&quot;</span><span class="p">))</span>
+        <span class="n">pp</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+        <span class="c1"># Save the dependency</span>
+        <span class="n">dependencies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">independent_coordinate</span><span class="p">,</span> <span class="n">polycoef</span><span class="p">,</span> <span class="n">dependent_joint_range</span><span class="p">)</span>
+
+      <span class="c1"># Treat as a MovingPathPoint</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">moving_pathpoint</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="n">tendon</span><span class="p">,</span> <span class="n">force_name</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="n">dependencies</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConditionalPathPoint.find_previous"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_points/ConditionalPathPoint/index.html#myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint.find_previous">[docs]</a>  <span class="k">def</span> <span class="nf">find_previous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">children</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">socket_parent_frame</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">idx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">child</span> <span class="o">=</span> <span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;PathPoint&quot;</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_parent_frame&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">socket_parent_frame</span><span class="p">:</span>
+        <span class="k">break</span>
+      <span class="n">idx</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">idx</span></div>
+
+<div class="viewcode-block" id="ConditionalPathPoint.find_next"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_points/ConditionalPathPoint/index.html#myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint.find_next">[docs]</a>  <span class="k">def</span> <span class="nf">find_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">children</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">socket_parent_frame</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">):</span>
+      <span class="n">child</span> <span class="o">=</span> <span class="n">children</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;PathPoint&quot;</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_parent_frame&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">socket_parent_frame</span><span class="p">:</span>
+        <span class="k">break</span>
+      <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">idx</span> <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="ConditionalPathPoint.plot_figure"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_points/ConditionalPathPoint/index.html#myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint.plot_figure">[docs]</a>  <span class="k">def</span> <span class="nf">plot_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_ideal</span><span class="p">,</span> <span class="n">y_ideal</span><span class="p">,</span> <span class="n">y_approx</span><span class="p">,</span> <span class="n">independent_joint</span><span class="p">,</span> <span class="n">dependent_joint</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">is_rectangular</span><span class="p">):</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">fun_type</span> <span class="o">=</span> <span class="s2">&quot;rectangular&quot;</span> <span class="k">if</span> <span class="n">is_rectangular</span> <span class="k">else</span> <span class="s2">&quot;step&quot;</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_ideal</span><span class="p">,</span> <span class="n">y_ideal</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Ideal </span><span class="si">{</span><span class="n">fun_type</span><span class="si">}</span><span class="s2"> function&quot;</span><span class="p">)</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_ideal</span><span class="p">,</span> <span class="n">y_approx</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Approximation of the </span><span class="si">{</span><span class="n">fun_type</span><span class="si">}</span><span class="s2"> function&quot;</span><span class="p">)</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Independent joint value (</span><span class="si">{</span><span class="n">independent_joint</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dependent joint value (</span><span class="si">{</span><span class="n">dependent_joint</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">pp</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Approximation of the </span><span class="si">{</span><span class="n">fun_type</span><span class="si">}</span><span class="s2"> function of ConditionalPathPoint </span><span class="si">{</span><span class="n">dependent_joint</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">coord</span><span class="si">}</span><span class="s2"> coordinate&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

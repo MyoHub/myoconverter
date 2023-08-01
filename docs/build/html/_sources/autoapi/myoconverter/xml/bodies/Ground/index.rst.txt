@@ -1,0 +1,32 @@
+:py:mod:`myoconverter.xml.bodies.Ground`
+========================================
+
+.. py:module:: myoconverter.xml.bodies.Ground
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.bodies.Ground.Ground
+
+
+
+
+.. py:class:: Ground
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This is a special case of a Body 
+
+   .. py:method:: parse(xml, add_ground_geom=False)
+
+
+   .. py:method:: parse_component(xml)
+
+
+

@@ -1,0 +1,79 @@
+<mujoco model="template">
+  <!-- This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. -->
+  <!-- Credits from the original OpenSim model. Note! If the following has any license information, it applies to the original OpenSim model. Credits: Author: The OpenSim Teams License: Creative Commons (CCBY 3.0). You are free to distribute, remix, tweak, and build upon this work, even commercially, as long as you credit us for the original creation. http://creativecommons.org/licenses/by/3.0/ -->
+  <!-- Note: inertiagrouprange="0 1" means that groups 0-1 will be used to infer masses/inertias, and groups 2-5 are
+  only for visualisation (e.g. wrapping objects) !-->
+  <compiler inertiafromgeom="auto" angle="radian" balanceinertia="true" boundmass="0.001" boundinertia="0.001" inertiagrouprange="0 1">
+    <lengthrange inttotal="50" useexisting="true"/>
+  </compiler>
+  <option collision="predefined"/>
+  <visual>
+    <scale framelength="0.5" framewidth="0.01"/>
+  </visual>
+  <default>
+    <joint limited="true" damping="0.05" armature="0.00001" stiffness="0"/>
+    <geom rgba="0.8 0.6 .4 1" margin="0.001"/>
+    <site size="0.001"/>
+    <tendon width="0.005" rgba=".95 .3 .3 1" limited="false"/>
+    <default class="muscle">
+      <muscle ctrllimited="true" ctrlrange="0 1" scale="200"/>
+    </default>
+    <default class="motor">
+      <general gainprm="5 0 0 0 0 0 0 0 0 0"/>
+    </default>
+  </default>
+  <option timestep="0.002"/>
+  <!-- nuser_jnt=1, the parameter is used to store default value of the joint, and nkey=1 to store keyframe with
+   default joint positions set !-->
+  <size njmax="1000" nconmax="400" nuser_jnt="1" nkey="1"/>
+  <worldbody>
+    <!-- The converter script assumes a body named 'ground' exists as a child element of worldbody -->
+    <body name="ground" euler="1.571 0 0">
+      <geom name="ground-plane" pos="0 0 0" euler="-1.571 0 0" size="10 10 0.125" type="plane" rgba="1.0 0.7 0.4 1.0" condim="3"/>
+      <geom name="ground_geom_2" type="mesh" pos="0 0.050000000000000003 0.34999999999999998" euler="-0 0 -0" mesh="ground_geom_2_block" rgba="1 1 1 1" group="0"/>
+      <geom name="ground_geom_3" type="mesh" pos="0 0.050000000000000003 -0.34999999999999998" euler="-0 0 -0" mesh="ground_geom_3_block" rgba="1 1 1 1" group="0"/>
+      <site name="muscle1_muscle1-point1" pos="0 0.050000000000000003 -0.34999999999999998"/>
+      <site name="muscle2_muscle2-point1" pos="0 0.050000000000000003 0.34999999999999998"/>
+    </body>
+    <light directional="true"/>
+    <body name="block" pos="0 1.11e-17 0.05" euler="1.571 0 0">
+      <inertial mass="20" pos="0 0 0" fullinertia="0.13333300000000001 0.13333300000000001 0.13333300000000001 0 0 0"/>
+      <geom name="block_geom_1" type="mesh" mesh="block_geom_1_block" rgba="1 1 1 1" group="0"/>
+      <joint name="block_tz" range="-0.1 0.1" limited="true" user="0.0" ref="0" type="slide" axis="-3.673e-06 0 1" damping="0" stiffness="0"/>
+      <site name="muscle1_muscle1-point2" pos="0 0 -0.050000000000000003"/>
+      <site name="muscle2_muscle2-point2" pos="0 0 0.050000000000000003"/>
+    </body>
+  </worldbody>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="0.6 0.8 1" width="256" height="256"/>
+    <mesh name="ground_geom_2_block" file="Geometry/block.stl" scale="5 1 1"/>
+    <mesh name="ground_geom_3_block" file="Geometry/block.stl" scale="5 1 1"/>
+    <mesh name="block_geom_1_block" file="Geometry/block.stl" scale="1 1 1"/>
+  </asset>
+  <tendon>
+    <!-- Leave this comment here to make 'tendon' element pretty printed !-->
+    <spatial name="muscle1_tendon">
+      <site site="muscle1_muscle1-point1"/>
+      <site site="muscle1_muscle1-point2"/>
+    </spatial>
+    <spatial name="muscle2_tendon">
+      <site site="muscle2_muscle2-point1"/>
+      <site site="muscle2_muscle2-point2"/>
+    </spatial>
+  </tendon>
+  <actuator>
+    <!-- Leave this comment here to make 'actuator' element pretty printed !-->
+    <muscle name="muscle1" lengthrange="0.01 1" force="1000" tendon="muscle1_tendon" class="muscle" timeconst="0.015 0.05"/>
+    <muscle name="muscle2" lengthrange="0.01 1" force="1000" tendon="muscle2_tendon" class="muscle" timeconst="0.015 0.05"/>
+  </actuator>
+  <equality>
+    <!-- Leave this comment here to make 'equality' element pretty printed !-->
+  </equality>
+  <contact>
+    <!-- Leave this comment here to make 'contact' element pretty printed !-->
+    <pair geom1="ground-plane" geom2="block_geom_1"/>
+  </contact>
+  <keyframe>
+    <key name="default-pose" qpos="0"/>
+  </keyframe>
+</mujoco>

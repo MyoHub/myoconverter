@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.converter &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.converter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.converter</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">find_element_by_name</span><span class="p">,</span> <span class="n">split_name</span><span class="p">,</span> <span class="n">create_keyframe</span>
+
+
+<div class="viewcode-block" id="convert"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param xml_file: Path to the OpenSim XML model file</span>
+<span class="sd">    :param output_folder: Path to folder where converted model is saved</span>
+<span class="sd">    :param kwargs: geometry_folder, add_ground_geom, treat_as_normal_path_point</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># First, initialise config (read and parse OpenSim and MuJoCo XML files, set variables etc.)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">initialise</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Commencing the conversion procedure!&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Parse ground. The ground may have attached geometries and wrapping objects</span>
+    <span class="n">parse_ground</span><span class="p">()</span>
+
+    <span class="c1"># Parse constraints. The constraints need to be parsed before joints, because we might need to update the polycoefs</span>
+    <span class="c1"># of some joint constraints when parsing joints</span>
+    <span class="n">parse_constraints</span><span class="p">()</span>
+
+    <span class="c1"># Parse and add bodies and joints</span>
+    <span class="n">parse_bodies_and_joints</span><span class="p">()</span>
+
+    <span class="c1"># Parse and add forces</span>
+    <span class="n">parse_forces</span><span class="p">()</span>
+
+    <span class="c1"># Parse markers -- needed for later optimization procedures</span>
+    <span class="n">parse_markers</span><span class="p">()</span>
+
+    <span class="c1"># Set keyframe</span>
+    <span class="n">set_keyframe</span><span class="p">()</span>
+
+    <span class="c1"># Copy credits from the OpenSim model</span>
+    <span class="n">copy_credits</span><span class="p">()</span>
+
+    <span class="c1"># Finally, save the MuJoCo model into XML file</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing the converted model into </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_XML_FILE</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">etree</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MUJOCO</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_XML_FILE</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;All good, conversion procedure is finished&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Return path to converted file</span>
+    <span class="k">return</span> <span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_XML_FILE</span></div>
+
+<div class="viewcode-block" id="parse_bodies_and_joints"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.parse_bodies_and_joints">[docs]</a><span class="k">def</span> <span class="nf">parse_bodies_and_joints</span><span class="p">():</span>
+
+    <span class="c1"># Start from ground and go through joints recursively (depth-first), and add bodies, geoms, joints to MuJoCo model</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting to parse bodies, wrapping objects, and joints&quot;</span><span class="p">)</span>
+    <span class="n">add_bodies_and_joints</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">O_GROUND</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">,</span> <span class="n">root_body</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_bodies_and_joints"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.add_bodies_and_joints">[docs]</a><span class="k">def</span> <span class="nf">add_bodies_and_joints</span><span class="p">(</span><span class="n">parent_name</span><span class="p">,</span> <span class="n">current_body</span><span class="p">,</span> <span class="n">root_body</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="c1"># Find ALL frames with &#39;parent_name&#39; as socket parent. This will contain some incorrect frames as well,</span>
+    <span class="c1"># we&#39;ll need to cut them by checking whether they are socket_parent_frames or socket_child_frames</span>
+    <span class="n">socket_parent</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">O_JOINTSET</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//socket_parent[text()=&#39;</span><span class="si">{</span><span class="n">parent_name</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">socket_parent</span><span class="p">:</span>
+
+        <span class="c1"># Get parent until WeldJoint, CustomJoint, etc</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+        <span class="n">joint</span> <span class="o">=</span> <span class="n">frames</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+
+        <span class="c1"># get parent and child socket frames (can be PhysicalOffsetFrame, or PhysicalFrame? Let&#39;s use wildcard</span>
+        <span class="c1"># in the find so we don&#39;t need to care about the tag)</span>
+        <span class="n">socket_parent_frame</span> <span class="o">=</span> <span class="n">frames</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*[@name=&#39;</span><span class="si">{</span><span class="n">joint</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;socket_parent_frame&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+        <span class="n">socket_child_frame</span> <span class="o">=</span> <span class="n">frames</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*[@name=&#39;</span><span class="si">{</span><span class="n">joint</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;socket_child_frame&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Ignore child socket frames</span>
+        <span class="k">if</span> <span class="n">socket_child_frame</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">parent_name</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Find child body of joint</span>
+        <span class="n">child_body</span> <span class="o">=</span> <span class="n">find_element_by_name</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">OPENSIM</span><span class="p">,</span> <span class="n">split_name</span><span class="p">(</span><span class="n">socket_child_frame</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;socket_parent&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+        <span class="c1"># Parse body</span>
+        <span class="n">next_body</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">BODY_PARSER</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">child_body</span><span class="p">,</span>
+                                          <span class="n">socket_parent_frame</span><span class="o">=</span><span class="n">socket_parent_frame</span><span class="p">,</span>
+                                          <span class="n">socket_child_frame</span><span class="o">=</span><span class="n">socket_child_frame</span><span class="p">,</span>
+                                          <span class="n">current_body</span><span class="o">=</span><span class="n">current_body</span><span class="p">,</span>
+                                          <span class="n">root_body</span><span class="o">=</span><span class="n">root_body</span><span class="p">)</span>
+
+        <span class="c1"># Parse joint</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">JOINT_PARSER</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">joint</span><span class="p">,</span>
+                               <span class="n">socket_parent_frame</span><span class="o">=</span><span class="n">socket_parent_frame</span><span class="p">,</span>
+                               <span class="n">socket_child_frame</span><span class="o">=</span><span class="n">socket_child_frame</span><span class="p">,</span>
+                               <span class="n">pointer</span><span class="o">=</span><span class="n">next_body</span><span class="p">,</span>
+                               <span class="n">root_body</span><span class="o">=</span><span class="n">root_body</span><span class="p">)</span>
+
+        <span class="c1"># Move to next joint</span>
+        <span class="n">parent_name</span> <span class="o">=</span> <span class="n">socket_child_frame</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;socket_parent&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">add_bodies_and_joints</span><span class="p">(</span><span class="n">parent_name</span><span class="p">,</span> <span class="n">next_body</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="parse_ground"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.parse_ground">[docs]</a><span class="k">def</span> <span class="nf">parse_ground</span><span class="p">():</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Parsing the ground&quot;</span><span class="p">)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">BODY_PARSER</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">O_GROUND</span><span class="p">,</span> <span class="n">add_ground_geom</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">ADD_GROUND_GEOM</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="parse_constraints"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.parse_constraints">[docs]</a><span class="k">def</span> <span class="nf">parse_constraints</span><span class="p">():</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting to parse constraints&quot;</span><span class="p">)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">CONSTRAINT_PARSER</span><span class="o">.</span><span class="n">parse_all</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">O_CONSTRAINTSET</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="parse_forces"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.parse_forces">[docs]</a><span class="k">def</span> <span class="nf">parse_forces</span><span class="p">():</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting to parse forces, including path points and wrap paths&quot;</span><span class="p">)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">FORCE_PARSER</span><span class="o">.</span><span class="n">parse_all</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">O_FORCESET</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="parse_markers"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.parse_markers">[docs]</a><span class="k">def</span> <span class="nf">parse_markers</span><span class="p">():</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting to parse markers&quot;</span><span class="p">)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">MARKER_PARSER</span><span class="o">.</span><span class="n">parse_all</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">O_MARKERSET</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="set_keyframe"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.set_keyframe">[docs]</a><span class="k">def</span> <span class="nf">set_keyframe</span><span class="p">():</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Setting the default keyframe&quot;</span><span class="p">)</span>
+    <span class="n">create_keyframe</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">MUJOCO</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_EQUALITY</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="copy_credits"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.copy_credits">[docs]</a><span class="k">def</span> <span class="nf">copy_credits</span><span class="p">():</span>
+
+    <span class="c1"># Get credits</span>
+    <span class="n">credits</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">OPENSIM</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;credits&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Add as comment if they exist</span>
+    <span class="k">if</span> <span class="n">credits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comment</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Comment</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Credits from original OpenSim model: </span><span class="si">{</span><span class="n">credits</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">MUJOCO</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="argparser"><a class="viewcode-back" href="../../../autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.argparser">[docs]</a>    <span class="n">argparser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Convert an OpenSim model into a MuJoCo model.&#39;</span></div>
+                                                 <span class="s1">&#39;Only Works with OpenSim v4 models.&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;xml_file&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to an OpenSim model XML file&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;output_folder&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to an output folder. The converted model will be saved here.&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--geometry_folder&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to the Geometry folder (by default uses folder of given OpenSim file)&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--add_ground_geom&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, a geom (of type plane) is added to the MuJoCo model as ground&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--treat_as_normal_path_point&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, MovingPathPoints and ConditionalPathPoints will be treated as normal &quot;</span>
+                                <span class="s2">&quot;PathPoints&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argparser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+
+    <span class="c1"># Do the conversion</span>
+    <span class="n">convert</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

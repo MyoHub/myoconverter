@@ -1,0 +1,121 @@
+:py:mod:`model_states.OsimMuscleStates`
+=======================================
+
+.. py:module:: model_states.OsimMuscleStates
+
+.. autoapi-nested-parse::
+
+   Created on Sun Feb 20 21:43:21 2022
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   model_states.OsimMuscleStates.OsimMuscleStates
+
+
+
+
+.. py:class:: OsimMuscleStates(osim_model, muscle_list=None)
+
+   A class to extract the muscle states (moment arms and force properites)
+   of the given OpenSim model
+
+   .. py:method:: reset()
+
+
+   .. py:method:: getWrapingCoords()
+
+      Extract the wrapping coordinates of the given muscle list. In addition,
+      the coupling coordinates when calculating moment arms were extracted.
+
+      For a given muscle list, outputs of this function is a dictionary:
+          
+          Keywords  ||  list of coordinates
+          muscle 1: coordinate 1, coordinate 2
+                    coordinate 3,
+                    
+          muscle 2: coordinate 1
+                    coordinate 3, coordinate 4
+                    coordinate 5, coordinate 6,
+                    
+          ...     
+          
+
+
+   .. py:method:: getCoordRanges()
+
+      Extract the motion ranges of given coordinates in an OpenSim model.
+
+      Outputs of this function is a dictionary with the coordinate names as 
+      keywords
+
+             Keywords  ||   list
+          
+          coordinate 1:  [lower bound, upper bound]
+          coordinate 2:  [lower bound, upper bound]
+          coordinate 3:  [lower bound, upper bound]
+          ...
+
+
+
+   .. py:method:: getMomentArms(save_path, speedy=False)
+
+      calcualte moment arms of a muscle at different coordinates it wrapped.
+
+      Parameters
+      ----------
+      wrapping_coordinate : dictionary
+          The dictionary that contains the muscles list and their
+          wrapping coordinates. If not provide, will calculate from the above
+          getWrapingCoord function.
+          
+      coordinate_range: dictionary
+          The dictionary that contains the motion ranges of the
+          joint lists that been wrapped by the muscles. if not provided,
+          generate from the above getWrapingCoord function.
+
+      save_path: string
+          The path to save muscle-specific force map files, if not provided, not saving...
+          
+      speedy: boolean
+          If True, select a lower number of particles, checking notes, iterations
+          to speed up the optimization process.
+
+      Returns
+      -------
+      self.moment_arms: dictionary
+          The dictionary that contains the moment arms that were
+          calculated from the opensim model with the given inputs
+
+
+   .. py:method:: getMuscleForceMaps(save_path, speedy=False)
+
+      get the muscle force maps from OpenSim models. 
+
+      Parameters
+      ----------
+
+      save_path: string
+          The path to save muscle-specific force map files, if not provided, not saving...
+          
+      speedy: boolean
+          If True, select a lower number of particles, checking notes, iterations
+          to speed up the optimization process.
+
+      Returns (NONE)
+      -------
+      self.force_maps: dictionary
+          The dictionary that contains the muscle force maps that were
+          calculated from the opensim model with the given inputs
+
+
+

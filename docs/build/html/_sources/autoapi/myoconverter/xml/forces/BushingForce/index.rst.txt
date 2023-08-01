@@ -1,0 +1,29 @@
+:py:mod:`myoconverter.xml.forces.BushingForce`
+==============================================
+
+.. py:module:: myoconverter.xml.forces.BushingForce
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.forces.BushingForce.BushingForce
+
+
+
+
+.. py:class:: BushingForce
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+

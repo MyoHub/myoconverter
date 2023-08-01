@@ -1,0 +1,49 @@
+:py:mod:`myoconverter.xml.bodies.utils`
+=======================================
+
+.. py:module:: myoconverter.xml.bodies.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.bodies.utils.valid_inertia
+   myoconverter.xml.bodies.utils.copy_mesh_file
+   myoconverter.xml.bodies.utils.get_rgba
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.bodies.utils._vtk_reader
+   myoconverter.xml.bodies.utils._stl_writer
+
+
+.. py:data:: _vtk_reader
+
+   
+
+.. py:data:: _stl_writer
+
+   
+
+.. py:function:: valid_inertia(mass, inertia_vec)
+
+
+.. py:function:: copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder)
+
+   This function copies the original mesh file,converts it to stl and fixes unconnected facets (if necessary) 
+
+
+.. py:function:: get_rgba(mesh)
+
+

@@ -1,0 +1,37 @@
+:py:mod:`myoconverter.xml.path_wraps.PathWrapSet`
+=================================================
+
+.. py:module:: myoconverter.xml.path_wraps.PathWrapSet
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_wraps.PathWrapSet.PathWrapSet
+
+
+
+
+.. py:class:: PathWrapSet
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class parses a whole PathWrapSet, unlike other parsers that parse individual objects of sets. This is because
+   a single tendon may have multiple path wraps (over different wrapping objects), but we can wrap the mujoco tendon only
+   wrt one wrapping object at a time. Hence, we wrap the mujoco tendon over the wrapping object that is closest.
+
+   Below, the estimation of wrapping sites is very much based on heuristics. We calculate distances between tendons (or
+   segments of tendons) and all applicable wrapping objects, and decide the wrapping sites based on those distances -- if
+   a segment (two consecutive sites) is close enough to a wrapping object, we add a wrapping site between those sites.
+   Works only with stationary sites. Also, relies on the assumption that wrapping objects are always close to the tendons
+   (distances are estimated when mujoco model is in default pose).
+
+   .. py:method:: parse(xml, tendon, force_name)
+
+
+

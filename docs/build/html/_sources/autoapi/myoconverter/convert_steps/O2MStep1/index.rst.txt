@@ -1,0 +1,66 @@
+:py:mod:`myoconverter.convert_steps.O2MStep1`
+=============================================
+
+.. py:module:: myoconverter.convert_steps.O2MStep1
+
+.. autoapi-nested-parse::
+
+   This script includes all the steps of transfering an OpenSim model to Mujoco.
+
+   Created on Tue Jul 27 23:19:13 2021
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.convert_steps.O2MStep1.BasicModelConvert
+
+
+
+
+.. py:class:: BasicModelConvert(osim_model_file, geometry_path, saving_path, add_ground_geom=False, treat_as_normal_path_point=False)
+
+   Class convert OpenSim MSK model to MuJoCo xml format.
+
+   Bodies, joints, muscles, ligaments, sites, constraints
+   are all converted. 
+   Forward kinematic check is perfomed for validating the
+   accuracy of the bone shapes and joint definitions.
+
+
+   .. py:method:: cvt1_ModelConvert()
+
+      Convert the osim model into mujoco using the functions in xml folder
+
+
+   .. py:method:: vlt1_forwardKinematicsValidation(mjc_model_path=None, end_points_osim=None, speedy=False)
+
+      Forward kinematic check
+      Use markers at the surface of the body to compare the end point positions
+      based on the same joint angle setups in both models.
+
+      Parameters:
+
+      mjc_model_path: string
+          The mujoco model path.
+          
+      end_points_osim: list of strings
+          A list of marker names that defined in the Osim model for the forward kinematic check
+          
+      speedy: boolean
+          If True, run lower number of posture check [5 <--> 10].
+
+
+
+   .. py:method:: endPointsPlot(end_pos_osim, end_pos_mjc, end_points)
+
+
+

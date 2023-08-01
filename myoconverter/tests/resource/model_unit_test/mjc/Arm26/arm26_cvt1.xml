@@ -1,0 +1,207 @@
+<mujoco model="template">
+  <!-- This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. -->
+  <!-- Credits from the original OpenSim model. Note! If the following has any license information, it applies to the original OpenSim model. Credits: The OpenSim Development Team (Reinbolt, J; Seth, A; Habib, A; Hamner, S) adapted from a model originally created by Kate Holzbaur (11/22/04) License: Creative Commons (CCBY 3.0). You are free to distribute, remix, tweak, and build upon this work, even commercially, as long as you credit us for the original creation. http://creativecommons.org/licenses/by/3.0/ -->
+  <!-- Note: inertiagrouprange="0 1" means that groups 0-1 will be used to infer masses/inertias, and groups 2-5 are
+  only for visualisation (e.g. wrapping objects) !-->
+  <compiler inertiafromgeom="auto" angle="radian" balanceinertia="true" boundmass="0.001" boundinertia="0.001" inertiagrouprange="0 1">
+    <lengthrange inttotal="50" useexisting="true"/>
+  </compiler>
+  <option collision="predefined"/>
+  <visual>
+    <scale framelength="0.5" framewidth="0.01"/>
+  </visual>
+  <default>
+    <joint limited="true" damping="0.05" armature="0.00001" stiffness="0"/>
+    <geom rgba="0.8 0.6 .4 1" margin="0.001"/>
+    <site size="0.001"/>
+    <tendon width="0.005" rgba=".95 .3 .3 1" limited="false"/>
+    <default class="muscle">
+      <muscle ctrllimited="true" ctrlrange="0 1" scale="200"/>
+    </default>
+    <default class="motor">
+      <general gainprm="5 0 0 0 0 0 0 0 0 0"/>
+    </default>
+  </default>
+  <option timestep="0.002"/>
+  <!-- nuser_jnt=1, the parameter is used to store default value of the joint, and nkey=1 to store keyframe with
+   default joint positions set !-->
+  <size njmax="1000" nconmax="400" nuser_jnt="1" nkey="1"/>
+  <worldbody>
+    <!-- The converter script assumes a body named 'ground' exists as a child element of worldbody -->
+    <body name="ground" euler="1.571 0 0">
+      <geom name="ground-plane" pos="0 0 0" euler="-1.571 0 0" size="10 10 0.125" type="plane" rgba="1.0 0.7 0.4 1.0" condim="3"/>
+    </body>
+    <light directional="true"/>
+    <body name="base" pos="0 1.776e-16 0.8" euler="1.571 0 0">
+      <inertial mass="0" pos="0 0 0"/>
+      <geom name="base_geom_1" type="mesh" mesh="base_geom_1_ground_ribs" rgba="1 1 1 1" group="0"/>
+      <geom name="base_geom_2" type="mesh" mesh="base_geom_2_ground_spine" rgba="1 1 1 1" group="0"/>
+      <geom name="base_geom_3" type="mesh" mesh="base_geom_3_ground_skull" rgba="1 1 1 1" group="0"/>
+      <geom name="base_geom_4" type="mesh" mesh="base_geom_4_ground_jaw" rgba="1 1 1 1" group="0"/>
+      <geom name="base_geom_5" type="mesh" mesh="base_geom_5_ground_r_clavicle" rgba="1 1 1 1" group="0"/>
+      <geom name="base_geom_6" type="mesh" mesh="base_geom_6_ground_r_scapula" rgba="1 1 1 1" group="0"/>
+      <geom name="TRIlongglen_cylinder" type="cylinder" euler="1.375 -0.2946 2.436" pos="-0.0439 -0.0039 0.1478" size="0.003 0.015" rgba="0.19 0.83 0.78 0.2" group="2"/>
+      <site name="TRIlongglen_sidesite" pos="-0.04682 -0.002529 0.1502" size="0.0005"/>
+      <body name="r_humerus" pos="-0.01755 -0.007 0.17" euler="0 0 0">
+        <inertial mass="1.8645719999999999" pos="0 -0.18049599999999999 0" fullinertia="0.01481 0.0045510000000000004 0.013193 0 0 0"/>
+        <geom name="r_humerus_geom_1" type="mesh" mesh="r_humerus_geom_1_arm_r_humerus" rgba="1 1 1 1" group="0"/>
+        <geom name="TRIlonghh_ellipsoid" type="sphere" euler="3.002 -0.8535 2.574" pos="-0.0078 -0.0041 -0.0014" size="0.02" rgba="0.19 0.83 0.78 0.2" group="2"/>
+        <site name="TRIlonghh_sidesite" pos="-0.02362 -0.006026 -0.01507" size="0.0005"/>
+        <geom name="BIClonghh_ellipsoid" type="sphere" euler="-2.004 -1.002 0.9755" pos="0.0033 0.0073 0.0003" size="0.02" rgba="0.19 0.83 0.78 0.2" group="2"/>
+        <site name="BIClonghh_sidesite" pos="0.01267 0.02554 0.004834" size="0.0005"/>
+        <geom name="TRI_cylinder" type="cylinder" euler="-0.1401 -0.006283 0.155" pos="0.0028 -0.2919 -0.0069" size="0.016 0.025" rgba="0.19 0.83 0.78 0.2" group="2"/>
+        <joint name="r_shoulder_elev" range="-1.571 3.142" limited="true" user="0.0" ref="0" axis="-0.0589 0.0023 0.9983" type="hinge"/>
+        <body name="r_ulna_radius_hand" pos="0.0061 -0.2904 -0.0123" euler="0 0 0">
+          <inertial mass="1.5343150000000001" pos="0 -0.181479 0" fullinertia="0.019281 0.0015709999999999999 0.020062 0 0 0"/>
+          <geom name="r_ulna_radius_hand_geom_1" type="mesh" mesh="r_ulna_radius_hand_geom_1_arm_r_ulna" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_2" type="mesh" mesh="r_ulna_radius_hand_geom_2_arm_r_radius" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_3" type="mesh" mesh="r_ulna_radius_hand_geom_3_arm_r_lunate" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_4" type="mesh" mesh="r_ulna_radius_hand_geom_4_arm_r_scaphoid" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_5" type="mesh" mesh="r_ulna_radius_hand_geom_5_arm_r_pisiform" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_6" type="mesh" mesh="r_ulna_radius_hand_geom_6_arm_r_triquetrum" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_7" type="mesh" mesh="r_ulna_radius_hand_geom_7_arm_r_capitate" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_8" type="mesh" mesh="r_ulna_radius_hand_geom_8_arm_r_trapezium" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_9" type="mesh" mesh="r_ulna_radius_hand_geom_9_arm_r_trapezoid" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_10" type="mesh" mesh="r_ulna_radius_hand_geom_10_arm_r_hamate" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_11" type="mesh" mesh="r_ulna_radius_hand_geom_11_arm_r_1mc" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_12" type="mesh" mesh="r_ulna_radius_hand_geom_12_arm_r_2mc" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_13" type="mesh" mesh="r_ulna_radius_hand_geom_13_arm_r_3mc" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_14" type="mesh" mesh="r_ulna_radius_hand_geom_14_arm_r_4mc" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_15" type="mesh" mesh="r_ulna_radius_hand_geom_15_arm_r_5mc" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_16" type="mesh" mesh="r_ulna_radius_hand_geom_16_arm_r_thumbprox" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_17" type="mesh" mesh="r_ulna_radius_hand_geom_17_arm_r_thumbdist" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_18" type="mesh" mesh="r_ulna_radius_hand_geom_18_arm_r_2proxph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_19" type="mesh" mesh="r_ulna_radius_hand_geom_19_arm_r_2midph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_20" type="mesh" mesh="r_ulna_radius_hand_geom_20_arm_r_2distph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_21" type="mesh" mesh="r_ulna_radius_hand_geom_21_arm_r_3proxph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_22" type="mesh" mesh="r_ulna_radius_hand_geom_22_arm_r_3midph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_23" type="mesh" mesh="r_ulna_radius_hand_geom_23_arm_r_3distph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_24" type="mesh" mesh="r_ulna_radius_hand_geom_24_arm_r_4proxph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_25" type="mesh" mesh="r_ulna_radius_hand_geom_25_arm_r_4midph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_26" type="mesh" mesh="r_ulna_radius_hand_geom_26_arm_r_4distph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_27" type="mesh" mesh="r_ulna_radius_hand_geom_27_arm_r_5proxph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_28" type="mesh" mesh="r_ulna_radius_hand_geom_28_arm_r_5midph" rgba="1 1 1 1" group="0"/>
+          <geom name="r_ulna_radius_hand_geom_29" type="mesh" mesh="r_ulna_radius_hand_geom_29_arm_r_5distph" rgba="1 1 1 1" group="0"/>
+          <joint name="r_elbow_flex" range="0 2.269" limited="true" user="0.0" ref="0" axis="0.0494 0.0366 0.9981" type="hinge"/>
+          <site name="BIClong_BIClong-P9" pos="0.0075100000000000002 -0.048390000000000002 0.02179"/>
+          <site name="r_radius_styloid_marker" group="4" pos="-0.0011 -0.2356 0.0943" rgba="1 0.1 0.5 0.5" size="0.01"/>
+        </body>
+        <site name="BIClong_BIClong-P3" pos="0.021309999999999999 0.017930000000000001 0.010279999999999999"/>
+        <site name="BIClong_BIClong-P4" pos="0.023779999999999999 -0.00511 0.01201"/>
+        <site name="BIClong_BIClong-P5" pos="0.01345 -0.02827 0.0013600000000000001"/>
+        <site name="BIClong_BIClong-P6" pos="0.01068 -0.077359999999999998 -0.00165"/>
+        <site name="BIClong_BIClong-P7" pos="0.01703 -0.12125 0.00024000000000000001"/>
+        <site name="BIClong_BIClong-P8" pos="0.022800000000000001 -0.1754 -0.0063"/>
+        <site name="BIClonghh_ellipsoid_BIClong_2_sidesite" pos="0.009153 0.02744 -0.0007744" size="0.0005"/>
+        <geom name="BIClonghh_ellipsoid_BIClong" type="sphere" euler="-2.004 -1.002 0.9755" pos="0.0033 0.0073 0.0003" size="0.02" rgba="0.19 0.83 0.78 0.2" group="2"/>
+        <site name="r_humerus_epicondyle_marker" group="4" pos="0.005 -0.2904 0.03" rgba="1 0.1 0.5 0.5" size="0.01"/>
+      </body>
+      <site name="BIClong_BIClong-P1" pos="-0.039234999999999999 0.00347 0.14795"/>
+      <site name="BIClong_BIClong-P2" pos="-0.028944999999999999 0.01391 0.15639"/>
+      <site name="r_acromion_marker" group="4" pos="-0.01256 0.04 0.17" rgba="1 0.1 0.5 0.5" size="0.01"/>
+    </body>
+  </worldbody>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="0.6 0.8 1" width="256" height="256"/>
+    <mesh name="base_geom_1_ground_ribs" file="Geometry/ground_ribs.stl" scale="1 1 1"/>
+    <mesh name="base_geom_2_ground_spine" file="Geometry/ground_spine.stl" scale="1 1 1"/>
+    <mesh name="base_geom_3_ground_skull" file="Geometry/ground_skull.stl" scale="1 1 1"/>
+    <mesh name="base_geom_4_ground_jaw" file="Geometry/ground_jaw.stl" scale="1 1 1"/>
+    <mesh name="base_geom_5_ground_r_clavicle" file="Geometry/ground_r_clavicle.stl" scale="1 1 1"/>
+    <mesh name="base_geom_6_ground_r_scapula" file="Geometry/ground_r_scapula.stl" scale="1 1 1"/>
+    <mesh name="r_humerus_geom_1_arm_r_humerus" file="Geometry/arm_r_humerus.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_1_arm_r_ulna" file="Geometry/arm_r_ulna.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_2_arm_r_radius" file="Geometry/arm_r_radius.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_3_arm_r_lunate" file="Geometry/arm_r_lunate.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_4_arm_r_scaphoid" file="Geometry/arm_r_scaphoid.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_5_arm_r_pisiform" file="Geometry/arm_r_pisiform.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_6_arm_r_triquetrum" file="Geometry/arm_r_triquetrum.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_7_arm_r_capitate" file="Geometry/arm_r_capitate.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_8_arm_r_trapezium" file="Geometry/arm_r_trapezium.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_9_arm_r_trapezoid" file="Geometry/arm_r_trapezoid.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_10_arm_r_hamate" file="Geometry/arm_r_hamate.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_11_arm_r_1mc" file="Geometry/arm_r_1mc.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_12_arm_r_2mc" file="Geometry/arm_r_2mc.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_13_arm_r_3mc" file="Geometry/arm_r_3mc.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_14_arm_r_4mc" file="Geometry/arm_r_4mc.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_15_arm_r_5mc" file="Geometry/arm_r_5mc.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_16_arm_r_thumbprox" file="Geometry/arm_r_thumbprox.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_17_arm_r_thumbdist" file="Geometry/arm_r_thumbdist.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_18_arm_r_2proxph" file="Geometry/arm_r_2proxph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_19_arm_r_2midph" file="Geometry/arm_r_2midph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_20_arm_r_2distph" file="Geometry/arm_r_2distph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_21_arm_r_3proxph" file="Geometry/arm_r_3proxph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_22_arm_r_3midph" file="Geometry/arm_r_3midph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_23_arm_r_3distph" file="Geometry/arm_r_3distph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_24_arm_r_4proxph" file="Geometry/arm_r_4proxph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_25_arm_r_4midph" file="Geometry/arm_r_4midph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_26_arm_r_4distph" file="Geometry/arm_r_4distph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_27_arm_r_5proxph" file="Geometry/arm_r_5proxph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_28_arm_r_5midph" file="Geometry/arm_r_5midph.stl" scale="1 1 1"/>
+    <mesh name="r_ulna_radius_hand_geom_29_arm_r_5distph" file="Geometry/arm_r_5distph.stl" scale="1 1 1"/>
+  </asset>
+  <tendon>
+    <!-- Leave this comment here to make 'tendon' element pretty printed !-->
+    <spatial name="BIClong_tendon">
+      <site site="BIClong_BIClong-P1"/>
+      <site site="BIClong_BIClong-P2"/>
+      <geom geom="BIClonghh_ellipsoid_BIClong" sidesite="BIClonghh_ellipsoid_BIClong_2_sidesite"/>
+      <site site="BIClong_BIClong-P3"/>
+      <site site="BIClong_BIClong-P4"/>
+      <site site="BIClong_BIClong-P5"/>
+      <site site="BIClong_BIClong-P6"/>
+      <site site="BIClong_BIClong-P7"/>
+      <site site="BIClong_BIClong-P8"/>
+      <site site="BIClong_BIClong-P9"/>
+    </spatial>
+  </tendon>
+  <actuator>
+    <!-- Leave this comment here to make 'actuator' element pretty printed !-->
+    <muscle name="BIClong" lengthrange="0.01 1" force="624.29999999999995" tendon="BIClong_tendon" class="muscle" timeconst="0.01 0.04"/>
+  </actuator>
+  <equality>
+    <!-- Leave this comment here to make 'equality' element pretty printed !-->
+  </equality>
+  <contact>
+    <!-- Leave this comment here to make 'contact' element pretty printed !-->
+    <pair geom1="ground-plane" geom2="base_geom_1"/>
+    <pair geom1="ground-plane" geom2="base_geom_2"/>
+    <pair geom1="ground-plane" geom2="base_geom_3"/>
+    <pair geom1="ground-plane" geom2="base_geom_4"/>
+    <pair geom1="ground-plane" geom2="base_geom_5"/>
+    <pair geom1="ground-plane" geom2="base_geom_6"/>
+    <pair geom1="ground-plane" geom2="r_humerus_geom_1"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_1"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_2"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_3"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_4"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_5"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_6"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_7"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_8"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_9"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_10"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_11"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_12"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_13"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_14"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_15"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_16"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_17"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_18"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_19"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_20"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_21"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_22"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_23"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_24"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_25"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_26"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_27"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_28"/>
+    <pair geom1="ground-plane" geom2="r_ulna_radius_hand_geom_29"/>
+  </contact>
+  <keyframe>
+    <key name="default-pose" qpos="0 0"/>
+  </keyframe>
+</mujoco>

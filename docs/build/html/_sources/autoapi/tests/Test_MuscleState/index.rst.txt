@@ -1,0 +1,64 @@
+:py:mod:`tests.Test_MuscleState`
+================================
+
+.. py:module:: tests.Test_MuscleState
+
+.. autoapi-nested-parse::
+
+   OsimMuscleStates Testing
+
+   Created on Tue Nov  1 22:57:35 2022
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+.. py:data:: osim_model_path
+   :value: '../../../models/osim/mobl_arms/MOBL_ARMS_fixed_41.osim'
+
+   
+
+.. py:data:: osim_model
+
+   
+
+.. py:data:: osimMusSta
+
+   
+
+.. py:data:: wrapping_coordinate
+
+   
+
+.. py:data:: osim_coordinate_range
+
+   
+
+.. py:data:: osim_moment_arms
+
+   
+
+.. py:data:: mjc_model_path
+   :value: '../../../models/converted/mobl_arms/MOBL_ARMS_fixed_41.xml'
+
+   
+
+.. py:data:: mjc_model
+
+   
+
+.. py:data:: mjcMusSta
+
+   
+
+.. py:data:: mjc_coordinate_range
+
+   
+
+.. py:data:: mjc_moment_arms
+
+   
+

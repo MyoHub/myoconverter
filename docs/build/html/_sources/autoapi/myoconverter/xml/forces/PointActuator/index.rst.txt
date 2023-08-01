@@ -1,0 +1,29 @@
+:py:mod:`myoconverter.xml.forces.PointActuator`
+===============================================
+
+.. py:module:: myoconverter.xml.forces.PointActuator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.forces.PointActuator.PointActuator
+
+
+
+
+.. py:class:: PointActuator
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+

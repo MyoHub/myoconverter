@@ -1,0 +1,32 @@
+:py:mod:`myoconverter.xml.forces.Millard2012EquilibriumMuscle`
+==============================================================
+
+.. py:module:: myoconverter.xml.forces.Millard2012EquilibriumMuscle
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.forces.Millard2012EquilibriumMuscle.Millard2012EquilibriumMuscle
+
+
+
+
+.. py:class:: Millard2012EquilibriumMuscle(**kwargs)
+
+   Bases: :py:obj:`myoconverter.xml.forces.Muscle.Muscle`
+
+   A parent class to handle common parsing tasks for muscle forces (actuators), like parsing path points 
+
+   .. py:method:: _parse(xml, **kwargs)
+
+      Child classes must implement this method. This is called from the 'parse' method below. Add any calculations /
+      conversions that weren't included in the default calculations / conversions below. 
+
+
+

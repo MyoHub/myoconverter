@@ -1,0 +1,36 @@
+:py:mod:`myoconverter.xml.joints.utils`
+=======================================
+
+.. py:module:: myoconverter.xml.joints.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.joints.utils.parse_coordinates
+   myoconverter.xml.joints.utils.lock_joint
+   myoconverter.xml.joints.utils.estimate_axis
+   myoconverter.xml.joints.utils.plot_and_save_figure
+
+
+
+.. py:function:: parse_coordinates(joint)
+
+
+.. py:function:: lock_joint(params, M_EQUALITY)
+
+   Add an equality constraint for this joint 
+
+
+.. py:function:: estimate_axis(socket_child_frame, axis)
+
+
+.. py:function:: plot_and_save_figure(x_values, y_values, fit, params, independent_coordinate, output_dir)
+
+

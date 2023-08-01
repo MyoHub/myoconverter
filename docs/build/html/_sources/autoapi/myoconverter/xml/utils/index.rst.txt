@@ -1,0 +1,122 @@
+:py:mod:`myoconverter.xml.utils`
+================================
+
+.. py:module:: myoconverter.xml.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.utils.find_element_by_name
+   myoconverter.xml.utils.str2vec
+   myoconverter.xml.utils.vec2str
+   myoconverter.xml.utils.num2str
+   myoconverter.xml.utils.filter_keys
+   myoconverter.xml.utils.filter_nan_values
+   myoconverter.xml.utils.filter_set
+   myoconverter.xml.utils.val2str
+   myoconverter.xml.utils.str2bool
+   myoconverter.xml.utils.bool2str
+   myoconverter.xml.utils.create_symmetric_matrix
+   myoconverter.xml.utils.element_txt2num
+   myoconverter.xml.utils.fit_piecewise_linear
+   myoconverter.xml.utils.fit_spline
+   myoconverter.xml.utils.create_transformation_matrix
+   myoconverter.xml.utils.calculate_mujoco_position
+   myoconverter.xml.utils.is_linear
+   myoconverter.xml.utils.get_body
+   myoconverter.xml.utils.create_keyframe
+   myoconverter.xml.utils.set_default_value
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.utils.split_name
+
+
+.. py:data:: split_name
+
+   
+
+.. py:function:: find_element_by_name(xml, names)
+
+
+.. py:function:: str2vec(string)
+
+
+.. py:function:: vec2str(vec)
+
+
+.. py:function:: num2str(x)
+
+
+.. py:function:: filter_keys(d, prefix='_')
+
+
+.. py:function:: filter_nan_values(d)
+
+
+.. py:function:: filter_set(s, prefix='_')
+
+
+.. py:function:: val2str(d)
+
+
+.. py:function:: str2bool(string)
+
+
+.. py:function:: bool2str(boolean)
+
+
+.. py:function:: create_symmetric_matrix(vec)
+
+
+.. py:function:: element_txt2num(xml, element_name, default=np.nan)
+
+   Get element text; return nan by default if element is missing
+
+
+.. py:function:: fit_piecewise_linear(x_values, y_values)
+
+   Fit a piecewise linear function. Useful when we don't need to model the relationship as a quartic function. 
+
+
+.. py:function:: fit_spline(x_values, y_values)
+
+   Fit a spline, check validity, return polycoef 
+
+
+.. py:function:: create_transformation_matrix(pos=None, quat=None, rotation_matrix=None, euler=None)
+
+
+.. py:function:: calculate_mujoco_position(tag, name, M_WORLDBODY)
+
+
+.. py:function:: is_linear(polycoef)
+
+
+.. py:function:: get_body(OPENSIM, M_WORLDBODY, parent_socket_frame)
+
+   Make sure the frame name has two elements: first correspond to bodyset, the second to a body name
+
+
+.. py:function:: create_keyframe(MUJOCO, M_WORLDBODY, M_EQUALITY)
+
+   Set keyframe info into mujoco model based on joint default values and equality constraints. Default values are
+   set as the "user" parameter for each joint in the mujoco file. Joint velocity, joint acceleration, and muscle internal
+   states are set to zero. 
+
+
+.. py:function:: set_default_value(M_EQUALITY, joints, default_values, joint_names, index)
+
+

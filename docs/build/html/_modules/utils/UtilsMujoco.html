@@ -1,0 +1,806 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsMujoco &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.UtilsMujoco</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.UtilsMujoco</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">opensim</span>
+<span class="kn">import</span> <span class="nn">mujoco_py</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsOpensim</span> <span class="kn">import</span> <span class="n">getJointsSpannedByMuscle</span><span class="p">,</span> <span class="n">getIndipCoordAndJoint</span><span class="p">,</span> <span class="n">getCouplingJoints</span><span class="p">,</span> <span class="n">getJointsControlledByMuscle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsRotation</span> <span class="kn">import</span> <span class="n">spherical2cartesian</span><span class="p">,</span> <span class="n">cartesian2spherical</span><span class="p">,</span>\
+     <span class="n">quaternionRotaion</span><span class="p">,</span> <span class="n">cartesian2cylindrical</span><span class="p">,</span> <span class="n">cylindarical2cartesian</span>
+
+<span class="c1"># get all independed joint coordinate ragne</span>
+<div class="viewcode-block" id="getCoordinateRange_mjc"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.getCoordinateRange_mjc">[docs]</a><span class="k">def</span> <span class="nf">getCoordinateRange_mjc</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">):</span>
+    
+    <span class="c1"># extract joint names and ranges</span>
+    <span class="n">joint_names</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">joint_names</span>
+    <span class="n">joint_ranges</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">jnt_range</span>
+    
+    <span class="n">free_jnt_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ang_ranges</span> <span class="o">=</span> <span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">ira</span><span class="p">,</span> <span class="n">ra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joint_ranges</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj1id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if there are no equality joint constraints</span>
+            <span class="n">free_jnt_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ira</span><span class="p">)</span>
+            <span class="n">ang_ranges</span><span class="p">[</span><span class="n">joint_names</span><span class="p">[</span><span class="n">ira</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">ra</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">ra</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">4</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ra</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ra</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ira</span> <span class="ow">in</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj1id</span><span class="p">[</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]:</span>
+                <span class="n">free_jnt_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ira</span><span class="p">)</span>
+                <span class="n">ang_ranges</span><span class="p">[</span><span class="n">joint_names</span><span class="p">[</span><span class="n">ira</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">ra</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">ra</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">4</span><span class="p">)]</span>
+            
+    <span class="k">return</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">free_jnt_id</span></div>
+    
+
+<div class="viewcode-block" id="calculateEndPoints_mjc"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.calculateEndPoints_mjc">[docs]</a><span class="k">def</span> <span class="nf">calculateEndPoints_mjc</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">end_points</span><span class="p">,</span> <span class="n">n_eval</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the positions of endpoints when iterating all joint angle meshes.</span>
+<span class="sd">    This is to check the Geometry and Joint Definition matches between the Opensim</span>
+<span class="sd">    and the converted MuJoCo models.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    osimModel_path : string</span>
+<span class="sd">        Path and name of the Osim model that will be evaluated.</span>
+<span class="sd">    endPoints : list of string</span>
+<span class="sd">        The names of the the body whose positions will be evaluated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    evaData: dict</span>
+<span class="sd">        The evaluation data, including the joint angle meshes and the corresponding</span>
+<span class="sd">        endpoint locations</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">mjc_model</span>  <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span> <span class="c1"># load mjc model</span>
+
+    <span class="c1"># set up simulations</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nsubsteps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">udd_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c1">## same time step as opensim</span>
+    
+    <span class="c1"># extract independed joint names and ranges</span>
+    <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">free_jnt_id</span> <span class="o">=</span> <span class="n">getCoordinateRange_mjc</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">)</span>
+            
+    <span class="c1"># find the index of the endPoint for checking the position</span>
+    <span class="n">end_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">end_point</span> <span class="ow">in</span> <span class="n">end_points</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">end_point</span> <span class="ow">in</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_names</span><span class="p">:</span>
+            <span class="n">end_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">site_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_point</span><span class="p">))</span>
+    
+    <span class="c1"># get the endBody position by assign joint angles</span>
+    <span class="n">end_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_eval</span><span class="p">):</span>
+        
+        <span class="n">jointEval</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">dof</span> <span class="ow">in</span> <span class="n">free_jnt_id</span><span class="p">:</span>
+            
+            <span class="n">ang_range</span> <span class="o">=</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">joint_names</span><span class="p">[</span><span class="n">dof</span><span class="p">]]</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+            <span class="n">jointEval</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ang_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span> \
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ang_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ang_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])))[</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">free_jnt_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">jointEval</span>
+            
+        <span class="n">dependencyJnts</span><span class="p">,</span> <span class="n">dependencyJntAngs</span><span class="p">,</span> <span class="n">freeJnts</span> <span class="o">=</span> <span class="n">dependencyJointAng</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">free_jnt_id</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">dependencyJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">dependencyJntAngs</span>
+
+        <span class="c1"># assign the value of locked joints</span>
+        <span class="n">lockedJnts</span><span class="p">,</span> <span class="n">lockedJointAngs</span> <span class="o">=</span> <span class="n">lockedJointAng</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">lockedJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">lockedJointAngs</span>
+
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">),)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">),)</span>
+        
+        <span class="n">sim</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
+        <span class="c1"># sim.step()</span>
+        
+        <span class="n">end_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">site_xpos</span><span class="p">[</span><span class="n">end_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    
+    <span class="k">return</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">end_pos</span></div>
+
+<div class="viewcode-block" id="dependencyJointAng"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.dependencyJointAng">[docs]</a><span class="k">def</span> <span class="nf">dependencyJointAng</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">free_jnt_id_array</span><span class="p">,</span> <span class="n">jnt_ang_array</span><span class="p">):</span>
+    
+    <span class="n">couplingJnt</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_type</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="n">activeEqu</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_active</span> <span class="o">==</span> <span class="mi">1</span>
+    
+    <span class="n">dependencyJntAngs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dependencyJnts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">freeJnts</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># check if couplingJnt exist</span>
+    <span class="n">couplingJnt_sign</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">couplingJnt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">couplingJnt</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">couplingJnt</span><span class="p">:</span>
+            <span class="n">couplingJnt_sign</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">couplingJnt_sign</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">couplingJnt_sign</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">couplingJnt</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">couplingJnt</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">activeEqu</span><span class="p">[</span><span class="n">ind</span><span class="p">]]):</span>
+                
+                <span class="n">dependencyJnt</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj1id</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="n">dependencyJnt</span> <span class="ow">in</span> <span class="n">dependencyJnts</span><span class="p">:</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;multiple equality constraints for the same dependency joint..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                
+                <span class="n">freeJnt</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj2id</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="n">freeJnt</span> <span class="ow">in</span> <span class="n">free_jnt_id_array</span><span class="p">:</span>
+                    <span class="n">dependencyJnts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dependencyJnt</span><span class="p">)</span>
+                    <span class="n">freeJnts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">freeJnt</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                    
+                <span class="n">freeJntAng</span> <span class="o">=</span> <span class="n">jnt_ang_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">free_jnt_id_array</span> <span class="o">==</span> <span class="n">freeJnt</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+                
+                <span class="n">poly_gains</span> <span class="o">=</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_data</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span>
+                
+                <span class="n">dependencyJntAng</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">idp</span><span class="p">,</span> <span class="n">poly_gain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">poly_gains</span><span class="p">):</span>
+                    <span class="n">dependencyJntAng</span> <span class="o">=</span> <span class="n">dependencyJntAng</span> <span class="o">+</span> <span class="n">poly_gain</span><span class="o">*</span><span class="n">freeJntAng</span><span class="o">**</span><span class="n">idp</span>
+                    
+                <span class="n">dependencyJntAngs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dependencyJntAng</span><span class="p">)</span>
+            
+    <span class="k">return</span> <span class="n">dependencyJnts</span><span class="p">,</span> <span class="n">dependencyJntAngs</span><span class="p">,</span> <span class="n">freeJnts</span></div>
+
+<div class="viewcode-block" id="lockedJointAng"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.lockedJointAng">[docs]</a><span class="k">def</span> <span class="nf">lockedJointAng</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    find the self-locked joints and corresponding joint angles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># find locked constraints that satisfy all three conditions</span>
+    <span class="n">lockedCons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_active</span> <span class="o">==</span> <span class="mi">1</span><span class="p">),</span> <span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj2id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">lockedJnts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lockedJntAngs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># dirty fix when there are only one constraints!!</span>
+    <span class="n">lockedCons_sign</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lockedCons</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="n">lockedCons</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lockedCons</span><span class="p">:</span>
+            <span class="n">lockedCons_sign</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lockedCons_sign</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># run through all the locked constraints</span>
+    <span class="k">if</span> <span class="n">lockedCons_sign</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lockedCons</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">lockedCons</span><span class="p">[</span><span class="n">ind</span><span class="p">]:</span>
+                <span class="n">lockedJnts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_obj1id</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+                <span class="n">lockedJntAngs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">eq_data</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">lockedJnts</span><span class="p">,</span> <span class="n">lockedJntAngs</span></div>
+
+
+<div class="viewcode-block" id="sortMuscleWrapSiteJoint"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.sortMuscleWrapSiteJoint">[docs]</a><span class="k">def</span> <span class="nf">sortMuscleWrapSiteJoint</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle_para_osim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    find out the wrapping objects, siteside, and corresponding joints</span>
+<span class="sd">    that should be optimized for a given muscle </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mjcModel: mujoco Model</span>
+<span class="sd">        A mujoco model.</span>
+<span class="sd">    muscle_para_osim: dict</span>
+<span class="sd">        The muscle, wrapping_coordinates, coordinate_range information</span>
+<span class="sd">        extracted from osim model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    muscle_para_osim: dict data</span>
+<span class="sd">        add wrapping object, site side, information</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WrapTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NONE&#39;</span><span class="p">,</span><span class="s1">&#39;JOINT&#39;</span><span class="p">,</span><span class="s1">&#39;PULLEY&#39;</span><span class="p">,</span><span class="s1">&#39;SITE&#39;</span><span class="p">,</span><span class="s1">&#39;SPHERE&#39;</span><span class="p">,</span><span class="s1">&#39;CYLINDER&#39;</span><span class="p">]</span>  <span class="c1"># default wrapping types</span>
+
+    <span class="n">muscle_name</span> <span class="o">=</span> <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;muscle_name&#39;</span><span class="p">]</span>
+
+    <span class="c1"># remove the wrapping information for updating purpose</span>
+    <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;wrapping_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">])</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+
+    <span class="c1"># get the list of muscles, by specifying the actuator type == 3</span>
+    <span class="n">muscle_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_names</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> \
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_trntype</span><span class="p">)</span>\
+                    <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="c1"># instead of looking for the index from muscle_list, the tendon id needs to </span>
+    <span class="c1"># be found from the tendon name list, due to the exists of liagments, so far</span>
+    <span class="c1"># liagments are not optimized (may cause issue, TODO in the future)</span>
+
+    <span class="c1"># ia = muscle_list.index(muscle_name)  # get index of aquaring muscle</span>
+    <span class="n">ia</span> <span class="o">=</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">tendon_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">muscle_name</span> <span class="o">+</span> <span class="s1">&#39;_tendon&#39;</span><span class="p">)</span>
+ 
+    <span class="n">tendon_adr_st</span> <span class="o">=</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">tendon_adr</span><span class="p">[</span><span class="n">ia</span><span class="p">]</span>  <span class="c1"># get the index number of the tendon</span>
+    <span class="n">site_num</span> <span class="o">=</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">tendon_num</span><span class="p">[</span><span class="n">ia</span><span class="p">]</span>  <span class="c1"># get the number of sites inside a tendon</span>
+    
+    <span class="n">wrap_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">site_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">wrap_id_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">site_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">site_num</span><span class="p">):</span>  <span class="c1"># run through these sites</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="n">tendon_adr_st</span> <span class="o">+</span> <span class="n">site_id</span>
+        
+        <span class="c1"># if the site is a wrap</span>
+        <span class="k">if</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span> <span class="ow">or</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>  
+
+            <span class="n">wrap_id</span> <span class="o">=</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_objid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># get the wrap id</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">wrap_id</span> <span class="ow">in</span> <span class="n">wrap_id_list</span><span class="p">:</span>  <span class="c1"># </span>
+                <span class="n">wrap_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wrap_id</span><span class="p">)</span>
+            
+                <span class="n">wrapInfo</span> <span class="o">=</span> <span class="p">[</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_id2name</span><span class="p">(</span><span class="n">wrap_id</span><span class="p">),</span>
+                            <span class="n">wrap_id</span><span class="p">,</span>
+                            <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]),</span>
+                            <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_size</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]),</span>
+                            <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_quat</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]),</span>
+                            <span class="n">WrapTypes</span><span class="p">[</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_type</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+                            <span class="p">[]]</span>
+
+                <span class="k">if</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_prm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># if so, and there is side site</span>
+                    <span class="n">site_side_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">wrap_prm</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>                
+                    <span class="n">siteInfo</span> <span class="o">=</span> <span class="p">[</span><span class="n">site_side_id</span><span class="p">,</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">site_side_id</span><span class="p">])]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;There is no side site for the Wrap: &#39;</span> <span class="o">+</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_id2name</span><span class="p">(</span><span class="n">wrap_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, at muscle:&#39;</span> <span class="o">+</span> <span class="n">muscle_name</span><span class="p">)</span>
+
+
+            <span class="c1"># Bow check which joints this wrapping object and wrapping point affectting...</span>
+            <span class="c1"># By moving the wrapping object to extrem locations. Since the wrapping point</span>
+            <span class="c1"># was already defined to the center of the wrapping object, muscle path should</span>
+            <span class="c1"># always go through the wrapping object if affecting, which create moment arm</span>
+            <span class="c1"># changes.</span>
+            <span class="c1"># If no joints are affected by the wrapping object and point, then the location</span>
+            <span class="c1"># of the wrapping point will be defined as [0, 0, 0]. This could happen, since</span>
+            <span class="c1"># multiple wrapping points can be detected for the same muscle and same wrapping</span>
+            <span class="c1"># object in the first step. </span>
+
+            <span class="k">for</span> <span class="n">i_jnts</span><span class="p">,</span> <span class="n">joints</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">]):</span>
+
+                <span class="c1"># compute moment arms before change</span>
+                <span class="n">ma_org</span> <span class="o">=</span> <span class="n">computeMomentArmMuscleJoints</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                    <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnts</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+                <span class="c1"># change the wrapping object location to a extrem location, 10 times of its size</span>
+                <span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_size</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]</span>
+                <span class="n">mjcModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">siteInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">])</span>
+
+                <span class="c1"># compute the moment arms gain after the change</span>
+                <span class="n">ma_aft</span> <span class="o">=</span> <span class="n">computeMomentArmMuscleJoints</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                            <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnts</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+                <span class="c1"># Check if there are large changes before and after the wrap object location change</span>
+                <span class="c1"># If there is moment arm differences, then save the wrapping object.</span>
+                <span class="n">ma_org_nonzeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ma_org</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="mf">1e-3</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">ma_aft</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="n">ma_org</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">/</span><span class="n">ma_org_nonzeros</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+                    
+                    <span class="c1"># And also check if the wrapping point is effecting the moment arms or not,</span>
+                    <span class="c1"># if yes, then this wrapping point will be saved in the muscle_parameter</span>
+                    <span class="c1"># for the moment arm optimization.</span>
+
+                    <span class="c1"># move site position to its orignal location</span>
+                    <span class="n">mjcModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">siteInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">siteInfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+                    <span class="c1"># calculate the moment arm again </span>
+                    <span class="n">ma_pnt</span> <span class="o">=</span> <span class="n">computeMomentArmMuscleJoints</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                            <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnts</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+                    <span class="c1"># calculate the difference</span>
+                    <span class="n">ma_aft_nonzeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ma_aft</span><span class="o">.</span><span class="n">flatten</span><span class="p">()),</span> <span class="mf">1e-3</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">((</span><span class="n">ma_pnt</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">-</span> <span class="n">ma_aft</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span><span class="o">/</span><span class="n">ma_aft_nonzeros</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">:</span>
+                        <span class="n">wrapInfo</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">siteInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">wrapInfo</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">siteInfo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+                        <span class="c1"># only save the wrapping objects and sites when both of them has effects</span>
+                        <span class="c1"># on the joint moment arms. Here we ASSUME, at most only one wrapping object</span>
+                        <span class="c1"># and one corresponding wrapping point for each muscle affecting on the checking</span>
+                        <span class="c1"># joints</span>
+                        <span class="n">muscle_para_osim</span><span class="p">[</span><span class="s1">&#39;wrapping_info&#39;</span><span class="p">][</span><span class="n">i_jnts</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">wrapInfo</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Wrapping sidesite does not affect moment arm, not saving...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                <span class="c1"># now move the wrapping object back to the origional location</span>
+                <span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrapInfo</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">muscle_para_osim</span></div>
+
+
+<div class="viewcode-block" id="updateSiteSide"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.updateSiteSide">[docs]</a><span class="k">def</span> <span class="nf">updateSiteSide</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">):</span>
+    <span class="c1"># change all the site side of the mujoco Model to the center of its wrap object</span>
+    
+    <span class="c1"># run through all geom items</span>
+    <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">mujocoModel</span><span class="o">.</span><span class="n">geom_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;_wrap&#39;</span> <span class="ow">in</span> <span class="n">geom</span><span class="p">:</span>  <span class="c1"># if &#39;_wrap&#39; is in the geom name, then it is a wrap object</span>
+            <span class="n">geom_location</span> <span class="o">=</span> <span class="n">mujocoModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">mujocoModel</span><span class="o">.</span><span class="n">geom_name2id</span><span class="p">(</span><span class="n">geom</span><span class="p">)]</span>
+        
+            <span class="c1"># find corresponding site sides, and update site side locations</span>
+            <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">mujocoModel</span><span class="o">.</span><span class="n">site_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">geom</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_site&#39;</span> <span class="ow">in</span> <span class="n">site</span><span class="p">:</span>
+                    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">mujocoModel</span><span class="o">.</span><span class="n">site_name2id</span><span class="p">(</span><span class="n">site</span><span class="p">)]</span> <span class="o">=</span> <span class="n">geom_location</span>
+                    
+    <span class="k">return</span> <span class="n">mujocoModel</span></div>
+                    
+
+<div class="viewcode-block" id="mjc_sim"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.mjc_sim">[docs]</a><span class="k">def</span> <span class="nf">mjc_sim</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">):</span>
+    <span class="c1"># load mujoco simulation models</span>
+    <span class="k">return</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="computeMomentArmMuscleJoints"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.computeMomentArmMuscleJoints">[docs]</a><span class="k">def</span> <span class="nf">computeMomentArmMuscleJoints</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">evalN</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate moment arm matries from given muscles and joints</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    
+    <span class="n">sim_mjc</span> <span class="o">=</span> <span class="n">mjc_sim</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">)</span>
+    <span class="n">sim_mjc</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c1">## same time step as opensim</span>
+    
+    <span class="n">muscles_idx</span> <span class="o">=</span> <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">muscle</span><span class="p">)</span>  <span class="c1"># muscle index</span>
+        
+    <span class="n">joints_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+        <span class="n">joints_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mujocoModel</span><span class="o">.</span><span class="n">joint_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">joint</span><span class="p">))</span>
+        
+    <span class="n">ang_meshes</span><span class="o">=</span><span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">joint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+        <span class="n">ang_meshes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">evalN</span><span class="p">))</span>
+
+    <span class="n">mom_arm</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="c1">#  for im, muscle in enumerate(muscles):  does not run through muscles, only one</span>
+    <span class="k">for</span> <span class="n">setAngleDofs</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">ang_meshes</span><span class="p">):</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">),)</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">),)</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">joints_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs</span>
+        
+        <span class="c1"># assign the value of dependency joints</span>
+        <span class="n">dependencyJnts</span><span class="p">,</span> <span class="n">dependencyJntAngs</span><span class="p">,</span> <span class="n">freeJnts</span> <span class="o">=</span>\
+            <span class="n">dependencyJointAng</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">,</span> <span class="n">setAngleDofs</span><span class="p">)</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">dependencyJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">dependencyJntAngs</span>
+
+        <span class="c1"># assign the value of locked joints</span>
+        <span class="n">lockedJnts</span><span class="p">,</span> <span class="n">lockedJointAngs</span> <span class="o">=</span> <span class="n">lockedJointAng</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">)</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">lockedJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">lockedJointAngs</span>
+
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
+        <span class="n">sim_mjc</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            
+        <span class="n">mom_arm_sub</span> <span class="o">=</span> <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actuator_moment</span><span class="p">[</span><span class="n">muscles_idx</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">dependencyJnts</span><span class="p">:</span> 
+            <span class="c1"># if there are dependency joint, then calculate moment arm using</span>
+            <span class="c1"># finite difference method, based on dTendon_Len/dJoint_ang</span>
+            
+            <span class="c1"># first get the muscle length with current joint angles</span>
+            <span class="n">mus_length0</span> <span class="o">=</span> <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actuator_length</span><span class="p">[</span><span class="n">muscles_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">setAngleDofs_copy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">setAngleDofs</span><span class="p">)</span>
+            
+            <span class="c1"># then a small change in every dependented free joint</span>
+            <span class="k">for</span> <span class="n">fjoint</span> <span class="ow">in</span> <span class="n">freeJnts</span><span class="p">:</span>
+                <span class="c1"># first set everything to 0</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">),)</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">),)</span>
+                
+                <span class="c1"># find the index of this free joint</span>
+                <span class="n">ifj</span> <span class="o">=</span> <span class="n">joints_idx</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">fjoint</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">setAngleDofs</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">==</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># if equal to the upper bounds</span>
+                    <span class="n">setAngleDofs_copy</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">0.005</span>  <span class="c1"># then change down</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">setAngleDofs_copy</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">0.005</span>  <span class="c1"># else change up</span>
+                    
+                <span class="c1"># assign to the sim data</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">joints_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs_copy</span>
+    
+                <span class="n">dependencyJnts</span><span class="p">,</span> <span class="n">dependencyJntAngs</span><span class="p">,</span> <span class="n">freeJnts</span> <span class="o">=</span>\
+                        <span class="n">dependencyJointAng</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">,</span> <span class="n">setAngleDofs_copy</span><span class="p">)</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">dependencyJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">dependencyJntAngs</span>
+
+                 <span class="c1"># assign the value of locked joints</span>
+                <span class="n">lockedJnts</span><span class="p">,</span> <span class="n">lockedJointAngs</span> <span class="o">=</span> <span class="n">lockedJointAng</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">)</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">lockedJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">lockedJointAngs</span>
+        
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">forward</span><span class="p">()</span>
+                <span class="n">sim_mjc</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                
+                <span class="n">mus_length1</span> <span class="o">=</span> <span class="n">sim_mjc</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actuator_length</span><span class="p">[</span><span class="n">muscles_idx</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
+                <span class="k">if</span> <span class="n">setAngleDofs</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">==</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># if equal to the upper bounds</span>
+                    <span class="n">mom_arm_sub</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">mus_length1</span> <span class="o">-</span> <span class="n">mus_length0</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">0.005</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">mom_arm_sub</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mus_length1</span> <span class="o">-</span> <span class="n">mus_length0</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ifj</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">0.005</span><span class="p">)</span>
+                    
+                <span class="n">setAngleDofs_copy</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs</span><span class="p">[</span><span class="n">ifj</span><span class="p">]</span>  <span class="c1"># change back to the initial length</span>
+                
+        <span class="n">mom_arm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mom_arm_sub</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mom_arm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="updateWrapSites"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.updateWrapSites">[docs]</a><span class="k">def</span> <span class="nf">updateWrapSites</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">wrap_type</span><span class="p">,</span> <span class="n">wrap_id</span><span class="p">,</span> <span class="n">pos_wrap</span><span class="p">,</span> <span class="n">size_wrap</span><span class="p">,</span> <span class="n">rot_wrap</span><span class="p">,</span> <span class="n">side_ids</span><span class="p">,</span> <span class="n">vec_optimized</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies values contained in vec_optimized to optimizing side of mujoco model </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        mjc_model (mujoco_py.cymj.PyMjModel): MuJoCo model</span>
+<span class="sd">        wrap_type (numpy.list): 1D list of string, clarify the wrapping types</span>
+<span class="sd">        side_ids (numpy.list): 1D list with the id of sides</span>
+<span class="sd">        pos (numpy.list): a list of 3D arrays with the position of the wrapping objects</span>
+<span class="sd">        size (numpy.list): a list of 3D arrays with the size of wrapping objects</span>
+<span class="sd">        rotation (numpy.list): a list of 4D arrays with the rotation info of wrapping objects</span>
+<span class="sd">        torus_flag (numpy.list): a list of strings, clarify whether is the origional wrapping torus</span>
+<span class="sd">        vec_optimized (numpy.ndarray): 1D vector with the concatenated array of optimized par</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># make sure side_ids is list</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">side_ids</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">side_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">side_ids</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s2">&quot;TORUS&quot;</span><span class="p">:</span>
+        
+        <span class="c1"># assign the center location of the wrap as the location of the sites</span>
+        <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">side_ids</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos_wrap</span>
+    
+    
+    <span class="k">elif</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;ELLIPSOID_CYLINDER&#39;</span><span class="p">:</span>
+        
+        <span class="c1"># update wrap size, location, rotation, as well as the site locations</span>
+        <span class="c1"># TODO: add rotation update, once optimized</span>
+        
+        <span class="n">mjc_model</span><span class="o">.</span><span class="n">geom_size</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">mjc_model</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">isi</span><span class="p">,</span> <span class="n">side_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">side_ids</span><span class="p">):</span>
+            <span class="n">cylinderical_side</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="o">*</span><span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+            <span class="n">cartesian_side</span> <span class="o">=</span> <span class="n">cylindarical2cartesian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">cylinderical_side</span><span class="p">)</span>
+            <span class="n">rotation_side</span> <span class="o">=</span> <span class="n">quaternionRotaion</span><span class="p">(</span><span class="n">rot_wrap</span><span class="p">,</span> <span class="n">cartesian_side</span><span class="p">)</span>  <span class="o">+</span> <span class="n">pos_wrap</span>
+            <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">side_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotation_side</span>
+        
+    <span class="k">elif</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;ELLIPSOID_SPHERE&#39;</span><span class="p">:</span>
+        
+        <span class="c1"># update wrap size, location, as well as the site locations</span>
+        <span class="n">mjc_model</span><span class="o">.</span><span class="n">geom_size</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">mjc_model</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">wrap_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">isi</span><span class="p">,</span> <span class="n">side_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">side_ids</span><span class="p">):</span>
+            <span class="n">spherical_side</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="o">*</span><span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+            <span class="n">cartesian_side</span> <span class="o">=</span> <span class="n">spherical2cartesian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">spherical_side</span><span class="p">)</span>
+            <span class="n">rotation_side</span> <span class="o">=</span> <span class="n">quaternionRotaion</span><span class="p">(</span><span class="n">rot_wrap</span><span class="p">,</span> <span class="n">cartesian_side</span><span class="p">)</span> <span class="o">+</span> <span class="n">pos_wrap</span>
+            <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">side_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotation_side</span>
+    
+    <span class="k">elif</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;SPHERE&#39;</span><span class="p">:</span>
+        
+        <span class="c1"># update only the site locations</span>
+        <span class="k">for</span> <span class="n">isi</span><span class="p">,</span> <span class="n">side_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">side_ids</span><span class="p">):</span>
+            <span class="n">spherical_side</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+            <span class="n">cartesian_side</span> <span class="o">=</span> <span class="n">spherical2cartesian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">spherical_side</span><span class="p">)</span>
+            <span class="n">rotation_side</span> <span class="o">=</span> <span class="n">quaternionRotaion</span><span class="p">(</span><span class="n">rot_wrap</span><span class="p">,</span> <span class="n">cartesian_side</span><span class="p">)</span> <span class="o">+</span> <span class="n">pos_wrap</span>
+            <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">side_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotation_side</span>
+            
+    <span class="k">elif</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;CYLINDER&#39;</span><span class="p">:</span>
+        
+        <span class="c1"># update only the site locations</span>
+        <span class="k">for</span> <span class="n">isi</span><span class="p">,</span> <span class="n">side_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">side_ids</span><span class="p">):</span>
+            <span class="n">cylinderical_side</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span><span class="p">],</span> <span class="n">vec_optimized</span><span class="p">[</span><span class="mi">0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">isi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+            <span class="n">cartesian_side</span> <span class="o">=</span> <span class="n">cylindarical2cartesian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">cylinderical_side</span><span class="p">)</span>
+            <span class="n">rotation_side</span> <span class="o">=</span> <span class="n">quaternionRotaion</span><span class="p">(</span><span class="n">rot_wrap</span><span class="p">,</span> <span class="n">cartesian_side</span><span class="p">)</span>  <span class="o">+</span> <span class="n">pos_wrap</span>
+            <span class="n">mjc_model</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">side_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotation_side</span>
+            
+    <span class="k">return</span> <span class="n">mjc_model</span></div>
+
+<div class="viewcode-block" id="getMuscleForceLengthCurvesSim"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.getMuscleForceLengthCurvesSim">[docs]</a><span class="k">def</span> <span class="nf">getMuscleForceLengthCurvesSim</span><span class="p">(</span><span class="n">mujocoModel_targ</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jnt_arr</span><span class="p">,</span> <span class="n">act_arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simplification Version</span>
+<span class="sd">    </span>
+<span class="sd">    Given as INPUT an OpenSim muscle OSModel, a muscle variable and a nr</span>
+<span class="sd">    of evaluation points this function returns as</span>
+<span class="sd">    musOutput a vector of the muscle variable of interest in the converted MuJoCo model</span>
+<span class="sd">    obtained by sampling the ROM of the joint spanned by the muscle in</span>
+<span class="sd">    N_EvalPoints evaluation points.</span>
+<span class="sd">    For multidof joint the combinations of ROMs are considered.</span>
+<span class="sd">    For multiarticular muscles the combination of ROM are considered.</span>
+<span class="sd">    The script is totally general because based on generating strings of code</span>
+<span class="sd">    correspondent to the encountered code. The strings are evaluated at the end.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># %======= SETTINGS ======</span>
+    
+    <span class="c1"># find out the coupling DoFs of this muscle, so that the optimization of the</span>
+    <span class="c1"># side site of corresponding DoFs only use the corresponding ma data. This </span>
+    <span class="c1"># will increase the speed of the optimzation, and avoid optimize something </span>
+    <span class="c1"># that is not needed, for instance, if only 2 out off 5 DoFs have ma difference</span>
+    <span class="c1"># then the others are not necessary to be optimized.</span>
+    <span class="c1"># osimDoF_cpJoints = getCouplingJoints(osimModel, muscles.get(curr_mus_name), joints)</span>
+    
+    <span class="n">joints_idx</span> <span class="o">=</span> <span class="p">[]</span>
+        
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">jnt_arr</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">jnt_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">jnt_arr</span><span class="p">]</span>
+        
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">act_arr</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">act_arr</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">act_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">act_arr</span><span class="p">]</span>
+        
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+        <span class="n">joints_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mujocoModel_targ</span><span class="o">.</span><span class="n">joint_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">joint</span><span class="p">))</span>
+        
+    <span class="n">force_mtu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">act_arr</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">jnt_arr</span><span class="p">)))</span>
+    <span class="n">length_mtu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">jnt_arr</span><span class="p">))</span>
+    
+    <span class="n">actuator_id</span> <span class="o">=</span> <span class="n">mujocoModel_targ</span><span class="o">.</span><span class="n">actuator_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">muscle</span><span class="p">)</span>
+
+    <span class="n">muscle_id</span> <span class="o">=</span> <span class="n">mujocoModel_targ</span><span class="o">.</span><span class="n">tendon_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;_tendon&#39;</span><span class="p">)</span>
+
+    <span class="n">mujocoModel_targ</span><span class="o">.</span><span class="n">actuator_dyntype</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># no activation dynamics</span>
+    
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="n">mujocoModel_targ</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nsubsteps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">udd_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="c1">## same time step as opensim</span>
+        
+    <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">setAngleDofs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jnt_arr</span><span class="p">):</span>
+        
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">),)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qvel</span><span class="p">),)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">joints_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">setAngleDofs</span>
+        
+        <span class="n">dependencyJnts</span><span class="p">,</span> <span class="n">dependencyJntAngs</span><span class="p">,</span> <span class="n">freeJnts</span> <span class="o">=</span>\
+            <span class="n">dependencyJointAng</span><span class="p">(</span><span class="n">mujocoModel_targ</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">,</span> <span class="n">setAngleDofs</span><span class="p">)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">dependencyJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">dependencyJntAngs</span>
+
+        <span class="c1"># find the self-locked joints and assign the contraint values</span>
+        <span class="n">lockedJnts</span><span class="p">,</span> <span class="n">lockedJntAngs</span> <span class="o">=</span> <span class="n">lockedJointAng</span><span class="p">(</span><span class="n">mujocoModel_targ</span><span class="p">)</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[</span><span class="n">lockedJnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">lockedJntAngs</span>
+        
+        <span class="k">for</span> <span class="n">ia</span><span class="p">,</span> <span class="n">act</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">act_arr</span><span class="p">):</span>
+            <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ctrl</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">act</span>    <span class="c1"># set control signal to 1</span>
+            <span class="c1"># sim.data.act[actuator_id] = act  # directly assign activation to 1</span>
+        
+            <span class="n">sim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            
+            <span class="n">force_mtu</span><span class="p">[</span><span class="n">ia</span><span class="p">,</span> <span class="n">ij</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actuator_force</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">act</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">length_mtu</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actuator_length</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
+    <span class="k">del</span> <span class="n">sim</span>
+    
+    <span class="n">mujocoModel_targ</span><span class="o">.</span><span class="n">actuator_dyntype</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># change back to activation dynamics 3</span>
+        
+    <span class="k">return</span> <span class="n">force_mtu</span><span class="p">,</span> <span class="n">length_mtu</span></div>
+    
+<div class="viewcode-block" id="updateMuscleForceProperties"><a class="viewcode-back" href="../../autoapi/utils/UtilsMujoco/index.html#utils.UtilsMujoco.updateMuscleForceProperties">[docs]</a><span class="k">def</span> <span class="nf">updateMuscleForceProperties</span><span class="p">(</span><span class="n">mujocoModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+    
+    <span class="n">actuator_id</span> <span class="o">=</span> <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_name2id</span><span class="p">(</span><span class="n">muscle</span><span class="p">)</span>
+    
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">mujocoModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">actuator_id</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">mujocoModel</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

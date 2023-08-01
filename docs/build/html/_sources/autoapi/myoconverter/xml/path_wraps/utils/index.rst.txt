@@ -1,0 +1,34 @@
+:py:mod:`myoconverter.xml.path_wraps.utils`
+===========================================
+
+.. py:module:: myoconverter.xml.path_wraps.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_wraps.utils.add_wrapping_site
+   myoconverter.xml.path_wraps.utils.maybe_add_wrapping_site
+   myoconverter.xml.path_wraps.utils.segment_distance_to_wrapping_object
+   myoconverter.xml.path_wraps.utils.create_sidesite_name
+
+
+
+.. py:function:: add_wrapping_site(idx, sites, muscle_name, wrap_object_name, wrap_object_pos, wrap_object_radius, wrap_object_body, wrap_object_body_pos, M_WORLDBODY)
+
+
+.. py:function:: maybe_add_wrapping_site(idx, sites, muscle_name, wrap_object_name, wrap_object_pos, wrap_object_radius, wrap_object_body, wrap_object_body_pos, params, M_WORLDBODY)
+
+
+.. py:function:: segment_distance_to_wrapping_object(s1, s2, wrap_object_pos, M_WORLDBODY)
+
+
+.. py:function:: create_sidesite_name(tendon_name, wrap_object_name, idx)
+
+

@@ -1,0 +1,136 @@
+:py:mod:`utils.UtilsRotation`
+=============================
+
+.. py:module:: utils.UtilsRotation
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   utils.UtilsRotation.spherical2cartesian
+   utils.UtilsRotation.cartesian2spherical
+   utils.UtilsRotation.quaternionRotaionInv
+   utils.UtilsRotation.quaternionRotaion
+   utils.UtilsRotation.cartesian2cylindrical
+   utils.UtilsRotation.cylindarical2cartesian
+   utils.UtilsRotation.TaitBryanRotationMatrix
+   utils.UtilsRotation.euler_change_sequence
+   utils.UtilsRotation.euler_change_sequence_bodyRotationFirst
+
+
+
+.. py:function:: spherical2cartesian(wrap_centre, site_pose_sph)
+
+   Transfer the site_pose in the Spherical coordinate into Catersian coordinate,
+   relative to the wrap_centre (for sphere objects)
+
+   Parameters:
+       wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+       site_pose_sph: the position of the site point, in Spherical coordinate:
+           r: float, ra [0, inf]
+           theta: float, vectical angle [0, pi]
+           phi: float, horizental angle [-pi, pi]
+
+
+.. py:function:: cartesian2spherical(wrap_centre, site_pose)
+
+   Transfer the site_pose in the Catersian coordinate into Spherical coordinate,
+   relative to the wrap_centre (for sphere objects)
+
+   Parameters:
+       wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+       site_pose: the position of the site point, in Catersian coordinate
+       
+   Outputs:
+       r: float, [0, inf], radius of the sphere
+       theta: float, [0 pi], rotation angle with respect to the z axis
+       phi: float, [-pi, pi],  rotation angle in the x-y plane
+       
+
+
+.. py:function:: quaternionRotaionInv(unitQuat, site_pose)
+
+   Rotation the site_pose based on the unit quaternion rotation vector.
+
+   Parameters:
+       unitQuat: unit vector of the quaternion rotation angles
+       site_pose: the catesian space location of the site point
+
+
+.. py:function:: quaternionRotaion(unitQuat, site_pose)
+
+   Rotation the site_pose based on the unit quaternion rotation vector.
+
+   Parameters:
+       unitQuat: unit vector of the quaternion rotation angles
+       site_pose: the catesian space location of the site point
+
+
+.. py:function:: cartesian2cylindrical(wrap_centre, site_pose)
+
+   Transfer the site_pose in the Catersian coordinate into Cylindrical coordinate,
+   relative to the wrap_centre (for sphere objects)
+
+   Parameters:
+       wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+       site_pose: the position of the site point, in Catersian coordinate
+       
+   Outputs:
+       rho: float, [0, inf], radius of the cylinder
+       phi: float, [-pi, pi], rotation angle
+       z: float, [-inf, inf], distance to the origin O, along the longitudinal axis        
+
+
+.. py:function:: cylindarical2cartesian(wrap_centre, site_pose_cyl)
+
+   Transfer the site_pose in the Cylindarical coordinate into Catersian coordinate,
+   relative to the wrap_centre (for sphere objects)
+
+   Parameters:
+       wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+       site_pose_sph: the position of the site point, in Cylindarical coordinate
+       
+   Outputs:
+       x: float, [-inf, inf], x axis location of the local coordinate
+       y: float, [-inf, inf], y axis location of the local coordinate
+       z: float, [-inf, inf], z axis location of the local coordinate
+       
+
+
+.. py:function:: TaitBryanRotationMatrix(Sequence, angles)
+
+
+.. py:function:: euler_change_sequence(oldSequence, old_angles, newSequence)
+
+   From the old sequence euler rotation angles, get euler rotation angles with
+   the sequence of x-y-z.
+
+   Parameters:
+       oldSequence: the old order of sequence of the euler rotation
+       old_angles: three euler angles in the old rotation sequence
+       newSequence: the new order of sequence of the euler rotation
+       
+   Outputs:
+       eulerNew: the new euler angles with the new rotation sequence.
+
+
+.. py:function:: euler_change_sequence_bodyRotationFirst(bodySequence, body_angle, oldSequence, old_angles, newSequence)
+
+   From the old sequence euler rotation angles, get euler rotation angles with
+   the sequence of x-y-z.
+
+   Parameters:
+       oldSequence: the old order of sequence of the euler rotation
+       old_angles: three euler angles in the old rotation sequence
+       newSequence: the new order of sequence of the euler rotation
+       
+   Outputs:
+       eulerNew: the new euler angles with the new rotation sequence.
+
+

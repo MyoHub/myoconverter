@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.convert_steps.O2MSteps &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.convert_steps.O2MSteps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.convert_steps.O2MSteps</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">myoconverter.convert_steps.O2MStep1</span> <span class="kn">import</span> <span class="n">BasicModelConvert</span>
+<span class="kn">from</span> <span class="nn">myoconverter.convert_steps.O2MStep2</span> <span class="kn">import</span> <span class="n">MomentArmOpt</span>
+<span class="kn">from</span> <span class="nn">myoconverter.convert_steps.O2MStep3</span> <span class="kn">import</span> <span class="n">MuscleForceOpt</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.generate_pdf</span> <span class="kn">import</span> <span class="n">generate_pdf</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="O2MSteps"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MSteps/index.html#myoconverter.convert_steps.O2MSteps.O2MSteps">[docs]</a><span class="k">class</span> <span class="nc">O2MSteps</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to coordinate all conversion steps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">osim_model_file</span><span class="p">,</span> <span class="n">geom_folder</span><span class="p">,</span> <span class="n">mjc_target_folder</span><span class="p">,</span>\
+                 <span class="n">convert_steps</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">muscle_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+                 <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">convert</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>\
+                 <span class="n">validation</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">generate_pdf</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>\
+                 <span class="n">add_ground_geom</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>\
+                 <span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">            </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        osim_model_file: string</span>
+<span class="sd">            The OpenSim model file. Only works with Osim 4.0+. Osim 3.0 models</span>
+<span class="sd">            can be saved into Osim 4.0+ by opening and saving in OpenSim 4.0+ software.</span>
+
+<span class="sd">        geo_folder: string</span>
+<span class="sd">            The geometry folder of the given Osim model.</span>
+
+<span class="sd">        mjc_target_folder: string</span>
+<span class="sd">            The target folder where the converted mjc model and validation results</span>
+<span class="sd">            will be saved.</span>
+
+<span class="sd">        convert_steps: list of integer numbers [1, 2, 3]</span>
+<span class="sd">            Corresponding to the three major steps, can be customized.</span>
+<span class="sd">            For instance, &#39;[1]&#39; refers to the &#39;general model conversion step&#39;;</span>
+<span class="sd">            &#39;[1, 2]&#39; refers to the &#39;general model conversion&#39; &amp; &#39;moment arm optimzation step&#39;;</span>
+<span class="sd">            &#39;[3]&#39; refers to the &#39;muscle force optimzation step&#39;, but will require that</span>
+<span class="sd">            the [1, 2] has been ran before (model are saved).</span>
+
+<span class="sd">        muscle_list: list of string</span>
+<span class="sd">            If not NONE, the list of selected muscles that will be processed only.</span>
+
+<span class="sd">        osim_data_overwrite: boolean</span>
+<span class="sd">            If True, overwrite the extracted data of Osim states.</span>
+
+<span class="sd">        convert: boolean</span>
+<span class="sd">            If True, run convert processed of the selected steps.</span>
+
+<span class="sd">        validation: boolean</span>
+<span class="sd">            If True, perform validation (generate plots) for the selected steps.</span>
+
+<span class="sd">        generate_pdf: boolean</span>
+<span class="sd">            If True, generate the pdf report for the converted model </span>
+<span class="sd">            This generation only reads the generated comparison plots from the validation steps.</span>
+<span class="sd">            Therefore, suggest to run after all the validation steps were preformed.</span>
+
+<span class="sd">        speedy: boolean</span>
+<span class="sd">            If True, the optimization process will select a low number of instances, </span>
+<span class="sd">            checking nodes, as well iterations to speed up the process. This may result less</span>
+<span class="sd">            optimal results, however for complex models, this is suggested. Then regular optimization</span>
+<span class="sd">            process (slower) can be done on selected muscles, if detected issues. </span>
+
+<span class="sd">        add_ground_geom: boolean</span>
+<span class="sd">            If True, add ground to the converted model.</span>
+
+<span class="sd">        treat_as_normal_path_point: boolean</span>
+<span class="sd">            If True, treat all moving and conditional points as normal fix points.        </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># # set logging</span>
+        <span class="c1"># MODEL_NAME = os.path.split(osim_model_file)[1][:-5]</span>
+        <span class="c1"># OUTPUT_LOG_FILE = os.path.join(mjc_target_folder, f&quot;{MODEL_NAME}-conversion.log&quot;)</span>
+
+        <span class="c1"># # If there is an existing log file, remove it</span>
+        <span class="c1"># if os.path.exists(OUTPUT_LOG_FILE):</span>
+        <span class="c1">#     os.remove(OUTPUT_LOG_FILE)</span>
+
+        <span class="c1"># # Set the log file</span>
+        <span class="c1"># logger.add(OUTPUT_LOG_FILE)</span>
+
+        <span class="c1"># Output file infos</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Given OpenSim model file: </span><span class="si">{</span><span class="n">osim_model_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading mesh files from folder </span><span class="si">{</span><span class="n">geom_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converted model will be saved in folder </span><span class="si">{</span><span class="n">mjc_target_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># transfer variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span> <span class="o">=</span> <span class="n">osim_model_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geom_folder</span> <span class="o">=</span> <span class="n">geom_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">=</span> <span class="n">mjc_target_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_steps</span> <span class="o">=</span> <span class="n">convert_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="n">muscle_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="n">osim_data_overwrite</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert</span> <span class="o">=</span> <span class="n">convert</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validation</span> <span class="o">=</span> <span class="n">validation</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_pdf</span> <span class="o">=</span> <span class="n">generate_pdf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span> <span class="o">=</span> <span class="n">speedy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_ground_geom</span> <span class="o">=</span> <span class="n">add_ground_geom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="n">treat_as_normal_path_point</span>
+
+<div class="viewcode-block" id="O2MSteps.PipelineExecution"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MSteps/index.html#myoconverter.convert_steps.O2MSteps.O2MSteps.PipelineExecution">[docs]</a>    <span class="k">def</span> <span class="nf">PipelineExecution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    	
+        <span class="c1"># create the mjc_target_folder</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+	    
+	    <span class="c1">##############################################################################</span>
+	    <span class="c1"># STEP 1: GEOMETRY CONVERTING</span>
+	    <span class="c1"># convert the geomerties</span>
+	    
+	    <span class="c1"># check if the first step is required</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_steps</span><span class="p">:</span>
+
+	        <span class="c1"># create the first step folder if not exist</span>
+            <span class="n">path_step1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step1_xmlConvert&#39;</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path_step1</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    		
+    	    <span class="c1"># load the first step converting class</span>
+            <span class="n">Step1</span> <span class="o">=</span> <span class="n">BasicModelConvert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">geom_folder</span><span class="p">,</span> <span class="n">path_step1</span><span class="p">,</span>\
+                                      <span class="n">add_ground_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ground_geom</span><span class="p">,</span>\
+                                      <span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treat_as_normal_path_point</span><span class="p">)</span>
+    		
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert</span><span class="p">:</span> <span class="c1"># General model conversion, generate xxxx_cvt1.xml model</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 1 conversion - cvt1.&quot;</span><span class="p">)</span>
+                <span class="n">mjcModel_Cvt1_path</span> <span class="o">=</span> <span class="n">Step1</span><span class="o">.</span><span class="n">cvt1_ModelConvert</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 1 conversion - cvt1.&quot;</span><span class="p">)</span> 
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;convert is set to False, skipped step 1 conversion - cvt1.&quot;</span><span class="p">)</span>
+                        
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation</span><span class="p">:</span>  <span class="c1"># validation of the general model conversion, forward kinematics check</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 1 validation - val1.&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert</span><span class="p">:</span>
+                    <span class="n">Step1</span><span class="o">.</span><span class="n">vlt1_forwardKinematicsValidation</span><span class="p">(</span><span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">mjcModel_Cvt1_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>\
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span>\
+                            <span class="s1">&#39;_cvt1.xml&#39;</span>
+                                
+                    <span class="n">Step1</span><span class="o">.</span><span class="n">vlt1_forwardKinematicsValidation</span><span class="p">(</span><span class="n">mjc_model_path</span> <span class="o">=</span> <span class="n">mjcModel_Cvt1_path</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 1 validation - val1.&quot;</span><span class="p">)</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;validation is set to False, skipped step 1 validation - vlt1.&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[1] is not selected, skipped step 1 process.&quot;</span><span class="p">)</span>
+
+	    <span class="c1">##############################################################################</span>
+
+        <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_steps</span><span class="p">:</span>
+	    <span class="c1">###############################################################################</span>
+    	    <span class="c1"># STEP 2: MOMENT ARM OPTIMIZATION</span>
+    	    
+            <span class="c1"># The cvt1 model name path(after the 1st step general conversion) from default setting.</span>
+            <span class="n">mjcModel_Cvt1_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>\
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span>\
+                            <span class="s1">&#39;_cvt1.xml&#39;</span>
+            
+            <span class="c1"># The cvt2 model name path(after the 2nd step convert) from default setting.</span>
+            <span class="n">mjcModel_Cvt2_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>\
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span>\
+                            <span class="s1">&#39;_cvt2.xml&#39;</span>
+            
+            <span class="c1"># First check if the cvt2 model is already exist. </span>
+            <span class="c1"># If so, then directly optimize on top of it.</span>
+            <span class="c1"># Otherwise, optimize from cvt1 model and generate cvt2 model at the end.</span>
+            <span class="c1"># If cvt1 model does not exist either, then raise an error.</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mjcModel_Cvt2_path</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;xxx_cvt2 model already exist, process from it&quot;</span><span class="p">)</span>
+                <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="n">mjcModel_Cvt2_path</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;xxx_cvt2 model does not exist, start from xxx_cvt1&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mjcModel_Cvt1_path</span><span class="p">):</span>
+                    <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="n">mjcModel_Cvt1_path</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;xxx_cvt1 model file does not exist either, stopped!&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Please run [1] first to get the xxx_cvt1 model&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;xxx_cvt1 model file does not exist, cannot process following&#39;</span> <span class="o">+</span> 
+                        <span class="s1">&#39;steps .. </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    	    
+    		<span class="c1"># step 2 saving path</span>
+            <span class="n">path_step2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step2_muscleKinematics&#39;</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path_step2</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    		
+            <span class="c1"># apply moment arm convert</span>
+            <span class="n">MA_Opt</span> <span class="o">=</span> <span class="n">MomentArmOpt</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">,</span> <span class="n">path_step2</span><span class="p">,</span>\
+                                  <span class="n">muscle_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">,</span> 
+                                  <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_data_overwrite</span><span class="p">,</span>\
+    			                  <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+    		    
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert</span><span class="p">:</span>
+                <span class="c1"># optimize the side sites to get better moment arm fits</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 2 conversion - cvt2.&quot;</span><span class="p">)</span>
+                <span class="n">mjcModel_Cvt2_path</span> <span class="o">=</span> <span class="n">MA_Opt</span><span class="o">.</span><span class="n">optMomentArms</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 2 conversion - cvt2.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;convert is set to False, skipped step 2 conversion - cvt2.&quot;</span><span class="p">)</span>
+    		
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation</span><span class="p">:</span>
+                <span class="c1"># then validate (plot) the convert results</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 2 validation - val2.&quot;</span><span class="p">)</span>
+                <span class="n">MA_Opt</span><span class="o">.</span><span class="n">compMomentArmResults</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 2 validation - val2.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;validation is set to False, skipped step 2 validation - val2.&quot;</span><span class="p">)</span>
+    		
+        <span class="c1">###############################################################################</span>
+        
+        <span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_steps</span><span class="p">:</span>
+ 	    <span class="c1">###############################################################################</span>
+ 	    <span class="c1"># STEP 3: MUSCULE FORCE OPTIMIZATION</span>
+  		    
+            <span class="c1"># The cvt2 model name path(after the 2nd step convert) from default setting.</span>
+            <span class="n">mjcModel_Cvt2_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>\
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span>\
+                            <span class="s1">&#39;_cvt2.xml&#39;</span>
+            
+            <span class="c1"># The cvt3 model name path(after the 3rd step convert) from default setting.</span>
+            <span class="n">mjcModel_Cvt3_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span>\
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span>\
+                            <span class="s1">&#39;_cvt3.xml&#39;</span>
+            
+            <span class="c1"># First check if the cvt2 model is already exist. </span>
+            <span class="c1"># If so, then directly optimize on top of it.</span>
+            <span class="c1"># Otherwise, optimize from cvt1 model and generate cvt2 model at the end.</span>
+            <span class="c1"># If cvt1 model does not exist either, then raise an error.</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mjcModel_Cvt3_path</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;xxx_cvt3 model already exist, process from it&quot;</span><span class="p">)</span>
+                <span class="n">cvt3_model_path</span> <span class="o">=</span> <span class="n">mjcModel_Cvt3_path</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;xxx_cvt3 model does not exist, start from xxx_cvt2&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mjcModel_Cvt2_path</span><span class="p">):</span>
+                    <span class="n">cvt3_model_path</span> <span class="o">=</span> <span class="n">mjcModel_Cvt2_path</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;xxx_cvt2 model file does not exist either, stopped!&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Please run [2] first to get the xxx_cvt2 model&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;xxx_cvt2 model file does not exist, cannot process following&#39;</span> <span class="o">+</span> 
+                        <span class="s1">&#39;steps .. </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    		
+    		<span class="c1"># step 3 saving path</span>
+            <span class="n">path_step3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step3_muscleKinetics&#39;</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path_step3</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    
+    		<span class="c1"># create an instance of the muscle force optimization</span>
+            <span class="n">musForceOpt</span> <span class="o">=</span> <span class="n">MuscleForceOpt</span><span class="p">(</span><span class="n">cvt3_model_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">,</span> <span class="n">path_step3</span><span class="p">,</span>\
+                                         <span class="n">muscle_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">,</span>\
+                                         <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_data_overwrite</span><span class="p">,</span>\
+    			                         <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert</span><span class="p">:</span>
+                <span class="c1"># optimize muscle parameters and save optimized model as cvt3</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 3 conversion - cvt3.&quot;</span><span class="p">)</span>
+                <span class="n">mjcModel_Cvt3_path</span> <span class="o">=</span> <span class="n">musForceOpt</span><span class="o">.</span><span class="n">optMuscleForce</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 3 conversion - cvt3.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Skipped step 3 conversion - cvt3.&quot;</span><span class="p">)</span>
+    
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validation</span><span class="p">:</span>
+                <span class="c1"># validate the muscle forces</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Started step 3 validation - val3.&quot;</span><span class="p">)</span>
+                <span class="n">musForceOpt</span><span class="o">.</span><span class="n">compMuscleForceResults</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished step 3 validation - val3.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Skipped step 3 validation - val3.&quot;</span><span class="p">)</span>
+
+	    <span class="c1"># ###############################################################################</span>
+	    
+        <span class="c1"># if pdf report required, then generate it from the plots that generated in the</span>
+        <span class="c1"># converted folder.</span>
+        <span class="c1">###############################################################################</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_pdf</span><span class="p">:</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating pdf report based on the validation results.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   This may take a while, suggest to do this after all validation steps...&quot;</span><span class="p">)</span>
+
+            <span class="n">mjcModel_vlt1_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s2">&quot;/Step1_xmlConvert&quot;</span>
+            <span class="n">mjcModel_vlt2_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s2">&quot;/Step2_muscleKinematics&quot;</span>
+            <span class="n">mjcModel_vlt3_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s2">&quot;/Step3_muscleKinetics&quot;</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">pdf</span> <span class="o">=</span> <span class="n">generate_pdf</span><span class="p">(</span><span class="n">mjcModel_vlt1_path</span><span class="p">,</span> <span class="n">mjcModel_vlt2_path</span><span class="p">,</span> <span class="n">mjcModel_vlt3_path</span><span class="p">)</span>
+
+            <span class="c1"># save the pdf report</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pdf</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_target_folder</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_conversion_report.pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+            <span class="n">logger</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

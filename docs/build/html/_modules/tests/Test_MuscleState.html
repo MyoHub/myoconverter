@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tests.Test_MuscleState &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tests.Test_MuscleState</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tests.Test_MuscleState</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">OsimMuscleStates Testing</span>
+
+<span class="sd">Created on Tue Nov  1 22:57:35 2022</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../modelState&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">OsimMuscleStates</span> <span class="kn">import</span> <span class="n">OsimMuscleStates</span>
+<span class="kn">import</span> <span class="nn">opensim</span>
+
+<span class="kn">from</span> <span class="nn">MjcMuscleStates</span> <span class="kn">import</span> <span class="n">MjcMuscleStates</span>
+<span class="kn">import</span> <span class="nn">mujoco_py</span>
+
+<div class="viewcode-block" id="osim_model_path"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.osim_model_path">[docs]</a><span class="n">osim_model_path</span> <span class="o">=</span> <span class="s1">&#39;../../../models/osim/mobl_arms/MOBL_ARMS_fixed_41.osim&#39;</span></div>
+
+<span class="c1"># load osim model</span>
+<div class="viewcode-block" id="osim_model"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.osim_model">[docs]</a><span class="n">osim_model</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">osim_model_path</span><span class="p">)</span></div>
+
+<span class="c1"># get muscle states</span>
+<div class="viewcode-block" id="osimMusSta"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.osimMusSta">[docs]</a><span class="n">osimMusSta</span> <span class="o">=</span> <span class="n">OsimMuscleStates</span><span class="p">(</span><span class="n">osim_model</span><span class="p">)</span></div>
+
+<span class="c1"># get the coordinates that are wrapped by these muscles</span>
+<div class="viewcode-block" id="wrapping_coordinate"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.wrapping_coordinate">[docs]</a><span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="n">osimMusSta</span><span class="o">.</span><span class="n">getWrapingCoords</span><span class="p">()</span></div>
+
+<span class="c1"># get the coordinate ranges</span>
+<div class="viewcode-block" id="osim_coordinate_range"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.osim_coordinate_range">[docs]</a><span class="n">osim_coordinate_range</span> <span class="o">=</span> <span class="n">osimMusSta</span><span class="o">.</span><span class="n">getCoordRanges</span><span class="p">()</span></div>
+
+<span class="c1"># calculate moment arms of all wrapping coordinate, a subset can be selected to</span>
+<span class="c1"># speed up this test</span>
+<div class="viewcode-block" id="osim_moment_arms"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.osim_moment_arms">[docs]</a><span class="n">osim_moment_arms</span> <span class="o">=</span> <span class="n">osimMusSta</span><span class="o">.</span><span class="n">getMomentArms</span><span class="p">(</span><span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="n">wrapping_coordinate</span><span class="p">,</span>\
+                                       <span class="n">coordinate_range</span> <span class="o">=</span> <span class="n">osim_coordinate_range</span><span class="p">,</span> <span class="n">evalN</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span></div>
+    
+      
+<span class="c1"># plotting osim coordinate ranges and moment arm maps as illustration, </span>
+<span class="c1"># TO BE ADDED (need discuss how to show)</span>
+
+
+
+
+<span class="c1">## now testing the mjc muscle state class</span>
+
+<div class="viewcode-block" id="mjc_model_path"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.mjc_model_path">[docs]</a><span class="n">mjc_model_path</span> <span class="o">=</span> <span class="s1">&#39;../../../models/converted/mobl_arms/MOBL_ARMS_fixed_41.xml&#39;</span></div>
+
+<span class="c1"># load mjc model</span>
+<div class="viewcode-block" id="mjc_model"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.mjc_model">[docs]</a><span class="n">mjc_model</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span></div>
+
+<span class="c1"># initalized the class</span>
+<div class="viewcode-block" id="mjcMusSta"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.mjcMusSta">[docs]</a><span class="n">mjcMusSta</span> <span class="o">=</span> <span class="n">MjcMuscleStates</span><span class="p">(</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">wrapping_coordinate</span><span class="p">)</span></div>
+
+<span class="c1"># calculate coordinate ranges</span>
+<div class="viewcode-block" id="mjc_coordinate_range"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.mjc_coordinate_range">[docs]</a><span class="n">mjc_coordinate_range</span> <span class="o">=</span> <span class="n">mjcMusSta</span><span class="o">.</span><span class="n">getCoordRanges</span><span class="p">()</span></div>
+
+<span class="c1"># calculate moment arms</span>
+<div class="viewcode-block" id="mjc_moment_arms"><a class="viewcode-back" href="../../autoapi/tests/Test_MuscleState/index.html#tests.Test_MuscleState.mjc_moment_arms">[docs]</a><span class="n">mjc_moment_arms</span> <span class="o">=</span> <span class="n">mjcMusSta</span><span class="o">.</span><span class="n">getMomentArms</span><span class="p">(</span><span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="n">wrapping_coordinate</span><span class="p">,</span>\
+                                          <span class="n">coordinate_range</span> <span class="o">=</span> <span class="n">mjc_coordinate_range</span><span class="p">,</span> <span class="n">evalN</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span></div>
+    
+
+<span class="c1"># plotting mjc coordinate ranges and moment arm maps as illustration, </span>
+<span class="c1"># TO BE ADDED (need discuss how to show)</span>
+
+
+
+
+                                       
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

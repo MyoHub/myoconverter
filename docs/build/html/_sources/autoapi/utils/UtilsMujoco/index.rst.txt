@@ -1,0 +1,123 @@
+:py:mod:`utils.UtilsMujoco`
+===========================
+
+.. py:module:: utils.UtilsMujoco
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   utils.UtilsMujoco.getCoordinateRange_mjc
+   utils.UtilsMujoco.calculateEndPoints_mjc
+   utils.UtilsMujoco.dependencyJointAng
+   utils.UtilsMujoco.lockedJointAng
+   utils.UtilsMujoco.sortMuscleWrapSiteJoint
+   utils.UtilsMujoco.updateSiteSide
+   utils.UtilsMujoco.mjc_sim
+   utils.UtilsMujoco.computeMomentArmMuscleJoints
+   utils.UtilsMujoco.updateWrapSites
+   utils.UtilsMujoco.getMuscleForceLengthCurvesSim
+   utils.UtilsMujoco.updateMuscleForceProperties
+
+
+
+.. py:function:: getCoordinateRange_mjc(mjc_model)
+
+
+.. py:function:: calculateEndPoints_mjc(mjc_model_path, end_points, n_eval)
+
+   Calculate the positions of endpoints when iterating all joint angle meshes.
+   This is to check the Geometry and Joint Definition matches between the Opensim
+   and the converted MuJoCo models.
+
+   Parameters
+   ----------
+   osimModel_path : string
+       Path and name of the Osim model that will be evaluated.
+   endPoints : list of string
+       The names of the the body whose positions will be evaluated.
+
+   Returns
+   -------
+   evaData: dict
+       The evaluation data, including the joint angle meshes and the corresponding
+       endpoint locations
+
+
+.. py:function:: dependencyJointAng(mjc_model, free_jnt_id_array, jnt_ang_array)
+
+
+.. py:function:: lockedJointAng(mjc_model)
+
+   find the self-locked joints and corresponding joint angles.
+
+
+.. py:function:: sortMuscleWrapSiteJoint(mjcModel, muscle_para_osim)
+
+   find out the wrapping objects, siteside, and corresponding joints
+   that should be optimized for a given muscle 
+
+   Parameters
+   ----------
+   mjcModel: mujoco Model
+       A mujoco model.
+   muscle_para_osim: dict
+       The muscle, wrapping_coordinates, coordinate_range information
+       extracted from osim model.
+
+   Returns
+   -------
+   muscle_para_osim: dict data
+       add wrapping object, site side, information
+
+
+.. py:function:: updateSiteSide(mujocoModel)
+
+
+.. py:function:: mjc_sim(mujocoModel)
+
+
+.. py:function:: computeMomentArmMuscleJoints(mujocoModel, muscle, joints, ang_ranges, evalN)
+
+   Calculate moment arm matries from given muscles and joints
+
+
+.. py:function:: updateWrapSites(mjc_model, wrap_type, wrap_id, pos_wrap, size_wrap, rot_wrap, side_ids, vec_optimized)
+
+   Applies values contained in vec_optimized to optimizing side of mujoco model 
+
+   Parameters:
+       mjc_model (mujoco_py.cymj.PyMjModel): MuJoCo model
+       wrap_type (numpy.list): 1D list of string, clarify the wrapping types
+       side_ids (numpy.list): 1D list with the id of sides
+       pos (numpy.list): a list of 3D arrays with the position of the wrapping objects
+       size (numpy.list): a list of 3D arrays with the size of wrapping objects
+       rotation (numpy.list): a list of 4D arrays with the rotation info of wrapping objects
+       torus_flag (numpy.list): a list of strings, clarify whether is the origional wrapping torus
+       vec_optimized (numpy.ndarray): 1D vector with the concatenated array of optimized par
+
+
+.. py:function:: getMuscleForceLengthCurvesSim(mujocoModel_targ, muscle, joints, jnt_arr, act_arr)
+
+   Simplification Version
+
+   Given as INPUT an OpenSim muscle OSModel, a muscle variable and a nr
+   of evaluation points this function returns as
+   musOutput a vector of the muscle variable of interest in the converted MuJoCo model
+   obtained by sampling the ROM of the joint spanned by the muscle in
+   N_EvalPoints evaluation points.
+   For multidof joint the combinations of ROMs are considered.
+   For multiarticular muscles the combination of ROM are considered.
+   The script is totally general because based on generating strings of code
+   correspondent to the encountered code. The strings are evaluated at the end.
+
+
+.. py:function:: updateMuscleForceProperties(mujocoModel, muscle, res)
+
+

@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.path_wraps.utils &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.path_wraps.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.path_wraps.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">calculate_mujoco_position</span><span class="p">,</span> <span class="n">vec2str</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.wrap_objects.WrapObject</span> <span class="kn">import</span> <span class="n">WrapObject</span>
+
+
+<div class="viewcode-block" id="add_wrapping_site"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/utils/index.html#myoconverter.xml.path_wraps.utils.add_wrapping_site">[docs]</a><span class="k">def</span> <span class="nf">add_wrapping_site</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">wrap_object_radius</span><span class="p">,</span> <span class="n">wrap_object_body</span><span class="p">,</span>
+                      <span class="n">wrap_object_body_pos</span><span class="p">,</span> <span class="n">M_WORLDBODY</span><span class="p">):</span>
+
+  <span class="c1"># Get relevant sites</span>
+  <span class="n">s1</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">s2</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+  <span class="c1"># Check if we need to create a new sidesite</span>
+  <span class="n">default_sidesite</span> <span class="o">=</span> <span class="n">wrap_object_body</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;site[@name=&#39;</span><span class="si">{</span><span class="n">wrap_object_name</span><span class="si">}</span><span class="s2">_sidesite&#39;]&quot;</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="n">default_sidesite</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Create a new sidesite</span>
+
+    <span class="c1"># Estimate distance between segment and wrapping object</span>
+    <span class="n">dist</span><span class="p">,</span> <span class="n">points</span> <span class="o">=</span> <span class="n">segment_distance_to_wrapping_object</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+    <span class="c1"># Get relative distance (wrt to wrap object radius)</span>
+    <span class="n">rel_dist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">/</span> <span class="n">wrap_object_radius</span>
+
+    <span class="c1"># Get closest distance</span>
+    <span class="n">point_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">rel_dist</span><span class="p">)</span>
+
+    <span class="c1"># If closest point is inside wrap object, estimate a new sidesite position outside wrap object</span>
+    <span class="k">if</span> <span class="n">rel_dist</span><span class="p">[</span><span class="n">point_idx</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="n">v</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">point_idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_object_pos</span>
+      <span class="n">pos</span> <span class="o">=</span> <span class="n">wrap_object_pos</span> <span class="o">+</span> \
+            <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="n">WrapObject</span><span class="o">.</span><span class="n">sidesite_dist</span><span class="p">()</span> <span class="o">+</span> <span class="n">wrap_object_radius</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">pos</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">point_idx</span><span class="p">]</span>
+
+    <span class="c1"># Get position relative to wrap object parent body position</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">vec2str</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">wrap_object_body_pos</span><span class="p">)</span>
+
+  <span class="k">else</span><span class="p">:</span>
+
+    <span class="c1"># Use the position of the default sidesite</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">default_sidesite</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span>
+
+  <span class="c1"># Create the sidesite</span>
+  <span class="n">sidesite</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span>
+                           <span class="n">name</span><span class="o">=</span><span class="n">create_sidesite_name</span><span class="p">(</span><span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">idx</span><span class="p">),</span>
+                           <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
+                           <span class="n">size</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WrapObject</span><span class="o">.</span><span class="n">sidesite_dist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;sidesite&quot;</span><span class="p">:</span> <span class="n">sidesite</span><span class="p">,</span> <span class="s2">&quot;wrap_object&quot;</span><span class="p">:</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="s2">&quot;wrap_object_body&quot;</span><span class="p">:</span> <span class="n">wrap_object_body</span><span class="p">,</span>
+          <span class="s2">&quot;predefined&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></div>
+
+<div class="viewcode-block" id="maybe_add_wrapping_site"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/utils/index.html#myoconverter.xml.path_wraps.utils.maybe_add_wrapping_site">[docs]</a><span class="k">def</span> <span class="nf">maybe_add_wrapping_site</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">wrap_object_radius</span><span class="p">,</span>
+                            <span class="n">wrap_object_body</span><span class="p">,</span> <span class="n">wrap_object_body_pos</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">M_WORLDBODY</span><span class="p">):</span>
+
+  <span class="c1"># Get relevant sites</span>
+  <span class="n">s1</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">s2</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+  <span class="c1"># Check if one of the sites is a conditional / moving site</span>
+  <span class="k">if</span> <span class="n">M_WORLDBODY</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*body[@name=&#39;</span><span class="si">{</span><span class="n">s1</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+      <span class="ow">or</span> <span class="n">M_WORLDBODY</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*body[@name=&#39;</span><span class="si">{</span><span class="n">s2</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;site&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span>
+
+  <span class="c1"># Check if a predefined sidesite already exists here, if so, go to next segment</span>
+  <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predefined&quot;</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
+
+  <span class="c1"># Estimate distance between segment and wrapping object</span>
+  <span class="n">dist</span><span class="p">,</span> <span class="n">points</span> <span class="o">=</span> <span class="n">segment_distance_to_wrapping_object</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+  <span class="c1"># Get relative distance (wrt to wrap object radius)</span>
+  <span class="n">rel_dist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">/</span> <span class="n">wrap_object_radius</span>
+
+  <span class="c1"># Get closest distance</span>
+  <span class="n">closest_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">rel_dist</span><span class="p">)</span>
+  <span class="n">closest_dist_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">rel_dist</span><span class="p">)</span>
+
+  <span class="c1"># Check if the segment is close enough to wrapping object</span>
+  <span class="n">min_rel_dist</span> <span class="o">=</span> <span class="mf">1.5</span>
+  <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">rel_dist</span> <span class="o">&lt;</span> <span class="n">min_rel_dist</span><span class="p">):</span>
+
+    <span class="c1"># Add a wrapping site; overwrite existing wrapping site if this one is closer to the wrap object</span>
+    <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">closest_dist</span> <span class="o">&gt;</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;dist&quot;</span><span class="p">]:</span>
+      <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span>
+
+    <span class="c1"># Check if a sidesite already exists</span>
+    <span class="n">default_sidesite</span> <span class="o">=</span> <span class="n">wrap_object_body</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;site[@name=&#39;</span><span class="si">{</span><span class="n">wrap_object_name</span><span class="si">}</span><span class="s2">_sidesite&#39;]&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">default_sidesite</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+      <span class="c1"># Find a suitable position for the new sidesite</span>
+
+      <span class="c1"># If closest point is inside wrap object, estimate a new sidesite position outside wrap object</span>
+      <span class="k">if</span> <span class="n">closest_dist</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">closest_dist_idx</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_object_pos</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">wrap_object_pos</span> <span class="o">+</span> \
+              <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="n">WrapObject</span><span class="o">.</span><span class="n">sidesite_dist</span><span class="p">()</span> <span class="o">+</span> <span class="n">wrap_object_radius</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">closest_dist_idx</span><span class="p">]</span>
+
+      <span class="c1"># Get position relative to wrap object parent body position</span>
+      <span class="n">pos</span> <span class="o">=</span> <span class="n">vec2str</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">wrap_object_body_pos</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="c1"># Use the position of the default sidesite</span>
+      <span class="n">pos</span> <span class="o">=</span> <span class="n">default_sidesite</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Create the sidesite</span>
+    <span class="n">sidesite</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span>
+                             <span class="n">name</span><span class="o">=</span><span class="n">create_sidesite_name</span><span class="p">(</span><span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">idx</span><span class="p">),</span>
+                             <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
+                             <span class="n">size</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mf">0.5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WrapObject</span><span class="o">.</span><span class="n">sidesite_dist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;sidesite&quot;</span><span class="p">:</span> <span class="n">sidesite</span><span class="p">,</span> <span class="s2">&quot;wrap_object&quot;</span><span class="p">:</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="s2">&quot;wrap_object_body&quot;</span><span class="p">:</span> <span class="n">wrap_object_body</span><span class="p">,</span>
+            <span class="s2">&quot;predefined&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">:</span> <span class="n">closest_dist</span><span class="p">},</span> <span class="kc">False</span>
+
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="segment_distance_to_wrapping_object"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/utils/index.html#myoconverter.xml.path_wraps.utils.segment_distance_to_wrapping_object">[docs]</a><span class="k">def</span> <span class="nf">segment_distance_to_wrapping_object</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">M_WORLDBODY</span><span class="p">):</span>
+
+  <span class="c1"># Get (global) locations of both sites</span>
+  <span class="n">s1_pos</span> <span class="o">=</span> <span class="n">calculate_mujoco_position</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="n">s1</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;site&quot;</span><span class="p">],</span> <span class="n">M_WORLDBODY</span><span class="p">)</span>
+  <span class="n">s2_pos</span> <span class="o">=</span> <span class="n">calculate_mujoco_position</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="n">s2</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;site&quot;</span><span class="p">],</span> <span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+  <span class="c1"># Calculate vector from s1 to s2</span>
+  <span class="n">v</span> <span class="o">=</span> <span class="n">s2_pos</span> <span class="o">-</span> <span class="n">s1_pos</span>
+
+  <span class="c1"># Divide the segment from s1 to s2 into 10 points</span>
+  <span class="n">k</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">s1_pos</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">v</span>
+
+  <span class="c1"># Calculate distances between the points defined above and the wrap object</span>
+  <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">points</span> <span class="o">-</span> <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">distances</span><span class="p">,</span> <span class="n">points</span></div>
+
+<div class="viewcode-block" id="create_sidesite_name"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/utils/index.html#myoconverter.xml.path_wraps.utils.create_sidesite_name">[docs]</a><span class="k">def</span> <span class="nf">create_sidesite_name</span><span class="p">(</span><span class="n">tendon_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+  <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">wrap_object_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">tendon_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">_sidesite&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

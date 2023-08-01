@@ -1,0 +1,30 @@
+:py:mod:`myoconverter.xml.path_points.utils`
+============================================
+
+.. py:module:: myoconverter.xml.path_points.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_points.utils.update_moving_path_point_location
+   myoconverter.xml.path_points.utils.get_moving_path_point_dependency
+   myoconverter.xml.path_points.utils.plot_figure
+
+
+
+.. py:function:: update_moving_path_point_location(coordinate_name, path_point)
+
+
+.. py:function:: get_moving_path_point_dependency(path_point, coordinate_name, socket_name, cfg, output_dir)
+
+
+.. py:function:: plot_figure(x_values, y_values, fit, independent_joint, path_point_name, coord)
+
+

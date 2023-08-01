@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Limitations &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Plans" href="plans.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Limitations</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/limitations.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="limitations">
+<h1>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h1>
+<p id="id1">There are some limitations involved in the current conversion and optimisation process, that are good to keep in mind when using the converted and optimised models. Below we list these limitations, in no particular order.</p>
+<ol class="arabic">
+<li><p>The converter assumes that the OpenSim XML model definition only has one kinematic tree.</p></li>
+<li><p>Contact definitions are not converted – with the exception that if a model is converted with the <cite>add-ground-geom</cite> keyword, contacts between the model and ground are included. However, it is fairly easy to add contacts to the converted MuJoCo model afterwards, e.g., using MuJoCo’s <em>contact/pair</em> definitions. One could also enable all contacts by setting <cite>collision=”all”</cite> in the converted XML model file (by default we set <cite>collision=”predefined”</cite>), but this could lead to unwanted collisions as most of the OpenSim models haven’t been developed for this purpose and their collision geometries may not be suitable.</p></li>
+<li><p>Default values for parameters set in the <em>defaults</em> element of an OpenSim model are not parsed or used during the conversion.</p></li>
+<li><p>Current conversion of conditional and moving path points may result in inaccurate movement of tendons. A detailed explanation of this conversion process can be found in <span class="xref std std-ref">Model Conversion</span>. Addressing these inaccuracies are left for future work.</p></li>
+<li><p>There are multiple parsers that haven’t been implemented, mainly related to actuators. The parsers that we know are missing are <em>BushingForce</em>, <em>FunctionBasedBushingForce</em>, <em>CoordinateLimitForce</em>, <em>PointActuator</em>, and <em>TorqueActuator</em>, but there likely are others that we haven’t encountered yet.</p></li>
+<li><p>Non-linear dependencies between independent coordinates and dependent coordinates in a CustomJoint are not currently supported.</p></li>
+<li><p>Wrapping object orientations are not optimized.</p>
+<p>As described in the section on <a class="reference internal" href="step2.html#muscle-kinematics-optimization"><span class="std std-ref">Step 2: Muscle Kinematics Optimization</span></a>, we employ different optimization approaches based on the type of wrapping object involved. In the case of an ellipsoid wrapping object, since MuJoCo does not support this specific type, we convert it to either a cylinder or a sphere based on the axis ratio. During the optimization phase, we not only optimize how the muscle wraps over the wrapping objects but also adjust the position of the converted cylinder or sphere to obtain a more accurate approximation of the wrapping surface shape.</p>
+<p>It’s important to note that the orientation of the wrapping objects theoretically impacts the shape of the surface over which the muscle wraps. However, optimizing the rotation parameters introduces significant non-linearities that make the optimization process more challenging. Therefore, the current pipeline does not optimize the orientation of the wrapping objects. Consequently, the muscle moment arms for the converted cylinder or sphere may not be identical to those of the original ellipsoid wrapping objects.</p>
+</li>
+<li><p>If the reference Opensim model has moment arm jumps, optimization does not smooth out the jumps before fitting to it.</p>
+<p>During our conversion process, we have observed sudden moment arm jumps (sign changes) in the reference OpenSim models. In the Muscle Kinematics Optimization step, we currently do not differentiate these jumps but accept them as part of the reference model.</p>
+<p>There are a couple of reasons for this approach. Firstly, we have not yet found an effective method to accurately identify and isolate these moment arm jumps. Secondly, these jumps often occur when a muscle path point intersects with a wrapping object, causing the path to transition from one side of the wrapping object to the other.</p>
+<p>It’s important to note that simply smoothing the reference moment arm maps will not resolve this issue. This is because the same phenomenon occurs in the MuJoCo model, as the converted path points behave in a similar manner to the original model.</p>
+<p>Addressing these moment arm jumps requires further investigation and development of techniques to properly handle the situation. As of now, we continue to work towards finding a solution to this challenge in order to improve the accuracy and fidelity of the converted models.</p>
+</li>
+<li><p>If the muscle operates in a strange range, outside the range of [0 1.8], the optimization cannot find a good solution.</p>
+<p>In contrast to OpenSim, MuJoCo uses <a class="reference external" href="https://mujoco.readthedocs.io/en/stable/modeling.html#muscle-actuators">operational range</a> rather than optimal fiber length to define muscle force properties. The operational range represents the valid range of muscle activation values within which the muscle behaves in a reasonable manner.</p>
+<p>In our optimization setup, we assume that the maximum operational range of the muscles falls within the interval [0, 1.8]. This range is considered reasonable as it ensures that the muscle behavior remains within acceptable biological constraints. It is important to note that this setup may not account for extreme conditions, such as the <a class="reference external" href="https://github.com/MyoHub/myoConverter/tree/main/models/osim/TugOfWar">Tag of War</a> model. However, it serves as a suitable constraint for typical biological musculoskeletal models.</p>
+</li>
+<li><p>Current MuJoCo model uses non-elastic tendon.</p></li>
+</ol>
+<blockquote>
+<div><p>The introduction of elastic tendon muscle actuators in the recent MuJoCo update (as discussed in the <a class="reference external" href="https://github.com/deepmind/mujoco/issues/305">GitHub issue</a>) is an exciting development. The inclusion of elastic muscle models in the conversion process would indeed contribute to creating more accurate and realistic models.</p>
+<p>By incorporating elastic tendon muscle actuators, the converted models can better capture the behavior and properties of muscles with elastic tendons. This enhancement would allow for more accurate simulations and analyses, particularly in scenarios where muscle elasticity plays a significant role, such as during movements involving stretching or energy storage/release.</p>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="plans.html" class="btn btn-neutral float-right" title="Plans" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

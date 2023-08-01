@@ -1,0 +1,1219 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsOpensim &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.UtilsOpensim</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.UtilsOpensim</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">opensim</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">nnls</span><span class="p">,</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Bounds</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">cma</span>
+<span class="kn">import</span> <span class="nn">pyswarms</span> <span class="k">as</span> <span class="nn">ps</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">differential_evolution</span> <span class="k">as</span> <span class="n">de</span>
+
+      
+<div class="viewcode-block" id="getJointsControlledByMuscle"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getJointsControlledByMuscle">[docs]</a><span class="k">def</span> <span class="nf">getJointsControlledByMuscle</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">OSMuscle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    remove the locked coordinates and dependency coordinates of the spanned joints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">currentState</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+
+    <span class="c1">#getting the joint crossed by a muscle</span>
+    <span class="n">muscleCrossedJointSet</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">getJointsSpannedByMuscle</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">OSMuscle</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+    
+    <span class="c1">#index f+or effective dofs</span>
+    <span class="n">DOF_Index</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># CoordinateBoundaries = []</span>
+    <span class="c1"># degIncremList = [] </span>
+
+
+    <span class="k">for</span> <span class="n">n_joint</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">muscleCrossedJointSet</span><span class="p">)):</span>
+
+        <span class="c1"># current joint</span>
+
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">muscleCrossedJointSet</span><span class="p">[</span><span class="n">n_joint</span><span class="p">]</span>
+
+
+        <span class="c1"># Initial estimation of the nr of Dof of the CoordinateSet for that</span>
+        <span class="c1"># joint before checking for locked and constraint dofs.</span>
+        <span class="n">nDOF</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getJointSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">curr_joint</span><span class="p">)</span><span class="o">.</span><span class="n">numCoordinates</span><span class="p">()</span>
+
+        <span class="c1"># skip welded joint and removes welded joint from muscleCrossedJointSet</span>
+        <span class="k">if</span> <span class="n">nDOF</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># calculating effective dof for that joint</span>
+        <span class="c1"># effect_DOF = nDOF</span>
+        <span class="k">for</span> <span class="n">n_coord</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nDOF</span><span class="p">):</span>
+            <span class="n">curr_coord</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getJointSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">curr_joint</span><span class="p">)</span><span class="o">.</span><span class="n">get_coordinates</span><span class="p">(</span><span class="n">n_coord</span><span class="p">)</span>
+            <span class="n">curr_coord_name</span> <span class="o">=</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+
+            <span class="c1"># skip dof if locked</span>
+            <span class="k">if</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">getLocked</span><span class="p">(</span><span class="n">currentState</span><span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># if coordinate is constrained then the independent coordinate and</span>
+            <span class="c1"># associated joint will be listed in the sampling &quot;map&quot;</span>
+            <span class="k">if</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">isConstrained</span><span class="p">(</span><span class="n">currentState</span><span class="p">):</span>
+                <span class="n">constraint_coord_name</span> <span class="o">=</span> <span class="n">curr_coord_name</span>
+                <span class="c1"># finding the independent coordinate</span>
+                <span class="p">[</span><span class="n">ind_coord_name</span><span class="p">,</span> <span class="n">ind_coord_joint_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">getIndipCoordAndJoint</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">constraint_coord_name</span><span class="p">)</span>
+                <span class="c1"># updating the coordinate name to be saved in the list</span>
+                <span class="n">curr_coord_name</span> <span class="o">=</span> <span class="n">ind_coord_name</span>
+
+                <span class="c1"># skip dof if independent coordinate locked (the coord</span>
+                <span class="c1"># correspondent to the name needs to be extracted)</span>
+                <span class="k">if</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">)</span><span class="o">.</span><span class="n">getLocked</span><span class="p">(</span><span class="n">currentState</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+            <span class="c1"># ignoring constrained dof if the coordinate that has already</span>
+            <span class="c1"># been stored</span>
+            <span class="k">if</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">DOF_Index</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># NB: DOF_Index is used later in the string generated code.</span>
+            <span class="c1"># CRUCIAL: the index of dof now is model based (&quot;global&quot;) and</span>
+            <span class="c1"># different from the joint based used until now.</span>
+            <span class="n">DOF_Index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">))</span>
+
+
+    <span class="c1">#setting up for loops in order to explore all the possible combination of</span>
+    <span class="c1">#joint angles (looping on all the dofs of each joint for all the joint</span>
+    <span class="c1">#crossed by the muscle).</span>
+    <span class="c1">#The model pose is updated via: &quot; coordToUpd.setValue(currentState,setAngleDof)&quot;</span>
+    <span class="c1">#The right dof to update is chosen via: &quot;coordToUpd = osimModel.getCoordinateSet.get(n_instr)&quot;</span>
+    <span class="n">DOF_Joints</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">n_instr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">DOF_Index</span><span class="p">)):</span>
+        <span class="c1"># print(&#39;Evaluating joint -- &#39;+osimModel.getCoordinateSet().get(DOF_Index[n_instr]).getName() + \</span>
+        <span class="c1"># &quot; -- for a range between &quot;+str(CoordinateBoundaries[n_instr]))</span>
+        <span class="n">DOF_Joints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">DOF_Index</span><span class="p">[</span><span class="n">n_instr</span><span class="p">])</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">DOF_Joints</span></div>
+
+    
+<span class="c1">### get the groups of coupling DoFs of a osimModel muscle</span>
+<div class="viewcode-block" id="getCouplingJoints"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getCouplingJoints">[docs]</a><span class="k">def</span> <span class="nf">getCouplingJoints</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">joints</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if coordinates are coupling when calculating moment arms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    <span class="c1">#initialize the model</span>
+    <span class="n">currentState</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    <span class="n">joints_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ang_ranges</span><span class="o">=</span><span class="p">[]</span>
+    <span class="n">joint_CPset</span> <span class="o">=</span> <span class="p">[]</span>
+            
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+        <span class="n">jointRange1</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+        <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+        
+        <span class="c1"># assume no joint can rotate more than 180 or -180.</span>
+        <span class="k">if</span> <span class="n">jointRange1</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">jointRange1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">if</span> <span class="n">jointRange2</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    
+        <span class="n">joints_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_joint</span><span class="p">)</span>
+        <span class="n">ang_ranges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">jointRange1</span><span class="p">,</span><span class="n">jointRange2</span><span class="p">]))</span>
+        
+        <span class="n">joint_CPset</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">joint</span><span class="p">])</span>
+        
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ang_ranges</span><span class="p">)):</span>
+        
+        <span class="c1"># set minimal angle value for each joint</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ia_range</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ang_ranges</span><span class="p">):</span>
+            <span class="n">coordToUpd</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">coordToUpd</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span> <span class="n">ia_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># calculate moment arm at current minimal joint angle values</span>
+        <span class="n">ma1</span> <span class="o">=</span> <span class="n">getMomentArmAtJoints</span><span class="p">(</span><span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">currentState</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">)</span>
+        
+        <span class="c1"># change the it-th joint angle value to maximum &amp; get moment arms</span>
+        <span class="n">coordToUpd</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="n">it</span><span class="p">])</span>
+        <span class="n">coordToUpd</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">it</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="n">ma2</span> <span class="o">=</span> <span class="n">getMomentArmAtJoints</span><span class="p">(</span><span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">currentState</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">sg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">ma1</span><span class="p">,</span> <span class="n">ma2</span><span class="p">,</span> <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">)):</span> <span class="c1"># if the MA are with in 0.01%, assume no difference.</span>
+        
+        <span class="c1"># find out the moment arm changes at all other joints by setting</span>
+        <span class="c1"># maximum angle of it-th joints. It means the it-th joint are coupling</span>
+        <span class="c1"># with them            </span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">sg</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">it</span><span class="p">:</span>  
+                <span class="n">joint_CPset</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="n">it</span><span class="p">])</span>
+        
+    <span class="k">return</span> <span class="n">joint_CPset</span></div>
+
+<span class="c1">### get motion ranges of given coordinates</span>
+<div class="viewcode-block" id="getJointRanges_dict"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getJointRanges_dict">[docs]</a><span class="k">def</span> <span class="nf">getJointRanges_dict</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">joints</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract motion range of given joint coordinates from Osim model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    <span class="c1">#initialize the model</span>
+    <span class="n">ang_ranges</span> <span class="o">=</span> <span class="p">{}</span>
+            
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+        <span class="n">jointRange1</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+        <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+        
+        <span class="c1"># assume no joint can rotate more than 180 or -180.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;_tx&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;_ty&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;_tz&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">):</span>
+            <span class="p">[]</span><span class="c1"># if joints are translational, do not constrain</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">jointRange1</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+                <span class="n">jointRange1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="k">if</span> <span class="n">jointRange2</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+                <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    
+        <span class="n">ang_ranges</span><span class="p">[</span><span class="n">joint</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">jointRange1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">jointRange2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span>
+        
+    <span class="k">return</span> <span class="n">ang_ranges</span></div>
+
+<span class="c1">### get motion ranges of given coordinates</span>
+<div class="viewcode-block" id="getJointRanges_array"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getJointRanges_array">[docs]</a><span class="k">def</span> <span class="nf">getJointRanges_array</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">joints</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract motion range of given joint coordinates from Osim model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    <span class="c1">#initialize the model</span>
+    <span class="n">ang_ranges</span> <span class="o">=</span> <span class="p">{}</span>
+            
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+        <span class="n">jointRange1</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+        <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+        
+        <span class="c1"># assume no joint can rotate more than 180 or -180.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;_tx&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;_ty&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;_tz&#39;</span> <span class="ow">in</span> <span class="n">joint</span><span class="p">):</span>
+            <span class="p">[]</span><span class="c1"># if joints are translational, do not constrain</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">jointRange1</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+                <span class="n">jointRange1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="k">if</span> <span class="n">jointRange2</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+                <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">round</span><span class="p">(</span><span class="n">jointRange1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">jointRange2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)])</span></div>
+
+<span class="c1">### get motion ranges of all coordinates</span>
+<div class="viewcode-block" id="getAllJointsRanges"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getAllJointsRanges">[docs]</a><span class="k">def</span> <span class="nf">getAllJointsRanges</span><span class="p">(</span><span class="n">osimModel</span><span class="p">):</span> 
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract motion range of all joint coordinates of the Osim model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">ang_ranges</span> <span class="o">=</span> <span class="p">{}</span>
+            
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">jointRange1</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+        <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">curr_joint</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+        
+        <span class="c1"># assume no joint can rotate more than 180 or -180.</span>
+        <span class="k">if</span> <span class="n">jointRange1</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">jointRange1</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">if</span> <span class="n">jointRange2</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">jointRange2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    
+        <span class="n">ang_ranges</span><span class="p">[</span><span class="n">curr_joint</span><span class="o">.</span><span class="n">getName</span><span class="p">()]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">jointRange1</span><span class="p">,</span><span class="n">jointRange2</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">ang_ranges</span></div>
+    
+
+<div class="viewcode-block" id="getJointsSpannedByMuscle"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getJointsSpannedByMuscle">[docs]</a><span class="k">def</span> <span class="nf">getJointsSpannedByMuscle</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">OSMuscleName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given as INPUT a muscle OSMuscleName from an OpenSim model, this function</span>
+<span class="sd">    returns the OUTPUT structure jointNameSet containing the OpenSim jointNames</span>
+<span class="sd">    crossed by the OSMuscle.</span>
+
+<span class="sd">    It works through the following steps:</span>
+<span class="sd">    1) extracts the GeometryPath</span>
+<span class="sd">    2) loops through the sinccgle points, determining the body they belong to</span>
+<span class="sd">    3) stores the bodies to which the muscle points are attached to</span>
+<span class="sd">    4) determines the nr of joints based on body indexes</span>
+<span class="sd">    5) stores the crossed OpenSim joints in the output structure named jointNameSet</span>
+
+<span class="sd">    NB this function return the crossed joints independently on the</span>
+<span class="sd">    constraints applied to the coordinates. Eg patello-femoral is considered as a</span>
+<span class="sd">    joint, although in Arnold&#39;s model it does not have independent</span>
+<span class="sd">    coordinates, but it is moved in dependency of the knee flexion angle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># %useful initializations</span>
+    <span class="n">BodySet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getBodySet</span><span class="p">()</span>
+    <span class="c1"># import ipdb; ipdb.set_trace()</span>
+    <span class="n">muscle</span>  <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">OSMuscleName</span><span class="p">)</span>
+
+
+    <span class="n">jointStructure</span> <span class="o">=</span> <span class="n">getModelJointDefinitions</span><span class="p">(</span><span class="n">osimModel</span><span class="p">)</span>
+
+    <span class="c1">#Extracting the PathPointSet via GeometryPath</span>
+    <span class="n">musclePath</span> <span class="o">=</span> <span class="n">muscle</span><span class="o">.</span><span class="n">getGeometryPath</span><span class="p">()</span>
+    <span class="n">musclePathPointSet</span> <span class="o">=</span> <span class="n">musclePath</span><span class="o">.</span><span class="n">getPathPointSet</span><span class="p">()</span>
+
+    <span class="c1">#for loops to get the attachment bodies</span>
+    <span class="n">n_body</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">jointNameSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">muscleAttachBodies</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">muscleAttachIndex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">muscleAttach</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n_point</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">musclePathPointSet</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+
+    <span class="c1"># get the current muscle point</span>
+        <span class="n">currentAttachBody</span> <span class="o">=</span> <span class="n">musclePathPointSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n_point</span><span class="p">)</span><span class="o">.</span><span class="n">getBodyName</span><span class="p">()</span>
+
+    <span class="c1"># %Initialize</span>
+        <span class="k">if</span> <span class="n">n_point</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">previousAttachBody</span> <span class="o">=</span> <span class="n">currentAttachBody</span>
+            <span class="n">muscleAttach</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">currentAttachBody</span><span class="p">,</span> <span class="n">BodySet</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">currentAttachBody</span><span class="p">)])</span>
+
+    <span class="c1"># building a vectors of the bodies attached to the muscles</span>
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="n">currentAttachBody</span> <span class="o">==</span> <span class="n">previousAttachBody</span><span class="p">):</span>
+            <span class="n">muscleAttach</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">currentAttachBody</span><span class="p">,</span> <span class="n">BodySet</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">currentAttachBody</span><span class="p">)])</span>
+            <span class="n">previousAttachBody</span> <span class="o">=</span> <span class="n">currentAttachBody</span>
+
+    <span class="c1">#From distal body checking the joint names going up until the desired</span>
+    <span class="c1">#OSJointName is found or the proximal body is reached as parent body.</span>
+    
+    <span class="c1"># #check if the muscle attachement are Proximal -&gt; Distal or reversed </span>
+    <span class="c1"># first_Body = getParentBodyJoint(jointStructure, muscleAttach[-1][0])</span>
+    <span class="c1"># second_Body = getParentBodyJoint(jointStructure, muscleAttach[0][0])</span>
+    <span class="c1"># if first_Body[1] and second_Body[1] and (first_Body[1] &lt; second_Body[1]):</span>
+    <span class="c1">#     DistalBodyName  = muscleAttach[0][0]</span>
+    <span class="c1">#     ProximalBodyName= muscleAttach[-1][0]</span>
+    <span class="c1"># else:</span>
+    <span class="c1">#     DistalBodyName  = muscleAttach[-1][0]</span>
+    <span class="c1">#     ProximalBodyName= muscleAttach[0][0]</span>
+
+    <span class="c1"># A new way of checking muscle attachment bodies</span>
+    <span class="c1"># Distal means the body is far away from root body</span>
+    <span class="c1"># Proximal means the body is closer to root body</span>
+
+    <span class="k">if</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># -1 means ground, the root</span>
+         <span class="n">DistalBodyName</span>  <span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+         <span class="n">ProximalBodyName</span><span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># -1 means ground, the root</span>
+        <span class="n">DistalBodyName</span>  <span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ProximalBodyName</span><span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># if the first body index is smaller than second body index</span>
+    <span class="c1"># then distal = second; proximal = first</span>
+    <span class="k">elif</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>  
+        <span class="n">DistalBodyName</span>  <span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ProximalBodyName</span><span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">DistalBodyName</span>  <span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ProximalBodyName</span><span class="o">=</span> <span class="n">muscleAttach</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># start from distal body, moving upward to proximal</span>
+    <span class="n">bodyName</span> <span class="o">=</span> <span class="n">DistalBodyName</span>  
+
+    <span class="n">spannedJointNameOld</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">NoDofjointNameSet</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">jointNameSet</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="n">bodyName</span> <span class="o">!=</span> <span class="n">ProximalBodyName</span> <span class="ow">and</span> <span class="n">bodyName</span> <span class="o">!=</span> <span class="s1">&#39;ground&#39;</span><span class="p">):</span>
+        <span class="n">spannedJointName</span> <span class="o">=</span> <span class="n">getChildBodyJoint</span><span class="p">(</span><span class="n">jointStructure</span><span class="p">,</span> <span class="n">bodyName</span><span class="p">)</span>
+        <span class="n">spannedJoint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getJointSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">spannedJointName</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">spannedJointName</span> <span class="o">!=</span> <span class="n">spannedJointNameOld</span><span class="p">:</span>
+
+            <span class="c1"># bodyName = jointStructure[spannedJointName][&#39;parentFrame&#39;]</span>
+
+            <span class="c1"># spannedJointNameOld = spannedJointName</span>
+        <span class="c1"># else:</span>
+            <span class="k">if</span> <span class="n">spannedJoint</span><span class="o">.</span><span class="n">numCoordinates</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">jointNameSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spannedJointName</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">NoDofjointNameSet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spannedJointName</span><span class="p">)</span>
+
+        <span class="n">spannedJointNameOld</span> <span class="o">=</span> <span class="n">spannedJointName</span>
+        <span class="n">bodyName</span> <span class="o">=</span> <span class="n">jointStructure</span><span class="p">[</span><span class="n">spannedJointName</span><span class="p">][</span><span class="s1">&#39;parentFrame&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jointNameSet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">([</span><span class="s1">&#39;No joint detected for muscle &#39;</span><span class="p">,</span><span class="n">OSMuscleName</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">NoDofjointNameSet</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">n_v</span> <span class="ow">in</span> <span class="n">NoDofjointNameSet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">([</span><span class="s1">&#39;Joint &#39;</span><span class="p">,</span><span class="n">n_v</span><span class="p">,</span><span class="s1">&#39; has no dof.&#39;</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">jointNameSet</span><span class="p">,</span> <span class="n">NoDofjointNameSet</span></div>
+
+
+<span class="c1">#### Python porting from https://github.com/modenaxe/MuscleParamOptimizer/blob/master/MATLAB_tool/MuscleParOptTool/private/getIndipCoordAndJoint.m</span>
+<div class="viewcode-block" id="getIndipCoordAndJoint"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getIndipCoordAndJoint">[docs]</a><span class="k">def</span> <span class="nf">getIndipCoordAndJoint</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">constraint_coord_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that given a dependent coordinate finds the independent</span>
+<span class="sd">    coordinate and the associated joint. The function assumes that the</span>
+<span class="sd">    constraint is a CoordinateCoupleConstraint as used by Arnold, Delp and LLLM.</span>
+<span class="sd">    The function can be useful to manage the patellar joint for instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># init state</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+
+    <span class="c1"># get coordinate</span>
+    <span class="n">constraint_coord</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">constraint_coord_name</span><span class="p">)</span>
+
+    <span class="c1">#  double check: if not constrained then function returns</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">constraint_coord</span><span class="o">.</span><span class="n">isConstrained</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">constraint_coord</span><span class="o">.</span><span class="n">getName</span><span class="si">}</span><span class="s2"> is not a constrained coordinate.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">([],[])</span>
+
+    <span class="c1"># otherwise search through the constraints</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">osimModel</span><span class="o">.</span><span class="n">getConstraintSet</span><span class="p">()</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+
+    <span class="c1"># get current constraint</span>
+        <span class="n">curr_constr</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getConstraintSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="c1"># this function assumes that the constraint will be a coordinate</span>
+    <span class="c1"># coupler contraint ( Arnold&#39;s model and LLLM uses this)</span>
+    <span class="c1"># cast down constraint</span>
+        <span class="n">curr_constr_casted</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">CoordinateCouplerConstraint</span><span class="o">.</span><span class="n">safeDownCast</span><span class="p">(</span><span class="n">curr_constr</span><span class="p">)</span>
+
+    <span class="c1"># get dep coordinate and check if it is the coord of interest</span>
+        <span class="n">dep_coord_name</span> <span class="o">=</span> <span class="n">curr_constr_casted</span><span class="o">.</span><span class="n">getDependentCoordinateName</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">constraint_coord_name</span> <span class="o">==</span> <span class="n">dep_coord_name</span><span class="p">:</span>
+    <span class="c1"># if curr_constr_casted.getIndependentCoordinateNames().getSize</span>
+            <span class="n">ind_coord_name_set</span> <span class="o">=</span> <span class="n">curr_constr_casted</span><span class="o">.</span><span class="n">getIndependentCoordinateNames</span><span class="p">()</span>
+
+    <span class="c1"># extract independent coordinate and independent joint to which the</span>
+    <span class="c1"># coordinate refers</span>
+            <span class="k">if</span> <span class="n">ind_coord_name_set</span><span class="o">.</span><span class="n">getSize</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ind_coord_name</span> <span class="o">=</span> <span class="n">curr_constr_casted</span><span class="o">.</span><span class="n">getIndependentCoordinateNames</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ind_coord_joint_name</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ind_coord_name</span><span class="p">)</span><span class="o">.</span><span class="n">getJoint</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+    <span class="c1">#  return ([],[])</span>
+            <span class="k">elif</span> <span class="n">ind_coord_name_set</span><span class="o">.</span><span class="n">getSize</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;getIndipCoordAndJoint.m. The CoordinateCouplerConstraint has more than one indipendent coordinate and this is not managed by this function yet.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">ind_coord_name</span><span class="p">,</span> <span class="n">ind_coord_joint_name</span><span class="p">]</span></div>
+
+<span class="c1">### needs to be checked based on https://github.com/modenaxe/MuscleParamOptimizer/blob/master/MATLAB_tool/MuscleParOptTool/getModelJointDefinitions.m</span>
+<div class="viewcode-block" id="getModelJointDefinitions"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getModelJointDefinitions">[docs]</a><span class="k">def</span> <span class="nf">getModelJointDefinitions</span><span class="p">(</span><span class="n">osimModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    functon to retun a strcuture for a specifc model, returning a list of the</span>
+<span class="sd">    joints present in the model and their associated frames</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#first get the associated jointset</span>
+    <span class="n">modelJointSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getJointSet</span><span class="p">()</span>
+    <span class="c1">#return the number of joints</span>
+    <span class="n">numJoints</span> <span class="o">=</span> <span class="n">modelJointSet</span><span class="o">.</span><span class="n">getSize</span><span class="p">()</span>
+
+    <span class="c1"># print(f&quot;NumJoints {numJoints}&quot;)</span>
+
+    <span class="c1">#create an empty structure to hold the data</span>
+    <span class="n">jointStructure</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numJoints</span><span class="p">):</span>
+        <span class="n">tempJoint</span> <span class="o">=</span> <span class="n">modelJointSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+        <span class="n">jointStructure</span><span class="p">[</span><span class="n">tempJoint</span><span class="o">.</span><span class="n">getName</span><span class="p">()]</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">jointStructure</span><span class="p">[</span><span class="n">tempJoint</span><span class="o">.</span><span class="n">getName</span><span class="p">()]</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;childFrame&#39;</span><span class="p">:</span> <span class="n">tempJoint</span><span class="o">.</span><span class="n">getChildFrame</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_offset&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">),</span><span class="s1">&#39;parentFrame&#39;</span><span class="p">:</span> <span class="n">tempJoint</span><span class="o">.</span><span class="n">getParentFrame</span><span class="p">()</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_offset&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">jointStructure</span></div>
+
+
+<div class="viewcode-block" id="getChildBodyJoint"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getChildBodyJoint">[docs]</a><span class="k">def</span> <span class="nf">getChildBodyJoint</span><span class="p">(</span><span class="n">jointStructure</span><span class="p">,</span> <span class="n">bodyName</span><span class="p">):</span>
+
+    <span class="c1"># return a list of the joints</span>
+    <span class="n">allJoints</span> <span class="o">=</span> <span class="n">jointStructure</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="c1">#loop through joints to check the child body entry and return if true</span>
+    <span class="c1">#NOTE: inefficient but will work temp.</span>
+
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">allJoints</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bodyName</span> <span class="o">==</span> <span class="n">jointStructure</span><span class="p">[</span><span class="n">joint</span><span class="p">][</span><span class="s1">&#39;childFrame&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">joint</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR!!! NO JOINT FOUND&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="getParentBodyJoint"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getParentBodyJoint">[docs]</a><span class="k">def</span> <span class="nf">getParentBodyJoint</span><span class="p">(</span><span class="n">jointStructure</span><span class="p">,</span> <span class="n">bodyName</span><span class="p">):</span>
+
+    <span class="c1"># return a list of the joints</span>
+    <span class="n">allJoints</span> <span class="o">=</span> <span class="n">jointStructure</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="c1">#loop through joints to check the child body entry and return if true</span>
+    <span class="c1">#NOTE: inefficient but will work temp.</span>
+
+    <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">joint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">allJoints</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bodyName</span> <span class="o">==</span> <span class="n">jointStructure</span><span class="p">[</span><span class="n">joint</span><span class="p">][</span><span class="s1">&#39;parentFrame&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">joint</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR!!! NO JOINT FOUND&quot;</span><span class="p">)</span></div>
+
+<span class="c1"># def getParentBodyJoint(jointStructure, bodyName):</span>
+
+<span class="c1">#     # return a list of the joints</span>
+<span class="c1">#     allJoints = jointStructure.keys()</span>
+<span class="c1">#     #loop through joints to check the child body entry and return if true</span>
+<span class="c1">#     #NOTE: inefficient but will work temp.</span>
+
+<span class="c1">#     for pos, joint in enumerate(allJoints):</span>
+<span class="c1">#         if bodyName == jointStructure[joint][&#39;parentFrame&#39;]:</span>
+<span class="c1">#             return (joint, pos)</span>
+<span class="c1">#     return (None,None)</span>
+
+
+<div class="viewcode-block" id="getMuscleCoordinates"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getMuscleCoordinates">[docs]</a><span class="k">def</span> <span class="nf">getMuscleCoordinates</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">muscleName</span><span class="p">):</span>
+    <span class="c1"># %% Muscle coordinate finder</span>
+    <span class="c1"># %   Returns a structure containing the coordinates that a muscle crosses and the</span>
+    <span class="c1"># %   range of values for which the muscle can generate a moment. This is done by</span>
+    <span class="c1"># %   examining the moment arm of the muscle across all coordinates in the model</span>
+    <span class="c1"># %   and recording where the moment arm is nonzero.</span>
+
+
+    <span class="c1"># Get a reference to the concrete muscle class.</span>
+    <span class="n">force</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">muscleName</span><span class="p">)</span>
+    <span class="c1"># muscleClass = force.getConcreteClassName()</span>
+    <span class="n">muscle</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Millard2012EquilibriumMuscle</span><span class="o">.</span><span class="n">safeDownCast</span><span class="p">(</span><span class="n">force</span><span class="p">)</span>
+    <span class="c1"># muscle = opensim.Thelen2003Muscle.safeDownCast(force)</span>
+    <span class="c1"># to be replaced with the function below to make it more general</span>
+    <span class="c1"># exec(&#39;muscle = opensim.&#39;+ muscleClass +&#39;.safeDownCast(force)&#39;)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">muscleName</span><span class="p">)</span>
+
+    <span class="c1"># Initialize.</span>
+    <span class="n">nCoord</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getSize</span><span class="p">()</span>
+    <span class="n">muscCoord</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># For storing coordinate values.</span>
+
+    <span class="c1"># %% Iterate through coordinates, finding nonzero moment arms.</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nCoord</span><span class="p">):</span>
+    <span class="c1">#  Get a reference to a coordinate.</span>
+        <span class="n">aCoord</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="c1">#  Get coordinate&#39;s max and min values.</span>
+        <span class="n">rMax</span> <span class="o">=</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+        <span class="n">rMin</span> <span class="o">=</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+        <span class="n">rDefault</span> <span class="o">=</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getDefaultValue</span><span class="p">()</span>
+    <span class="c1">#  Define three points in the range to test the moment arm.</span>
+        <span class="n">totalRange</span> <span class="o">=</span> <span class="n">rMax</span> <span class="o">-</span> <span class="n">rMin</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+        <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rMin</span> <span class="o">+</span> <span class="n">totalRange</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rMin</span> <span class="o">+</span> <span class="n">totalRange</span><span class="o">/</span><span class="mi">3</span>
+        <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">rMin</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">totalRange</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">aCoord</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1">#   Compute the moment arm of the muscle for this coordinate.</span>
+
+            <span class="n">momentArm</span> <span class="o">=</span> <span class="n">muscle</span><span class="o">.</span><span class="n">computeMomentArm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">aCoord</span><span class="p">)</span>
+
+    <span class="c1">#   Avoid false positives due to roundoff e</span>
+            <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-6</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">momentArm</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tol</span> <span class="p">):</span>
+                <span class="n">muscCoord</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">continue</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not Interrupted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># % Set the coordinate back to its default value.</span>
+        <span class="n">aCoord</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">rDefault</span><span class="p">)</span>
+
+
+    <span class="c1"># %% Initialize the structure that will be returned.</span>
+    <span class="n">muscle</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">muscle</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muscleName</span>
+    <span class="n">muscle</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+
+    <span class="c1"># %% Cycle through each coordinate found above and save its range of values. These</span>
+    <span class="c1"># % will get used later to calculate muscle forces.</span>
+    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">muscCoord</span><span class="p">)):</span>
+        <span class="c1"># Get a reference to the coordinate.</span>
+        <span class="n">aCoord</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">muscCoord</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+
+        <span class="c1"># print(aCoord.getName(),aCoord.isConstrained(state),aCoord.getLocked(state),aCoord.getRangeMin(),aCoord.getRangeMax())</span>
+
+        <span class="c1"># % Create an array of radian values for the range.</span>
+        <span class="k">if</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">RangeMin</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">RangeMin</span> <span class="o">=</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMin</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">RangeMax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">RangeMax</span> <span class="o">=</span> <span class="n">aCoord</span><span class="o">.</span><span class="n">getRangeMax</span><span class="p">()</span>
+
+        <span class="n">coordRange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">RangeMin</span><span class="p">,</span> <span class="n">RangeMax</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span><span class="c1">#0.01)</span>
+        <span class="c1">#  print(aCoord.getName(),RangeMin, RangeMax)</span>
+        <span class="c1"># % Store the coordinate and its range of values in the structure.</span>
+        <span class="c1"># eval([&#39;muscle.coordinates.&#39;, ...</span>
+        <span class="c1"># char(model.getCoordinateSet().get(muscCoord(u))), &#39; = [coordRange];&#39;]);</span>
+        <span class="n">muscle</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="n">aCoord</span><span class="o">.</span><span class="n">getName</span><span class="p">()]</span> <span class="o">=</span> <span class="n">coordRange</span>
+
+    <span class="k">return</span> <span class="n">muscle</span></div>
+
+
+<div class="viewcode-block" id="getWrappingSide"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getWrappingSide">[docs]</a><span class="k">def</span> <span class="nf">getWrappingSide</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">OSMuscleName</span><span class="p">,</span> <span class="n">currentState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the position of the wrapping side</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        osimModel: Opensim model</span>
+<span class="sd">        OSMuscleName (str): muscle name</span>
+<span class="sd">        currentState : State of the Opensim model</span>
+
+<span class="sd">    returns:</span>
+<span class="sd">        wrapMuscleDic: Dictionary with the wrapping center, dimension, type and position of the side</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">muscle</span>  <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">OSMuscleName</span><span class="p">)</span>
+    <span class="n">musclePath</span> <span class="o">=</span> <span class="n">muscle</span><span class="o">.</span><span class="n">getGeometryPath</span><span class="p">()</span>
+    <span class="n">currentPath</span> <span class="o">=</span> <span class="n">musclePath</span><span class="o">.</span><span class="n">getCurrentPath</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">musclePath</span><span class="o">.</span><span class="n">getWrapSet</span><span class="p">()</span>
+
+    <span class="n">wrapMuscleDic</span><span class="o">=</span><span class="p">{}</span>
+    <span class="n">wrapMuscleDicIntersect</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n_ws</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n_ws</span><span class="p">)</span>
+        <span class="n">wo</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n_ws</span><span class="p">)</span><span class="o">.</span><span class="n">getWrapObject</span><span class="p">()</span>
+        <span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">get_wrap_object</span><span class="p">()]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;center&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">wo</span><span class="o">.</span><span class="n">get_translation</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
+                                        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span><span class="n">wo</span><span class="o">.</span><span class="n">getDimensionsString</span><span class="p">(),</span>
+                                        <span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="n">wo</span><span class="o">.</span><span class="n">getWrapTypeName</span><span class="p">()}</span>
+        <span class="n">wrapMuscleDicIntersect</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">get_wrap_object</span><span class="p">()]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Heuristic based on the assumtion that </span>
+        <span class="c1"># 1. last muscle attachment and wrapping surface are in the same relative coordinate frame</span>
+        <span class="c1"># 2. the muscle attachment is already on the side of the wrapping we want to enfoce</span>
+        <span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">w</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cp</span> <span class="o">=</span> <span class="n">currentPath</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">get_range</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">mp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cp</span><span class="o">.</span><span class="n">getLocation</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+            <span class="n">wo</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n_ws</span><span class="p">)</span><span class="o">.</span><span class="n">getWrapObject</span><span class="p">()</span>
+            <span class="n">cw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">wo</span><span class="o">.</span><span class="n">get_translation</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+            <span class="n">side</span> <span class="o">=</span> <span class="n">mp</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">mp</span><span class="o">-</span><span class="n">cw</span><span class="p">)</span>
+            <span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">get_wrap_object</span><span class="p">()]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;side_pos&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">side</span><span class="p">,</span><span class="mi">4</span><span class="p">)})</span>
+
+    <span class="k">def</span> <span class="nf">calculateNewPos</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">mag</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Function to triangulate the position of the side of the wrapping</span>
+<span class="sd">            based on the intersaction of the muscle with the wrapping surface </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span> <span class="o">=</span> <span class="n">center</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">pos1</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">pos2</span>
+
+        <span class="n">xm</span><span class="p">,</span> <span class="n">ym</span><span class="p">,</span> <span class="n">zm</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span><span class="o">+</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">y1</span><span class="o">+</span><span class="n">y2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">z1</span><span class="o">+</span><span class="n">z2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">zd</span> <span class="o">=</span> <span class="p">(</span><span class="n">xm</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="n">mag</span><span class="o">+</span><span class="n">x0</span><span class="p">,</span> <span class="p">(</span><span class="n">ym</span><span class="o">-</span><span class="n">y0</span><span class="p">)</span><span class="o">*</span><span class="n">mag</span><span class="o">+</span><span class="n">y0</span><span class="p">,</span> <span class="p">(</span><span class="n">zm</span><span class="o">-</span><span class="n">z0</span><span class="p">)</span><span class="o">*</span><span class="n">mag</span><span class="o">+</span><span class="n">z0</span>
+
+        <span class="k">return</span> <span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">zd</span>
+
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">currentPath</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">currentPath</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">p3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cp</span><span class="o">.</span><span class="n">getLocation</span><span class="p">(</span><span class="n">currentState</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+
+        <span class="k">if</span> <span class="n">cp</span><span class="o">.</span><span class="n">getWrapObject</span><span class="p">():</span>
+            <span class="n">wo</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">getWrapObject</span><span class="p">()</span>
+            <span class="n">wrapMuscleDicIntersect</span><span class="p">[</span><span class="n">wo</span><span class="o">.</span><span class="n">getName</span><span class="p">()]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p3d</span><span class="p">)</span>
+            
+    <span class="k">for</span> <span class="n">s_wo</span> <span class="ow">in</span> <span class="n">wrapMuscleDicIntersect</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">wrapMuscleDicIntersect</span><span class="p">[</span><span class="n">s_wo</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">s_wo</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;torus&#39;</span><span class="p">:</span>
+                <span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">s_wo</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;side_pos&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">s_wo</span><span class="p">][</span><span class="s1">&#39;center&#39;</span><span class="p">],</span><span class="mi">4</span><span class="p">)})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">zd</span> <span class="o">=</span> <span class="n">calculateNewPos</span><span class="p">(</span><span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">s_wo</span><span class="p">][</span><span class="s1">&#39;center&#39;</span><span class="p">],</span><span class="n">wrapMuscleDicIntersect</span><span class="p">[</span><span class="n">s_wo</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">wrapMuscleDicIntersect</span><span class="p">[</span><span class="n">s_wo</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">wrapMuscleDic</span><span class="p">[</span><span class="n">s_wo</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;side_pos&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">([</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">zd</span><span class="p">],</span><span class="mi">4</span><span class="p">)})</span>
+            <span class="c1"># print(s_wo, wrapMuscleDic[s_wo][&#39;type&#39;])</span>
+    <span class="k">return</span> <span class="n">wrapMuscleDic</span></div>
+
+<div class="viewcode-block" id="getAllIndependentCoordinates"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getAllIndependentCoordinates">[docs]</a><span class="k">def</span> <span class="nf">getAllIndependentCoordinates</span><span class="p">(</span><span class="n">osimModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all indpendent coordinates in an Osim model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># load coordinates and initialize model state</span>
+    <span class="n">coordSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    
+    <span class="n">DOF_Index</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">joint_names</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">curr_coord</span> <span class="ow">in</span> <span class="n">coordSet</span><span class="p">:</span>
+        
+        <span class="n">curr_coord_name</span> <span class="o">=</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+        
+        <span class="c1"># find the independed joints if the current coordinate is contrainted</span>
+        <span class="k">if</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">isConstrained</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">curr_coord</span><span class="o">.</span><span class="n">getLocked</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+            
+            <span class="n">constraint_coord_name</span> <span class="o">=</span> <span class="n">curr_coord_name</span>
+            <span class="c1"># finding the independent coordinate</span>
+            <span class="p">[</span><span class="n">ind_coord_name</span><span class="p">,</span> <span class="n">ind_coord_joint_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">getIndipCoordAndJoint</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">constraint_coord_name</span><span class="p">)</span>
+            <span class="c1"># updating the coordinate name to be saved in the list</span>
+            <span class="n">curr_coord_name</span> <span class="o">=</span> <span class="n">ind_coord_name</span>
+            
+            
+        <span class="c1"># skip dof if independent coordinate locked (the coord</span>
+        <span class="c1"># correspondent to the name needs to be extracted)</span>
+        <span class="k">if</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">)</span><span class="o">.</span><span class="n">getLocked</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+            <span class="k">continue</span>
+    
+        <span class="c1"># if curr_coord_name is already in the DoF_index, then skip saving    </span>
+        <span class="k">if</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">)</span> <span class="ow">in</span> <span class="n">DOF_Index</span><span class="p">:</span>
+            <span class="k">continue</span>
+        
+        <span class="c1"># NB: DOF_Index is used later in the string generated code.</span>
+        <span class="c1"># CRUCIAL: the index of dof now is model based (&quot;global&quot;) and</span>
+        <span class="c1"># different from the joint based used until now.</span>
+        <span class="n">DOF_Index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">))</span>
+        <span class="n">joint_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_coord_name</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">joint_names</span><span class="p">,</span> <span class="n">DOF_Index</span></div>
+
+<div class="viewcode-block" id="extractMarkerSet"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.extractMarkerSet">[docs]</a><span class="k">def</span> <span class="nf">extractMarkerSet</span><span class="p">(</span><span class="n">osimModel_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract marker list from Osim model for forward kinematic check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">osimModel</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">osimModel_path</span><span class="p">)</span>
+    
+    <span class="n">markerSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getMarkerSet</span><span class="p">()</span>
+    <span class="n">markerNames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">markerSet</span><span class="p">:</span>
+        <span class="n">markerNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">marker</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+        
+    <span class="k">return</span> <span class="n">markerNames</span></div>
+    
+
+<div class="viewcode-block" id="calculateEndPoints_osim"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.calculateEndPoints_osim">[docs]</a><span class="k">def</span> <span class="nf">calculateEndPoints_osim</span><span class="p">(</span><span class="n">osimModel_path</span><span class="p">,</span> <span class="n">endPoints</span><span class="p">,</span> <span class="n">N_EvalPoints</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the positions of endpoints when iterating all joint angle meshes.</span>
+<span class="sd">    This is to check the Geometry and Joint Definition matches between the Opensim</span>
+<span class="sd">    and the converted MuJoCo models.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    osimModel_path : string</span>
+<span class="sd">        Path and name of the Osim model that will be evaluated.</span>
+<span class="sd">    endPoints : list of string</span>
+<span class="sd">        The names of the endpoints whose positions will be evaluated.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    evaData: dict</span>
+<span class="sd">        The evaluation data, including the joint angle meshes and the corresponding</span>
+<span class="sd">        endpoint locations</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">osimModel</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">osimModel_path</span><span class="p">)</span>
+    
+    <span class="n">coordSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+        
+    <span class="n">markerSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getMarkerSet</span><span class="p">()</span>
+        
+    <span class="c1"># find index of the targetting markers inside the marker set</span>
+    <span class="n">end_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">endPoint</span> <span class="ow">in</span> <span class="n">endPoints</span><span class="p">:</span>
+        <span class="n">end_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">endPoint</span><span class="p">))</span>
+    
+    <span class="c1"># get the joints and range informatino</span>
+    <span class="n">joint_names</span><span class="p">,</span> <span class="n">DOF_Index</span> <span class="o">=</span> <span class="n">getAllIndependentCoordinates</span><span class="p">(</span><span class="n">osimModel</span><span class="p">)</span>
+    
+    <span class="n">ang_ranges</span> <span class="o">=</span> <span class="n">getJointRanges_dict</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">joint_names</span><span class="p">)</span>
+    
+    <span class="c1"># Storing the location of end points</span>
+    <span class="n">endPos</span> <span class="o">=</span><span class="p">[]</span>
+    
+    <span class="c1"># as musculoskeletal model getting complex (the number of joints increases)</span>
+    <span class="c1">#, it is harder to run a batch loop of all possible postures. Therefore, </span>
+    <span class="c1"># N_EvalPoints random postures were selected to do the comparison.</span>
+    
+    <span class="k">for</span> <span class="n">n_eval</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_EvalPoints</span><span class="p">):</span>
+        
+        <span class="c1"># set up coordinate values</span>
+        <span class="k">for</span> <span class="n">idof</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">DOF_Index</span><span class="p">):</span>
+            
+            <span class="n">range_ind</span> <span class="o">=</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">joint_names</span><span class="p">[</span><span class="n">idof</span><span class="p">]]</span>
+            
+            <span class="c1"># generate the random joint angles based the n th evaluation point </span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">n_eval</span><span class="p">)</span>
+            <span class="n">jointEval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">range_ind</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span> \
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">range_ind</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">range_ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            
+            <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setSpeedValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    
+        <span class="c1"># extract the marker location after the simulation</span>
+        <span class="n">endiPos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ed</span> <span class="ow">in</span> <span class="n">end_id</span><span class="p">:</span>
+            <span class="n">endiiPos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ed</span><span class="p">)</span><span class="o">.</span><span class="n">getLocationInGround</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+                <span class="n">endiiPos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ed</span><span class="p">)</span><span class="o">.</span><span class="n">getLocationInGround</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+            <span class="n">endiPos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endiiPos</span><span class="p">)</span>
+            
+        <span class="n">endPos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endiPos</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">endPos</span></div>
+
+<span class="c1"># update the osim model coordinate variable values</span>
+<div class="viewcode-block" id="updOsimCoordEndPoints"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.updOsimCoordEndPoints">[docs]</a><span class="k">def</span> <span class="nf">updOsimCoordEndPoints</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">DOF_Index</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">,</span> <span class="n">endPoints</span><span class="p">):</span>
+    
+    <span class="n">state</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    <span class="n">coordSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span>
+    
+    <span class="n">markerSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getMarkerSet</span><span class="p">()</span>
+        
+    <span class="c1"># find index of the targetting markers inside the marker set</span>
+    <span class="n">end_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">endPoint</span> <span class="ow">in</span> <span class="n">endPoints</span><span class="p">:</span>
+        <span class="n">end_id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">getIndex</span><span class="p">(</span><span class="n">endPoint</span><span class="p">))</span>
+    
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="c1"># initialize simulation    </span>
+    <span class="c1"># manager = opensim.Manager(osimModel)</span>
+    <span class="c1"># manager.initialize(state)</span>
+    
+    <span class="c1"># run simulation one time before setting up the corrdinates, to makesure the</span>
+    <span class="c1"># simulation results for markers are correct.</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">setTime</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># state = manager.integrate(stepsize)</span>
+    
+    <span class="c1"># set up coordinate values</span>
+    <span class="k">for</span> <span class="n">idof</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">DOF_Index</span><span class="p">):</span>
+        
+        <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">[</span><span class="n">idof</span><span class="p">])</span>
+        <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setSpeedValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        
+    <span class="c1"># initialize simulation    </span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Manager</span><span class="p">(</span><span class="n">osimModel</span><span class="p">)</span>
+    <span class="c1"># start simulation</span>
+    <span class="c1"># state.setTime(n_eval*stepsize)</span>
+    
+    <span class="c1"># initilize the manager</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        
+    <span class="c1"># do the intergration</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">stepsize</span><span class="p">)</span>
+    
+    <span class="c1"># extract the marker location after the simulation</span>
+    <span class="n">endiPos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ed</span> <span class="ow">in</span> <span class="n">end_id</span><span class="p">:</span>
+        <span class="n">endiiPos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ed</span><span class="p">)</span><span class="o">.</span><span class="n">getLocationInGround</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+            <span class="n">endiiPos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">markerSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ed</span><span class="p">)</span><span class="o">.</span><span class="n">getLocationInGround</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+        <span class="n">endiPos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endiiPos</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">endiPos</span></div>
+
+<div class="viewcode-block" id="getMomentArmAtJoints"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getMomentArmAtJoints">[docs]</a><span class="k">def</span> <span class="nf">getMomentArmAtJoints</span><span class="p">(</span><span class="n">muscleModel</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">joint_set</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute moment arm of a muscle at a joint that it wraps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mom_arm</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joint_set</span><span class="p">:</span>
+        <span class="n">mom_arm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">muscleModel</span><span class="o">.</span><span class="n">computeMomentArm</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">joint</span><span class="p">))</span>
+        
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mom_arm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="computeMomentArm"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.computeMomentArm">[docs]</a><span class="k">def</span> <span class="nf">computeMomentArm</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">N_EvalPoints</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+    <span class="c1">#initialize the model</span>
+    <span class="n">currentState</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    <span class="n">joints_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ang_mesh</span><span class="o">=</span><span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">joint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+        <span class="n">joints_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_joint</span><span class="p">)</span>
+        <span class="n">ang_mesh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">N_EvalPoints</span><span class="p">))</span>
+
+    <span class="n">mom_arm</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">setAngleDofs</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">ang_mesh</span><span class="p">):</span>
+        <span class="c1"># this itertools.product will generate the angle mesh list in this structure:</span>
+        <span class="c1"># [Ang11, Ang21, Ang31], [Ang11, Ang21, Ang32], ...</span>
+        <span class="c1"># [Ang11, Ang22, Ang31], [Ang11, Ang22, Ang32], ...</span>
+        <span class="c1"># ...</span>
+        <span class="c1"># [Ang12, Ang21, Ang31], [Ang12, Ang21, Ang32], ...</span>
+        <span class="c1"># ...</span>
+        <span class="c1"># ...</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ia</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">setAngleDofs</span><span class="p">):</span>
+            <span class="c1"># coordToUpd = osimModel.getCoordinateSet().get(joints[i])</span>
+            <span class="n">joints_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span><span class="n">ia</span><span class="p">)</span>
+        
+        <span class="n">mom_arm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">getMomentArmAtJoints</span><span class="p">(</span><span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">currentState</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mom_arm</span><span class="p">)</span></div>
+
+<span class="c1"># update the osim model coordinate variable values</span>
+<div class="viewcode-block" id="updOsimCoordMomentArm"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.updOsimCoordMomentArm">[docs]</a><span class="k">def</span> <span class="nf">updOsimCoordMomentArm</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">,</span> <span class="n">DOF_index</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">):</span>
+    
+    <span class="n">state</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    <span class="n">coordSet</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span>
+    
+    
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="c1"># initialize simulation    </span>
+    <span class="c1"># manager = opensim.Manager(osimModel)</span>
+    <span class="c1"># manager.initialize(state)</span>
+    
+    <span class="c1"># run simulation one time before setting up the corrdinates, to makesure the</span>
+    <span class="c1"># simulation results for markers are correct.</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">setTime</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># state = manager.integrate(stepsize)</span>
+
+    <span class="c1"># set up coordinate values</span>
+    <span class="k">for</span> <span class="n">idof</span><span class="p">,</span> <span class="n">dof</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">DOF_index</span><span class="p">):</span>
+        
+        <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">jointEval</span><span class="p">[</span><span class="n">idof</span><span class="p">])</span>
+        <span class="n">coordSet</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dof</span><span class="p">)</span><span class="o">.</span><span class="n">setSpeedValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        
+    <span class="c1"># initialize simulation    </span>
+    <span class="n">manager</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Manager</span><span class="p">(</span><span class="n">osimModel</span><span class="p">)</span>
+    <span class="c1"># start simulation</span>
+    <span class="c1"># state.setTime(n_eval*stepsize)</span>
+    
+    <span class="c1"># initilize the manager</span>
+    <span class="n">manager</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        
+    <span class="c1"># do the intergration</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">stepsize</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">getMomentArmAtJoints</span><span class="p">(</span><span class="n">osim_muscle_model</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">joints_idx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getMuscleLengthList"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getMuscleLengthList">[docs]</a><span class="k">def</span> <span class="nf">getMuscleLengthList</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">osim_muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">ang_ranges</span><span class="p">,</span> <span class="n">speedy</span><span class="p">):</span>
+    <span class="c1"># get the max and min MTU lengths and forcces inside the joint angle ranges</span>
+    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">joints</span> <span class="o">=</span> <span class="p">[</span><span class="n">joints</span><span class="p">]</span>
+        
+    <span class="c1">#initialize the model, then calcualted the joint ranges</span>
+    <span class="n">currentState</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    <span class="n">joints_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ang_mesh</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">speedy</span><span class="p">:</span>
+        <span class="c1"># contraint the max evaluate data points based on the number of unique joints</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">2</span>
+            
+        <span class="n">N_eval</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1"># number of muscle length check nodes</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># contraint the max evaluate data points based on the number of unique joints</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">25</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">11</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">evalN_jnt</span> <span class="o">=</span> <span class="mi">3</span>
+            
+        <span class="n">N_eval</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># number of muscle length check nodes</span>
+
+    <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">joint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+        <span class="n">curr_joint</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+        <span class="n">joints_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_joint</span><span class="p">)</span>
+        <span class="n">ang_mesh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">ang_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">evalN_jnt</span><span class="p">))</span>
+
+    <span class="c1"># calculate muscle tendon lengths based on the meshes of joint angles</span>
+    <span class="n">mtu_len</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">jit_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">setAngleDofs</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">ang_mesh</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ia</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">setAngleDofs</span><span class="p">):</span>
+            <span class="c1"># coordToUpd = osimModel.getCoordinateSet().get(joints[i])</span>
+            <span class="n">joints_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span><span class="n">ia</span><span class="p">)</span>
+            
+        <span class="n">jit_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">setAngleDofs</span><span class="p">)</span>
+        <span class="n">mtu_len</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">osim_muscle</span><span class="o">.</span><span class="n">getGeometryPath</span><span class="p">()</span><span class="o">.</span><span class="n">getLength</span><span class="p">(</span><span class="n">currentState</span><span class="p">))</span>
+        
+    <span class="c1"># generate the even distributed muscle tendon lenghts based on the min </span>
+    <span class="c1"># and max of muscle lengths that calculated from the mesh joint angles</span>
+    <span class="n">mtu_len_dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">mtu_len</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">mtu_len</span><span class="p">),</span> <span class="n">N_eval</span><span class="p">)</span>
+    
+    <span class="c1"># find the closed muscle tendon lengths from the even distributed mtu lengths</span>
+    <span class="n">mtu_len_set</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">jit_list_set</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">mtu_len_i</span> <span class="ow">in</span> <span class="n">mtu_len_dis</span><span class="p">:</span>
+        <span class="n">mtu_len_dis_ind</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mtu_len</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mtu_len</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">mtu_len_i</span><span class="p">))</span>
+        
+        <span class="n">mtu_len_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mtu_len</span><span class="p">[</span><span class="n">mtu_len_dis_ind</span><span class="p">])</span>
+        <span class="n">jit_list_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jit_list</span><span class="p">[</span><span class="n">mtu_len_dis_ind</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_len_set</span><span class="p">),</span> <span class="n">jit_list_set</span></div>
+
+
+<div class="viewcode-block" id="getMuscleForceMaps"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getMuscleForceMaps">[docs]</a><span class="k">def</span> <span class="nf">getMuscleForceMaps</span><span class="p">(</span><span class="n">osimModel</span><span class="p">,</span> <span class="n">osim_muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">jit_list_set</span><span class="p">,</span> <span class="n">act_list</span><span class="p">):</span>
+    
+    
+    <span class="c1">#initialize the model, then calcualted the joint ranges</span>
+    <span class="n">currentState</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">initSystem</span><span class="p">()</span>
+    
+    <span class="c1"># then calculate the equilibrated muscle force from the selected joint meshes</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">jit_list_set</span><span class="p">)</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">act_list</span><span class="p">)</span>
+    <span class="n">mtu_act</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+    <span class="n">mtu_pas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+    <span class="n">mtu_for</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+    <span class="c1"># mtu_ang = []</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">setAngleDofs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jit_list_set</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">iia</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">setAngleDofs</span><span class="p">):</span>
+            <span class="n">coordToUpd</span> <span class="o">=</span> <span class="n">osimModel</span><span class="o">.</span><span class="n">getCoordinateSet</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+            <span class="n">coordToUpd</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span><span class="n">iia</span><span class="p">)</span>
+            
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ja</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">act_list</span><span class="p">):</span>
+            <span class="n">osim_muscle</span><span class="o">.</span><span class="n">setActivation</span><span class="p">(</span><span class="n">currentState</span><span class="p">,</span> <span class="n">ja</span><span class="p">)</span>
+            <span class="n">osimModel</span><span class="o">.</span><span class="n">equilibrateMuscles</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>
+            <span class="c1"># if ja == 1:  # extract active and passive forces only when muscle activation == 1</span>
+            <span class="n">mtu_act</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">getActiveFiberForce</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>
+            <span class="n">mtu_pas</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">getPassiveFiberForce</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>
+            <span class="n">mtu_for</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">getFiberForceAlongTendon</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>  <span class="c1"># might return Nan, don&#39;t know why...</span>
+
+    <span class="c1"># if total fiber force contains NaN, then calculate from active and passive forces</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">mtu_for</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_act</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_pas</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_act</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_pas</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_for</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_act</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtu_pas</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getMuscleProperties"><a class="viewcode-back" href="../../autoapi/utils/UtilsOpensim/index.html#utils.UtilsOpensim.getMuscleProperties">[docs]</a><span class="k">def</span> <span class="nf">getMuscleProperties</span><span class="p">(</span><span class="n">osim_muscle</span><span class="p">):</span>
+    <span class="c1"># This function is to get the muscle properties, such as activation dynamics</span>
+    <span class="c1"># optimal fiber lengths, fiber/tendon slack lengths, and so on.</span>
+    
+    <span class="c1"># current code only works for the Millard muscle type</span>
+    
+    <span class="c1"># Millard_muscle = opensim.Millard2012EquilibriumMuscle.safeDownCast(osim_muscle)</span>
+    
+    <span class="n">fiber_opt</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">get_optimal_fiber_length</span><span class="p">()</span>
+    <span class="n">tendon_sla</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">get_tendon_slack_length</span><span class="p">()</span>
+    <span class="n">penna_opt</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">get_pennation_angle_at_optimal</span><span class="p">()</span>
+    <span class="n">fmax</span> <span class="o">=</span> <span class="n">osim_muscle</span><span class="o">.</span><span class="n">get_max_isometric_force</span><span class="p">()</span>
+    <span class="c1"># FVC  = osim_muscle.getForceVelocityCurve()</span>
+    <span class="c1"># fvmax = FVC.getMaxEccentricVelocityForceMultiplier()</span>
+
+    <span class="c1"># min_a = osim_muscle.getMinControl()</span>
+    <span class="c1"># max_a = osim_muscle.getMaxControl()</span>
+    <span class="c1"># t_act = Millard_muscle.get_activation_time_constant()</span>
+    <span class="c1"># t_det = Millard_muscle.get_deactivation_time_constant()</span>
+    
+    <span class="n">muscle_property_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fiber_opt&#39;</span><span class="p">:</span> <span class="n">fiber_opt</span><span class="p">,</span> <span class="s1">&#39;tendon_sla&#39;</span><span class="p">:</span> <span class="n">tendon_sla</span><span class="p">,</span> 
+                            <span class="s1">&#39;penna_opt&#39;</span><span class="p">:</span> <span class="n">penna_opt</span><span class="p">,</span> <span class="s1">&#39;fmax&#39;</span><span class="p">:</span> <span class="n">fmax</span><span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">muscle_property_dict</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

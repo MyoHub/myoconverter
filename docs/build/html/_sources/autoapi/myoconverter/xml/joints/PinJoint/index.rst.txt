@@ -1,0 +1,32 @@
+:py:mod:`myoconverter.xml.joints.PinJoint`
+==========================================
+
+.. py:module:: myoconverter.xml.joints.PinJoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.joints.PinJoint.PinJoint
+
+
+
+
+.. py:class:: PinJoint
+
+   Bases: :py:obj:`myoconverter.xml.joints.Joint.Joint`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: _parse(xml, socket_parent_frame, socket_child_frame, pointer)
+
+      Child classes must implement this method. This is called from the 'parse' method below. Add any calculations /
+      conversions that weren't included in the default calculations / conversions below. 
+
+
+

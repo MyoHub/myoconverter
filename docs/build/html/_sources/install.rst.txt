@@ -1,0 +1,9 @@
+Installation
+============
+
+.. _installation:
+
+You don't need to install MyoConverter in order to use the optimized models. The conversion and optimization pipeline outputs the models as MuJoCo XML files, and these files have been uploaded to the GitHub repository, from where you can download them.
+
+
+If you want to convert and optimize a model that has not been uploaded to the GitHub repository, or participate in the development of the pipeline, you only need to pull the project from GitHub, and set it up according to description inside the `ReadMe <https://github.com/MyoHub/myoConverter/tree/main#download--setup>`_. 

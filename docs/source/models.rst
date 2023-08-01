@@ -1,0 +1,19 @@
+.. _models:
+
+Models
+======
+
+In the `ReadMe <https://github.com/MyoHub/myoConverter/tree/main#example-models>`_ of the myoConverter repository we present a set of example models that we use to evaluate the accuracy of the converter. In addition to these models, we maintain here a list of models that have been converted and used by other users. This repertoire aims to minimize redundant efforts in converting the same models. However, it's important to note that we cannot guarantee the quality or accuracy of these listed models. Therefore, we strongly recommend thoroughly testing them before using in your own projects.
+
+If you encounter any issues with the listed models, we kindly request that you report them to the original creator or maintainer of the model. This ensures that any problems can be addressed by the appropriate individuals.
+
+In general, rather than recreating identical models, we encourage users to focus their efforts on refining and improving existing models. Collaboration and refinement of existing resources can lead to greater efficiency and quality within the community.
+
+- `myoSim <https://github.com/MyoHub/myo_sim>`_: 
+ myoSim is the musculoskeletal model library of `myoSuite <https://github.com/facebookresearch/myosuite>`_, which is a platform for application of Machine Learning to bio-mechanic control problems. MyoSim currently contains several converted and well tuned (manually) finger, hand, arm, and leg models.
+ 
+- TO BE ADDED
+  
+  
+
+

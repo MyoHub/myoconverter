@@ -1,0 +1,46 @@
+:py:mod:`myoconverter.xml.path_points.ConditionalPathPoint`
+===========================================================
+
+.. py:module:: myoconverter.xml.path_points.ConditionalPathPoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_points.ConditionalPathPoint.ConditionalPathPoint
+
+
+
+
+.. py:class:: ConditionalPathPoint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, tendon, force_name, **kwargs)
+
+      This is a difficult one. We need to 'anchor' the conditional path point to a normal path point, and treat it
+      like a moving path point (move from 'anchor' to its actual position when the independent coordinate is inside
+      valid range)
+
+      We approximate the above movement behaviour with either a step function or a rectangular function. In case of a step
+      function the movement is further approximated with a linear function, and in case of a rectangular function the
+      movement is approximated with a quadratic function.
+
+
+   .. py:method:: find_previous(children, idx, socket_parent_frame)
+
+
+   .. py:method:: find_next(children, idx, socket_parent_frame)
+
+
+   .. py:method:: plot_figure(x_ideal, y_ideal, y_approx, independent_joint, dependent_joint, coord, is_rectangular)
+
+
+

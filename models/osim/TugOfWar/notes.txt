@@ -1,0 +1,9 @@
+
+- Original from https://github.com/opensim-org/opensim-models/tree/master/Models/Tug_of_War (downloaded 2023/01/11). The xml file was converted to OpenSimDocument Version="40000" format by opening the original file in OpenSim 4.0.
+
+- Reduced the sliding range from [-0.3, 0.3] to [-0.1, 0.1], to make sure that muscles are working at reasonable ranges.
+
+- Credits for the Tug_of_War.osim model: The OpenSim Teams
+
+- License for the Tug_of_War.osim model: Creative Commons (CCBY 3.0) http://creativecommons.org/licenses/by/3.0/
+

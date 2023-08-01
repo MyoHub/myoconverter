@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsMujoco &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsMujoco</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/utils/UtilsMujoco/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utils.UtilsMujoco">
+<span id="utils-utilsmujoco"></span><h1><a class="reference internal" href="#module-utils.UtilsMujoco" title="utils.UtilsMujoco"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsMujoco</span></code></a><a class="headerlink" href="#module-utils.UtilsMujoco" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.getCoordinateRange_mjc" title="utils.UtilsMujoco.getCoordinateRange_mjc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCoordinateRange_mjc</span></code></a>(mjc_model)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsMujoco.calculateEndPoints_mjc" title="utils.UtilsMujoco.calculateEndPoints_mjc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculateEndPoints_mjc</span></code></a>(mjc_model_path, end_points, n_eval)</p></td>
+<td><p>Calculate the positions of endpoints when iterating all joint angle meshes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.dependencyJointAng" title="utils.UtilsMujoco.dependencyJointAng"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dependencyJointAng</span></code></a>(mjc_model, free_jnt_id_array, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsMujoco.lockedJointAng" title="utils.UtilsMujoco.lockedJointAng"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lockedJointAng</span></code></a>(mjc_model)</p></td>
+<td><p>find the self-locked joints and corresponding joint angles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.sortMuscleWrapSiteJoint" title="utils.UtilsMujoco.sortMuscleWrapSiteJoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sortMuscleWrapSiteJoint</span></code></a>(mjcModel, muscle_para_osim)</p></td>
+<td><p>find out the wrapping objects, siteside, and corresponding joints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsMujoco.updateSiteSide" title="utils.UtilsMujoco.updateSiteSide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateSiteSide</span></code></a>(mujocoModel)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.mjc_sim" title="utils.UtilsMujoco.mjc_sim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mjc_sim</span></code></a>(mujocoModel)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsMujoco.computeMomentArmMuscleJoints" title="utils.UtilsMujoco.computeMomentArmMuscleJoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeMomentArmMuscleJoints</span></code></a>(mujocoModel, muscle, …)</p></td>
+<td><p>Calculate moment arm matries from given muscles and joints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.updateWrapSites" title="utils.UtilsMujoco.updateWrapSites"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateWrapSites</span></code></a>(mjc_model, wrap_type, wrap_id, …)</p></td>
+<td><p>Applies values contained in vec_optimized to optimizing side of mujoco model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsMujoco.getMuscleForceLengthCurvesSim" title="utils.UtilsMujoco.getMuscleForceLengthCurvesSim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMuscleForceLengthCurvesSim</span></code></a>(mujocoModel_targ, …)</p></td>
+<td><p>Simplification Version</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsMujoco.updateMuscleForceProperties" title="utils.UtilsMujoco.updateMuscleForceProperties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateMuscleForceProperties</span></code></a>(mujocoModel, muscle, res)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.getCoordinateRange_mjc">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">getCoordinateRange_mjc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#getCoordinateRange_mjc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.getCoordinateRange_mjc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.calculateEndPoints_mjc">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">calculateEndPoints_mjc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eval</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#calculateEndPoints_mjc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.calculateEndPoints_mjc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the positions of endpoints when iterating all joint angle meshes.
+This is to check the Geometry and Joint Definition matches between the Opensim
+and the converted MuJoCo models.</p>
+<dl class="simple">
+<dt>osimModel_path<span class="classifier">string</span></dt><dd><p>Path and name of the Osim model that will be evaluated.</p>
+</dd>
+<dt>endPoints<span class="classifier">list of string</span></dt><dd><p>The names of the the body whose positions will be evaluated.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>evaData: dict</dt><dd><p>The evaluation data, including the joint angle meshes and the corresponding
+endpoint locations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.dependencyJointAng">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">dependencyJointAng</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_jnt_id_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jnt_ang_array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#dependencyJointAng"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.dependencyJointAng" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.lockedJointAng">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">lockedJointAng</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#lockedJointAng"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.lockedJointAng" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the self-locked joints and corresponding joint angles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.sortMuscleWrapSiteJoint">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">sortMuscleWrapSiteJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjcModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle_para_osim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#sortMuscleWrapSiteJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.sortMuscleWrapSiteJoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>find out the wrapping objects, siteside, and corresponding joints
+that should be optimized for a given muscle</p>
+<dl class="simple">
+<dt>mjcModel: mujoco Model</dt><dd><p>A mujoco model.</p>
+</dd>
+<dt>muscle_para_osim: dict</dt><dd><p>The muscle, wrapping_coordinates, coordinate_range information
+extracted from osim model.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>muscle_para_osim: dict data</dt><dd><p>add wrapping object, site side, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.updateSiteSide">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">updateSiteSide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mujocoModel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#updateSiteSide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.updateSiteSide" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.mjc_sim">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">mjc_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mujocoModel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#mjc_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.mjc_sim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.computeMomentArmMuscleJoints">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">computeMomentArmMuscleJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mujocoModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#computeMomentArmMuscleJoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.computeMomentArmMuscleJoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate moment arm matries from given muscles and joints</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.updateWrapSites">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">updateWrapSites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec_optimized</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#updateWrapSites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.updateWrapSites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies values contained in vec_optimized to optimizing side of mujoco model</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>mjc_model (mujoco_py.cymj.PyMjModel): MuJoCo model
+wrap_type (numpy.list): 1D list of string, clarify the wrapping types
+side_ids (numpy.list): 1D list with the id of sides
+pos (numpy.list): a list of 3D arrays with the position of the wrapping objects
+size (numpy.list): a list of 3D arrays with the size of wrapping objects
+rotation (numpy.list): a list of 4D arrays with the rotation info of wrapping objects
+torus_flag (numpy.list): a list of strings, clarify whether is the origional wrapping torus
+vec_optimized (numpy.ndarray): 1D vector with the concatenated array of optimized par</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.getMuscleForceLengthCurvesSim">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">getMuscleForceLengthCurvesSim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mujocoModel_targ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jnt_arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#getMuscleForceLengthCurvesSim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.getMuscleForceLengthCurvesSim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simplification Version</p>
+<p>Given as INPUT an OpenSim muscle OSModel, a muscle variable and a nr
+of evaluation points this function returns as
+musOutput a vector of the muscle variable of interest in the converted MuJoCo model
+obtained by sampling the ROM of the joint spanned by the muscle in
+N_EvalPoints evaluation points.
+For multidof joint the combinations of ROMs are considered.
+For multiarticular muscles the combination of ROM are considered.
+The script is totally general because based on generating strings of code
+correspondent to the encountered code. The strings are evaluated at the end.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsMujoco.updateMuscleForceProperties">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsMujoco.</span></span><span class="sig-name descname"><span class="pre">updateMuscleForceProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mujocoModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsMujoco.html#updateMuscleForceProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsMujoco.updateMuscleForceProperties" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

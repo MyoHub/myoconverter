@@ -1,0 +1,32 @@
+:py:mod:`myoconverter.xml.wrap_objects.WrapEllipsoid`
+=====================================================
+
+.. py:module:: myoconverter.xml.wrap_objects.WrapEllipsoid
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.wrap_objects.WrapEllipsoid.WrapEllipsoid
+
+
+
+
+.. py:class:: WrapEllipsoid(**kwargs)
+
+   Bases: :py:obj:`myoconverter.xml.wrap_objects.WrapObject.WrapObject`
+
+   A parent class to handle common parsing tasks for wrapping objects 
+
+   .. py:method:: _parse(xml, **kwargs)
+
+      Child classes must implement this method. This is called from the 'parse' method below. Add any calculations /
+      conversions that weren't included in the default calculations / conversions below. 
+
+
+

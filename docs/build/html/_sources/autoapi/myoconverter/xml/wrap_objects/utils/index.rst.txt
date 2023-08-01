@@ -1,0 +1,59 @@
+:py:mod:`myoconverter.xml.wrap_objects.utils`
+=============================================
+
+.. py:module:: myoconverter.xml.wrap_objects.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.wrap_objects.utils.mujoco_wrap_object_name
+   myoconverter.xml.wrap_objects.utils.projected_point_inside_segment
+   myoconverter.xml.wrap_objects.utils.point_distance_from_segment
+   myoconverter.xml.wrap_objects.utils.find_wrap_path
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.wrap_objects.utils.wrap_name_mapping
+
+
+.. py:data:: wrap_name_mapping
+
+   
+
+.. py:function:: mujoco_wrap_object_name(osim_wrap_object_name)
+
+   We add a suffix to the wrap object names in mujoco, find the mujoco name
+
+
+.. py:function:: projected_point_inside_segment(a, b, p)
+
+   Check if point p is inside segment starting from a and ending in b.
+   Adapted from https://stackoverflow.com/a/47492642/6065074 
+
+
+.. py:function:: point_distance_from_segment(a, b, p)
+
+   Calculate distance between point p and line defined by segment starting from a and ending in b.
+   Adapted from https://www.nagwa.com/en/explainers/939127418581/ 
+
+
+.. py:function:: find_wrap_path(xml, body, tendon, center)
+
+   Find locations of wrapping sites within the tendon. This placement is very much based on heuristics,
+   and probably could be improved
+
+   NOTE! This function is not used anywhere. Leaving it here in case it could be useful in the future.
+
+

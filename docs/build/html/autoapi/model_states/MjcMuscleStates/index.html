@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>model_states.MjcMuscleStates &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">model_states.MjcMuscleStates</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/model_states/MjcMuscleStates/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-model_states.MjcMuscleStates">
+<span id="model-states-mjcmusclestates"></span><h1><a class="reference internal" href="#module-model_states.MjcMuscleStates" title="model_states.MjcMuscleStates"><code class="xref py py-mod docutils literal notranslate"><span class="pre">model_states.MjcMuscleStates</span></code></a><a class="headerlink" href="#module-model_states.MjcMuscleStates" title="Permalink to this headline">¶</a></h1>
+<p>Created on Sun Feb 20 21:43:21 2022</p>
+<p>&#64;author: hwang</p>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#model_states.MjcMuscleStates.MjcMuscleStates" title="model_states.MjcMuscleStates.MjcMuscleStates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MjcMuscleStates</span></code></a></p></td>
+<td><p>A class to extract the muscle states (moment arms and force properites)</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">model_states.MjcMuscleStates.</span></span><span class="sig-name descname"><span class="pre">MjcMuscleStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapping_coordinate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to extract the muscle states (moment arms and force properites)
+of the given Mujoco model</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates.getWrapingCoords">
+<span class="sig-name descname"><span class="pre">getWrapingCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates.getWrapingCoords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates.getWrapingCoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>This information will directly take the result from Osim model,
+from given input.</p>
+<p>In mjc models, muscles are treated as one type of actuators (type 3),
+there are several other type of actuators. Here we only look at the
+muscle actuators.</p>
+<p>For a given muscle list, outputs of this function is a dictionary:</p>
+<blockquote>
+<div><p>Keywords  ||  list of coordinates
+muscle 1: coordinate 1, coordinate 2</p>
+<blockquote>
+<div><p>coordinate 3,</p>
+</div></blockquote>
+<dl class="simple">
+<dt>muscle 2: coordinate 1</dt><dd><p>coordinate 3, coordinate 4
+coordinate 5, coordinate 6,</p>
+</dd>
+</dl>
+<p>…</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates.getCoordRanges">
+<span class="sig-name descname"><span class="pre">getCoordRanges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates.getCoordRanges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates.getCoordRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the motion ranges of given coordinates in an mjc model.</p>
+<p>Outputs of this function is a dictionary with the coordinate names as
+keywords</p>
+<blockquote>
+<div><blockquote>
+<div><p>Keywords  ||   list</p>
+</div></blockquote>
+<p>coordinate 1:  [lower bound, upper bound]
+coordinate 2:  [lower bound, upper bound]
+coordinate 3:  [lower bound, upper bound]
+…</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates.getMomentArms">
+<span class="sig-name descname"><span class="pre">getMomentArms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wrapping_coordinate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinate_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates.getMomentArms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates.getMomentArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>calcualte moment arms of a muscle at different coordinates it wrapped.</p>
+<dl class="simple">
+<dt>wrapping_coordinate<span class="classifier">dictionary</span></dt><dd><p>DESCRIPTION: the dictionary that contains the muscles list and their
+wrapping coordinates. If not provide, will calculate from the above
+getWrapingCoord function.</p>
+</dd>
+<dt>coordinate_range: dictionary</dt><dd><p>DESCRIPTION: the dictionary that contains the motion ranges of the
+joint lists that been wrapped by the muscles. if not provided,
+generate from the above getWrapingCoord function.</p>
+</dd>
+</dl>
+<p>evalN: integer
+DESCRIPTION: Number of nodes to evalute in between the coordinate range, default value 7.</p>
+<dl class="simple">
+<dt>self.moment_arms: dictionary</dt><dd><p>DESCRIPTION: the dictionary that contains the moment arms that were
+calculated from the opensim model with the given inputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="model_states.MjcMuscleStates.MjcMuscleStates.getMuscleForceMaps">
+<span class="sig-name descname"><span class="pre">getMuscleForceMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osim_force_maps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapping_coordinate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinate_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/model_states/MjcMuscleStates.html#MjcMuscleStates.getMuscleForceMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#model_states.MjcMuscleStates.MjcMuscleStates.getMuscleForceMaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the muscle force maps from MuJoCo models. Strongly suggest to run
+this step after optimizing the moment arms. This force length maps are
+using the same joint angle vectors that been used in OpenSim model when
+force maps were extracted. If there are large moment arm differences,
+the muscle lengths will be very different, then comparison between the
+OpenSim and MuJoCo muscle force maps are not vaildate any more.</p>
+<dl class="simple">
+<dt>osim_force_maps: dictionary</dt><dd><p>DESCRIPTION: the force maps exracted from OpenSim model.</p>
+</dd>
+<dt>wrapping_coordinate<span class="classifier">dictionary</span></dt><dd><p>DESCRIPTION: the dictionary that contains the muscles list and their
+wrapping coordinates. If not provide, will calculate from the above
+getWrapingCoord function.</p>
+</dd>
+<dt>coordinate_range: dictionary</dt><dd><p>DESCRIPTION: the dictionary that contains the motion ranges of the
+joint lists that been wrapped by the muscles. if not provided,
+generate from the above getWrapingCoord function.</p>
+</dd>
+</dl>
+<p>evalN: integer
+DESCRIPTION: Number of nodes to evalute in between the coordinate range, default value 11.</p>
+<dl class="simple">
+<dt>self.force_maps: dictionary</dt><dd><p>DESCRIPTION: the dictionary that contains the muscle force maps that were
+calculated from the opensim model with the given inputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

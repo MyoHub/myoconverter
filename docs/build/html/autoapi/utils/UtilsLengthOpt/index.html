@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsLengthOpt &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsLengthOpt</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/utils/UtilsLengthOpt/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utils.UtilsLengthOpt">
+<span id="utils-utilslengthopt"></span><h1><a class="reference internal" href="#module-utils.UtilsLengthOpt" title="utils.UtilsLengthOpt"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsLengthOpt</span></code></a><a class="headerlink" href="#module-utils.UtilsLengthOpt" title="Permalink to this headline">¶</a></h1>
+<p>Created on Wed Jul 28 12:54:25 2021</p>
+<p>&#64;author: hwang</p>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsLengthOpt.objMAMuscle" title="utils.UtilsLengthOpt.objMAMuscle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objMAMuscle</span></code></a>(x, side_id, wrap_type, wrap_id, pos_wrap, …)</p></td>
+<td><p>this objective function calculate the difference of moment arms between opensim model and mujoco model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsLengthOpt.getMomentArmDiff" title="utils.UtilsLengthOpt.getMomentArmDiff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMomentArmDiff</span></code></a>(mjcModel, muscle, joints, …)</p></td>
+<td><p>Check if the moment arm differences between the osim and mjc models are beyond</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsLengthOpt.maOptPSO_cust" title="utils.UtilsLengthOpt.maOptPSO_cust"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maOptPSO_cust</span></code></a>(mjc_model_path, muscle, joints, …[, …])</p></td>
+<td><p>This is a self-defined particle swarm optimizer (PSO) for the moment arm optimization. The purpurse of define</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsLengthOpt.objMAMuscle">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsLengthOpt.</span></span><span class="sig-name descname"><span class="pre">objMAMuscle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_ma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mjc_model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsLengthOpt.html#objMAMuscle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsLengthOpt.objMAMuscle" title="Permalink to this definition">¶</a></dt>
+<dd><p>this objective function calculate the difference of moment arms between opensim model and mujoco model.</p>
+<p>Inputs:</p>
+<dl class="simple">
+<dt>x: vector</dt><dd><p>optimization vectors</p>
+</dd>
+<dt>side_id: int</dt><dd><p>the id list of the optimization sides</p>
+</dd>
+<dt>wrap_type: string</dt><dd><p>the type defined in O2MStep2</p>
+</dd>
+<dt>wrap_id: int</dt><dd><p>wrapping object id</p>
+</dd>
+<dt>pos_wrap: vector</dt><dd><p>the position of the wrapping object</p>
+</dd>
+<dt>size_wrap: vector</dt><dd><p>the size of the wrapping object</p>
+</dd>
+<dt>rotation_wrap: vector</dt><dd><p>the rotation vector of the wrapping object</p>
+</dd>
+<dt>osim_ma: vector</dt><dd><p>the moment arm vector of the osim model</p>
+</dd>
+<dt>mjc_model: mujoco model</dt><dd><p>the targeting mujoco model</p>
+</dd>
+<dt>muscle: string</dt><dd><p>muscle name</p>
+</dd>
+<dt>joints: list of string</dt><dd><p>the coordinates that the moment arms are caclulated</p>
+</dd>
+<dt>angle_ranges: list</dt><dd><p>the motion ranges of the mentioned coordinates</p>
+</dd>
+<dt>evalN: int</dt><dd><p>the number of evaluation points for the moment arm calculation</p>
+</dd>
+<dt>Outputs:</dt><dd><p>rms_ma: root mean square of the moment arm difference.</p>
+</dd>
+</dl>
+<p>rms_x: root mean square of the optimizing parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsLengthOpt.getMomentArmDiff">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsLengthOpt.</span></span><span class="sig-name descname"><span class="pre">getMomentArmDiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjcModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jnt_motion_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_ma_joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsLengthOpt.html#getMomentArmDiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsLengthOpt.getMomentArmDiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the moment arm differences between the osim and mjc models are beyond
+thresholds</p>
+<p>Only works for one muscle at multiple joints.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsLengthOpt.maOptPSO_cust">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsLengthOpt.</span></span><span class="sig-name descname"><span class="pre">maOptPSO_cust</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjc_model_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrap_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_wrap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_ma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evalN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optParam_lb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optParam_ub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_org</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsLengthOpt.html#maOptPSO_cust"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsLengthOpt.maOptPSO_cust" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a self-defined particle swarm optimizer (PSO) for the moment arm optimization. The purpurse of define
+it here, instead of using other packages, is to gain custmizied feature control.
+This is a temporary solution, eventually, these features should be added to the exist PSO python packages and
+use them as the optimizor</p>
+<dl>
+<dt>INPUTS:</dt><dd><p>mjcModel: mujoco model
+muscle: string</p>
+<blockquote>
+<div><p>muscle name</p>
+</div></blockquote>
+<dl class="simple">
+<dt>joints: list</dt><dd><p>a list of coordinate names for the optimization</p>
+</dd>
+<dt>joint_ranges: list</dt><dd><p>a list of vectors that defines the motion ranges of the above coordinates</p>
+</dd>
+<dt>side_id: int</dt><dd><p>the id list of the optimization sides</p>
+</dd>
+<dt>wrap_type: string</dt><dd><p>the type defined in O2MStep2</p>
+</dd>
+<dt>wrap_id: int</dt><dd><p>wrapping object id</p>
+</dd>
+<dt>pos_wrap: vector</dt><dd><p>the position of the wrapping object</p>
+</dd>
+<dt>size_wrap: vector</dt><dd><p>the size of the wrapping object</p>
+</dd>
+<dt>rotation_wrap: vector</dt><dd><p>the rotation vector of the wrapping object</p>
+</dd>
+<dt>osim_ma: vector</dt><dd><p>the moment arm vector of the osim model</p>
+</dd>
+<dt>evalN: int</dt><dd><p>the number of evaluation points for moment arm opt</p>
+</dd>
+<dt>opt_param_lb: array</dt><dd><p>the lower bound of the optimized parameters</p>
+</dd>
+<dt>opt_param_ub: array</dt><dd><p>the upper bound of the optimized parameters</p>
+</dd>
+<dt>cost_org: double</dt><dd><p>the cost function value before the optimization</p>
+</dd>
+<dt>speedy: boolean</dt><dd><p>If true, reduce the particle size and iteration number</p>
+</dd>
+</dl>
+</dd>
+<dt>OUTPUTS:</dt><dd><p>res_side: optimization side locations
+mjcModel: updated mujoco models</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

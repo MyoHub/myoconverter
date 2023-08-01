@@ -1,0 +1,49 @@
+:py:mod:`myoconverter.O2MPipeline`
+==================================
+
+.. py:module:: myoconverter.O2MPipeline
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.O2MPipeline.O2MPipeline
+   myoconverter.O2MPipeline.coordinate_kwargs
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.O2MPipeline.argparser
+
+
+.. py:function:: O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+
+   :param osim_file: Path to the OpenSim OSIM model file
+   :param geometry_folder: Path to the Geometry folder
+   :param output_folder: Path to folder where converted model is saved
+   :param : Selected conversion steps, any subset of [1, 2, 3]
+   :param kwargs: convert_step, muscle_list, osim_data_overwrite, convert, 
+       validation, generate_pdf, speedy, add_ground_geom, 
+       treat_as_normal_path_point
+   :return:
+
+
+.. py:function:: coordinate_kwargs(osim_file, output_folder, convert_steps, osim_data_overwrite, conversion, validation, speedy)
+
+   Some config flags may conflicting with each other, this coordinate step is to manage them.
+
+
+.. py:data:: argparser
+
+   
+

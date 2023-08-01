@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Usage &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p id="id1">You don’t need to install MyoConverter in order to use the optimized models. The conversion and optimization pipeline outputs the models as MuJoCo XML files, and these files have been uploaded to the GitHub repository, from where you can download them.</p>
+<p>If you want to convert and optimize a model that has not been uploaded to the GitHub repository, or participate in the development of the pipeline, you only need to pull the project from GitHub, and set up the Conda environment.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:MyoHub/myoConverter.git
+conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myoconverter<span class="w"> </span>-f<span class="w"> </span>myoConverter/conda_env.yml
+conda<span class="w"> </span>activate<span class="w"> </span>myoconverter
+</pre></div>
+</div>
+<p>Then you can run the pipeline by calling the python function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myoconverter.O2MPipeline</span> <span class="kn">import</span> <span class="n">O2MPipeline</span>
+
+<span class="c1"># define pipline configurations</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># define kwargs inputs</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;convert_steps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>    <span class="c1"># All three steps selected</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;muscle_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>           <span class="c1"># No specific muscle selected, optimize all of them</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;osim_data_overwrite&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># Overwrite the Osim model state files</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;conversion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>               <span class="c1"># Yes, perform &#39;Cvt#&#39; process</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>            <span class="c1"># Yes, perform &#39;Vlt#&#39; process</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;speedy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>               <span class="c1"># Do not reduce the checking notes to increase speed</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;generate_pdf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>         <span class="c1"># Do not generate validation pdf report</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;add_ground_geom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>       <span class="c1"># Add ground to the model</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;treat_as_normal_path_point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># Using constraints to represent moving and conditional</span>
+
+<span class="n">O2MPipeline</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">geometry_folder</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here are the explanations of these configuration files:</p>
+<ul class="simple">
+<li><p><em>convert_steps</em> :  Selected conversion steps, could be any subset of [1, 2, 3] based on the needs, Default = [1, 2, 3]</p></li>
+<li><p><em>muscle_list</em> :  Selected specific muscles for the conversion and validation steps’, Default = None</p></li>
+<li><p><em>osim_data_overwrite</em> :  If ture, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]</p></li>
+<li><p><em>conversion</em> :  If true, perform the conversion functions of selected steps, Default = True</p></li>
+<li><p><em>validation</em> :  If true, perform the validation functions of selected steps, Default = True</p></li>
+<li><p><em>speedy</em> :  If true, reduce the number of checking notes in optimization steps to increase speed, Default = False</p></li>
+<li><p><em>generate_pdf</em> :  If true, generate a pdf report of the validation results, Default = False</p></li>
+<li><p><em>add_ground_geom</em> :  If true, a geom (of type plane) is added to the MuJoCo model as ground, Default = False</p></li>
+<li><p><em>treat_as_normal_path_point</em> :  If true, MovingPathPoints and ConditionalPathPoints will be treated as normal PathPoints, Default = False</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

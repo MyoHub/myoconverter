@@ -1,0 +1,47 @@
+:py:mod:`myoconverter.convert_steps.O2MStep4`
+=============================================
+
+.. py:module:: myoconverter.convert_steps.O2MStep4
+
+.. autoapi-nested-parse::
+
+   Created on Sat May 14 21:27:00 2022
+
+   mapping site side location and muscle parameters from one side muscle to the
+   other side.
+
+   Assume the bone geometry and muscle paths are already converted and identical 
+   from one side to the other. 
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.convert_steps.O2MStep4.SymmetricMapping
+
+
+
+
+.. py:class:: SymmetricMapping(mjc_model_file, ref_side, tar_side, symm_axis)
+
+   .. py:method:: wrapper_match()
+
+
+   .. py:method:: site_side_match()
+
+
+   .. py:method:: muscle_match()
+
+
+   .. py:method:: model_save()
+
+
+

@@ -1,0 +1,64 @@
+<mujoco model="template">
+    <!-- This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. -->
+    <compiler angle="radian"/>
+    <option timestep="0.001" collision="predefined"/>
+    <size njmax="1000" nconmax="400" nkey="1" nuser_jnt="1"/>
+    <visual>
+        <scale framelength="0.5" framewidth="0.01"/>
+    </visual>
+    <default class="main">
+        <joint limited="true" armature="1e-05" damping="0.05"/>
+        <geom margin="0.001" rgba="0.8 0.6 0.4 1"/>
+        <site size="0.001 0.005 0.005"/>
+        <tendon width="0.005" rgba="0.95 0.3 0.3 1"/>
+        <default class="muscle">
+            <general ctrllimited="true" ctrlrange="0 1" dyntype="muscle" gaintype="muscle" biastype="muscle" dynprm="0.01 0.04 0 0 0 0 0 0 0 0" gainprm="0.75 1.05 -1 200 0.5 1.6 1.5 1.3 1.2 0" biasprm="0.75 1.05 -1 200 0.5 1.6 1.5 1.3 1.2 0"/>
+        </default>
+        <default class="motor">
+            <general gainprm="5 0 0 0 0 0 0 0 0 0"/>
+        </default>
+    </default>
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2="0.6 0.8 1" width="256" height="1536"/>
+        <mesh name="ground_geom_2_block" file="Geometry/block.stl" scale="5 1 1"/>
+        <mesh name="ground_geom_3_block" file="Geometry/block.stl" scale="5 1 1"/>
+        <mesh name="block_geom_1_block" file="Geometry/block.stl"/>
+    </asset>
+    <worldbody>
+        <light pos="0 0 0" dir="0 0 -1" directional="true"/>
+        <body name="ground" pos="0 0 0" quat="0.707035 0.707179 0 0">
+            <geom name="ground-plane" size="10 10 0.125" quat="0.707035 -0.707179 0 0" type="plane" rgba="1 0.7 0.4 1"/>
+            <geom name="ground_geom_2" pos="0 0.05 0.35" type="mesh" rgba="1 1 1 1" mesh="ground_geom_2_block"/>
+            <geom name="ground_geom_3" pos="0 0.05 -0.35" type="mesh" rgba="1 1 1 1" mesh="ground_geom_3_block"/>
+            <site name="muscle1_muscle1-point1" pos="0 0.05 -0.35"/>
+            <site name="muscle2_muscle2-point1" pos="0 0.05 0.35"/>
+        </body>
+        <body name="block" pos="0 0 0.05" quat="0.707035 0.707179 0 0">
+            <inertial pos="0 0 0" mass="20" diaginertia="0.133333 0.133333 0.133333"/>
+            <joint name="block_tz" pos="0 0 0" axis="-3.673e-06 0 1" type="slide" range="-0.1 0.1" damping="0"/>
+            <geom name="block_geom_1" type="mesh" rgba="1 1 1 1" mesh="block_geom_1_block"/>
+            <site name="muscle1_muscle1-point2" pos="0 0 -0.05"/>
+            <site name="muscle2_muscle2-point2" pos="0 0 0.05"/>
+        </body>
+    </worldbody>
+    <contact>
+        <pair geom1="ground-plane" geom2="block_geom_1"/>
+    </contact>
+    <tendon>
+        <spatial name="muscle1_tendon">
+            <site site="muscle1_muscle1-point1"/>
+            <site site="muscle1_muscle1-point2"/>
+        </spatial>
+        <spatial name="muscle2_tendon">
+            <site site="muscle2_muscle2-point1"/>
+            <site site="muscle2_muscle2-point2"/>
+        </spatial>
+    </tendon>
+    <actuator>
+        <general name="muscle1" class="muscle" tendon="muscle1_tendon" lengthrange="0.19999 0.39999" dynprm="0.015 0.05 0 0 0 0 0 0 0 0" gainprm="0.0765085 1.64637 1025.41 1 0 2 10 3.92115 1.4 0" biasprm="0.0765085 1.64637 1025.41 1 0 2 10 3.92115 1.4 0"/>
+        <general name="muscle2" class="muscle" tendon="muscle2_tendon" lengthrange="0.20001 0.40001" dynprm="0.015 0.05 0 0 0 0 0 0 0 0" gainprm="0.0436128 1.58601 975.302 1 0 2 10 4.97089 1.4 0" biasprm="0.0436128 1.58601 975.302 1 0 2 10 4.97089 1.4 0"/>
+    </actuator>
+    <keyframe>
+        <key name="default-pose"/>
+    </keyframe>
+</mujoco>

@@ -1,0 +1,13 @@
+
+- Downloaded from https://simtk.org/projects/neckdynamics (2023/01/12), project is called "Musculoskeletal Model of Head and Neck Suitable for Dynamic Simulations", download file is called "HYOID_1.2_ScaledStrenght_UpdatedInertia.zip"
+
+- The model was converted to OpenSimDocument Version="40000" format by opening the original xml file in OpenSim 4.4
+
+- Credits for the HYOID_1.2_ScaledStrenght_UpdatedInertia.osim model: Jonathan Mortensen, University of Utah, Department of Mechanical Engineering
+
+- License for the HYOID_1.2_ScaledStrenght_UpdatedInertia.osim model: MIT (see "license" text file)
+
+- Publications and references for the HYOID_1.2_ScaledStrenght_UpdatedInertia.osim model: Mortensen J, Vasavada A., Merryweather A., "The inclusion of hyoid muscles improve moment generating capacity and dynamic simulations in musculoskeletal models of the head and neck", PLOS ONE, 2018
+
+- The above credits, license, and citation info apply to the file HYOID_1.2_ScaledStrenght_UpdatedInertia_adjusted.osim. In this file we have adjusted the operation range of pitch1, roll1, yaw1, pitch2, roll2, yaw2, so that the mapping from them to the rotation axis is be 1:1 (current pipeline cannot handle other mapping ratio). The corresponding joint constraints that are based on these joints are also adjusted to maintain the same coupling relationship. This adjustment will create different joint operation range than the original osim model, but the behavior should be the same. In the long run, we will find ways to solve this automatically inside the pipeline.
+

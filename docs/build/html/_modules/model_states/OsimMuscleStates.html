@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>model_states.OsimMuscleStates &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>model_states.OsimMuscleStates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for model_states.OsimMuscleStates</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sun Feb 20 21:43:21 2022</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsOpensim</span> <span class="kn">import</span> <span class="n">getJointsControlledByMuscle</span><span class="p">,</span> <span class="n">getCouplingJoints</span><span class="p">,</span>\
+        <span class="n">getAllIndependentCoordinates</span><span class="p">,</span> <span class="n">getJointRanges_dict</span><span class="p">,</span> <span class="n">getJointRanges_array</span><span class="p">,</span> <span class="n">computeMomentArm</span><span class="p">,</span>\
+        <span class="n">getMuscleLengthList</span><span class="p">,</span> <span class="n">getMuscleForceMaps</span><span class="p">,</span> <span class="n">getMuscleProperties</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+        
+
+<div class="viewcode-block" id="OsimMuscleStates"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates">[docs]</a><span class="k">class</span> <span class="nc">OsimMuscleStates</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to extract the muscle states (moment arms and force properites)</span>
+<span class="sd">        of the given OpenSim model</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+             
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">osim_model</span><span class="p">,</span> <span class="n">muscle_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        osim_model: loaded opensim model</span>
+<span class="sd">        muscle_list: specified muscles whose states will be extracted. if None,</span>
+<span class="sd">                     then all muscles inside the OsimModel will be calculated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># initilize the input osim model as the global variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span> <span class="o">=</span> <span class="n">osim_model</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">muscle_list</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">muscle_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="n">muscle_list</span>
+
+        <span class="c1"># dictionary for storing calculated moment arms and force properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        
+<div class="viewcode-block" id="OsimMuscleStates.reset"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># reset all calculated variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+        
+        
+    <span class="c1"># get the wrapping coordinate of the given muscle list</span>
+<div class="viewcode-block" id="OsimMuscleStates.getWrapingCoords"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates.getWrapingCoords">[docs]</a>    <span class="k">def</span> <span class="nf">getWrapingCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the wrapping coordinates of the given muscle list. In addition,</span>
+<span class="sd">        the coupling coordinates when calculating moment arms were extracted.</span>
+<span class="sd">        </span>
+<span class="sd">        For a given muscle list, outputs of this function is a dictionary:</span>
+<span class="sd">            </span>
+<span class="sd">            Keywords  ||  list of coordinates</span>
+<span class="sd">            muscle 1: coordinate 1, coordinate 2</span>
+<span class="sd">                      coordinate 3,</span>
+<span class="sd">                      </span>
+<span class="sd">            muscle 2: coordinate 1</span>
+<span class="sd">                      coordinate 3, coordinate 4</span>
+<span class="sd">                      coordinate 5, coordinate 6,</span>
+<span class="sd">                      </span>
+<span class="sd">            ...     </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>       
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Extract the joints that muscle wrapped over from Osim model&quot;</span><span class="p">)</span> 
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">osim_muscles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span>  <span class="c1"># osim muscle class</span>
+            
+        <span class="c1"># go through a for loop of each muscle to extract the wrapped coordinates</span>
+        <span class="k">for</span> <span class="n">i_muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+            
+            <span class="c1"># get wrapping coordiantes</span>
+            <span class="n">joints</span> <span class="o">=</span> <span class="n">getJointsControlledByMuscle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">osim_muscles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i_muscle</span><span class="p">))</span>
+            
+            <span class="n">jointCP</span> <span class="o">=</span> <span class="n">getCouplingJoints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">osim_muscles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i_muscle</span><span class="p">),</span> <span class="n">joints</span><span class="p">)</span>
+            
+            <span class="c1"># remove the duplicated coupling joints combinations</span>
+            <span class="n">wrap_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">{</span><span class="o">*</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">jointCP</span><span class="p">]}];</span>
+            
+            <span class="c1"># remove the sub coupling joints and only save the largest one.</span>
+            <span class="c1"># Also make sure they always have the same order in every calculations.</span>
+            <span class="c1"># A dirty fix right now, must have better ways to do this....</span>
+            <span class="n">i_wrap</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">i_wrap</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_list</span><span class="p">):</span>
+                <span class="n">j_wrap</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">j_wrap</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">wrap_list</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i_wrap</span> <span class="o">==</span> <span class="n">j_wrap</span><span class="p">:</span>
+                        <span class="n">j_wrap</span> <span class="o">=</span> <span class="n">j_wrap</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">elem</span> <span class="ow">in</span> <span class="n">wrap_list</span><span class="p">[</span><span class="n">j_wrap</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">wrap_list</span><span class="p">[</span><span class="n">i_wrap</span><span class="p">]):</span>
+                            <span class="k">del</span> <span class="n">wrap_list</span><span class="p">[</span><span class="n">i_wrap</span><span class="p">]</span>
+                            <span class="k">break</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">j_wrap</span> <span class="o">=</span> <span class="n">j_wrap</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">i_wrap</span> <span class="o">=</span> <span class="n">i_wrap</span> <span class="o">+</span> <span class="mi">1</span>
+                    
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">i_muscle</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrap_list</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span></div>
+    
+    <span class="c1"># getting all coordinate ranges that wrapped by muscles</span>
+<div class="viewcode-block" id="OsimMuscleStates.getCoordRanges"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates.getCoordRanges">[docs]</a>    <span class="k">def</span> <span class="nf">getCoordRanges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the motion ranges of given coordinates in an OpenSim model.</span>
+<span class="sd">        </span>
+<span class="sd">        Outputs of this function is a dictionary with the coordinate names as </span>
+<span class="sd">        keywords</span>
+<span class="sd">        </span>
+<span class="sd">               Keywords  ||   list</span>
+<span class="sd">            </span>
+<span class="sd">            coordinate 1:  [lower bound, upper bound]</span>
+<span class="sd">            coordinate 2:  [lower bound, upper bound]</span>
+<span class="sd">            coordinate 3:  [lower bound, upper bound]</span>
+<span class="sd">            ...</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Extract joint motion range from Osim model&quot;</span><span class="p">)</span>
+        
+        <span class="n">joint_names</span><span class="p">,</span> <span class="n">DOF_Index</span> <span class="o">=</span> <span class="n">getAllIndependentCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinate_range</span> <span class="o">=</span> <span class="n">getJointRanges_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">joint_names</span><span class="p">)</span>
+                    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate_range</span></div>
+
+            
+<div class="viewcode-block" id="OsimMuscleStates.getMomentArms"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates.getMomentArms">[docs]</a>    <span class="k">def</span> <span class="nf">getMomentArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calcualte moment arms of a muscle at different coordinates it wrapped.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wrapping_coordinate : dictionary</span>
+<span class="sd">            The dictionary that contains the muscles list and their</span>
+<span class="sd">            wrapping coordinates. If not provide, will calculate from the above</span>
+<span class="sd">            getWrapingCoord function.</span>
+<span class="sd">            </span>
+<span class="sd">        coordinate_range: dictionary</span>
+<span class="sd">            The dictionary that contains the motion ranges of the</span>
+<span class="sd">            joint lists that been wrapped by the muscles. if not provided,</span>
+<span class="sd">            generate from the above getWrapingCoord function.</span>
+
+<span class="sd">        save_path: string</span>
+<span class="sd">            The path to save muscle-specific force map files, if not provided, not saving...</span>
+<span class="sd">            </span>
+<span class="sd">        speedy: boolean</span>
+<span class="sd">            If True, select a lower number of particles, checking notes, iterations</span>
+<span class="sd">            to speed up the optimization process.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.moment_arms: dictionary</span>
+<span class="sd">            The dictionary that contains the moment arms that were</span>
+<span class="sd">            calculated from the opensim model with the given inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">getWrapingCoords</span><span class="p">()</span>  <span class="c1"># generate wrapping coordiantes</span>
+        <span class="c1">#  self.getCoordRanges()  # extract joint ranges</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculate moment arms from Osim model&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># self.moment_arms = {}  don&#39;t not export all the moment arm in one file anymore </span>
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>   <span class="c1"># run through all muscles</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">muscle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+            <span class="n">osim_muscle</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">muscle</span><span class="p">)</span>
+
+            <span class="n">mus_para</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">mus_para</span><span class="p">[</span><span class="s1">&#39;muscle_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muscle</span>
+            <span class="n">muscle_moment_arms</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">mus_para</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">muscle</span><span class="p">]</span>
+
+            <span class="n">motion_ranges</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">moment_arms_joints</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">evalN_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">joints</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">muscle</span><span class="p">]:</span>  <span class="c1"># run through all joints</span>
+
+                <span class="k">if</span> <span class="n">speedy</span><span class="p">:</span>  <span class="c1"># speedy optimization with lower number of evaluation nodes</span>
+                
+                    <span class="c1"># setup the maximum mesh points depends on the number of </span>
+                    <span class="c1"># joint coupling together, otherwise it will take too long to</span>
+                    <span class="c1"># compute them!</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">25</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">7</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">4</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">3</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">2</span>
+                
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># setup the maximum mesh points depends on the number of </span>
+                    <span class="c1"># joint coupling together, otherwise it will take too long to</span>
+                    <span class="c1"># compute them!</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">25</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">11</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">7</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">5</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">4</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">3</span>
+            
+                <span class="n">motion_range</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>  <span class="c1"># extract the motion range</span>
+                    <span class="n">motion_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">getJointRanges_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">joint</span><span class="p">))</span>
+                
+                <span class="c1"># calculate moment arms for this muscle and joints</span>
+                <span class="c1"># and save it to a list</span>
+                <span class="n">moment_arms_joints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">computeMomentArm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span>\
+                                                 <span class="n">osim_muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">motion_range</span><span class="p">,</span>\
+                                                 <span class="n">evalN</span><span class="p">))</span>
+
+                <span class="n">motion_ranges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">motion_range</span><span class="p">)</span>
+                <span class="n">evalN_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evalN</span><span class="p">)</span>
+
+            <span class="c1"># save joint motion ranges and moment arm lists</span>
+            <span class="n">mus_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">motion_ranges</span>
+            <span class="n">mus_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">moment_arms_joints</span>
+            <span class="n">mus_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evalN_list</span>
+
+            <span class="c1"># save moment arm data if a saving path is provided</span>
+            <span class="k">if</span> <span class="n">save_path</span><span class="p">:</span>
+                <span class="n">muscle_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">mus_para</span><span class="p">,</span> <span class="n">muscle_file</span><span class="p">)</span>
+                <span class="n">muscle_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+            <span class="c1"># save the moment arms of the muscle into a dictionary, NO LONGER NEEDED</span>
+            <span class="c1"># self.moment_arms[muscle]= muscle_moment_arms</span>
+            
+        <span class="c1"># return self.moment_arms</span>
+    
+<div class="viewcode-block" id="OsimMuscleStates.getMuscleForceMaps"><a class="viewcode-back" href="../../autoapi/model_states/OsimMuscleStates/index.html#model_states.OsimMuscleStates.OsimMuscleStates.getMuscleForceMaps">[docs]</a>    <span class="k">def</span> <span class="nf">getMuscleForceMaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get the muscle force maps from OpenSim models. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        save_path: string</span>
+<span class="sd">            The path to save muscle-specific force map files, if not provided, not saving...</span>
+<span class="sd">            </span>
+<span class="sd">        speedy: boolean</span>
+<span class="sd">            If True, select a lower number of particles, checking notes, iterations</span>
+<span class="sd">            to speed up the optimization process.</span>
+
+<span class="sd">        Returns (NONE)</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.force_maps: dictionary</span>
+<span class="sd">            The dictionary that contains the muscle force maps that were</span>
+<span class="sd">            calculated from the opensim model with the given inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: set condition to avoid run this again.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getWrapingCoords</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculate muscle force curves from Osim model&quot;</span><span class="p">)</span>
+            
+        <span class="c1"># force_maps = {}</span>
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>   <span class="c1"># run through each muscle</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">muscle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+            <span class="n">osim_muscle</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">muscle</span><span class="p">)</span>
+            
+            <span class="c1"># get a list of muscle lengths from minimal to maximum and the corresponding</span>
+            <span class="c1"># joint angle list</span>
+            <span class="n">force_map</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="c1"># extract the property parameters from the OpenSim models</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;mtu_par_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">getMuscleProperties</span><span class="p">(</span><span class="n">osim_muscle</span><span class="p">)</span>
+            
+            <span class="n">motion_range</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">joints_uniq</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">joints</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">muscle</span><span class="p">]:</span>  <span class="c1"># run through all joints           </span>
+                <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>  <span class="c1"># extract the motion range</span>
+                    <span class="k">if</span> <span class="n">joint</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">joints_uniq</span><span class="p">:</span>  <span class="c1"># only go through the unique joint coordinates</span>
+                        <span class="n">joints_uniq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+                        <span class="n">motion_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">getJointRanges_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">joint</span><span class="p">))</span>
+        
+            <span class="n">mtu_len_set</span><span class="p">,</span> <span class="n">jit_list_set</span> <span class="o">=</span> <span class="n">getMuscleLengthList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span>\
+                                                            <span class="n">osim_muscle</span><span class="p">,</span> <span class="n">joints_uniq</span><span class="p">,</span>\
+                                                            <span class="n">motion_range</span><span class="p">,</span> <span class="n">speedy</span><span class="p">)</span>
+            
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;muscle_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">muscle</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;mtu_length_osim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu_len_set</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;jit_list_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">jit_list_set</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;jit_uniq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">joints_uniq</span>
+                
+            <span class="c1"># set the muscle activation shift from 0 to 1</span>
+            <span class="c1"># only optimize when activation equal to 1</span>
+            <span class="n">act_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># np.linspace(0, 1, 5)</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;act_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">act_list</span>
+                
+            <span class="c1"># get muscle tendon force,  and active/passive forces</span>
+            <span class="n">mtu_force_length</span><span class="p">,</span> <span class="n">act_force_length</span><span class="p">,</span> <span class="n">pas_force_length</span> <span class="o">=</span> \
+                <span class="n">getMuscleForceMaps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">osim_muscle</span><span class="p">,</span> <span class="n">joints_uniq</span><span class="p">,</span> <span class="n">jit_list_set</span><span class="p">,</span> <span class="n">act_list</span><span class="p">)</span>
+                
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;mtu_force_osim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu_force_length</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;act_force_osim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">act_force_length</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;pas_force_osim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pas_force_length</span>
+                
+            <span class="k">if</span> <span class="n">save_path</span><span class="p">:</span>
+                <span class="n">muscle_mf_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">force_map</span><span class="p">,</span> <span class="n">muscle_mf_file</span><span class="p">)</span>
+                <span class="n">muscle_mf_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+        
+        <span class="c1"># return force_maps</span>
+    
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

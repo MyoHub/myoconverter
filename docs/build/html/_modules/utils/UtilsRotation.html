@@ -1,0 +1,535 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsRotation &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.UtilsRotation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.UtilsRotation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">arctan</span>
+
+
+
+<span class="c1"># This utilis cotains the coordinate convertion and rotation functions</span>
+
+<div class="viewcode-block" id="spherical2cartesian"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.spherical2cartesian">[docs]</a><span class="k">def</span> <span class="nf">spherical2cartesian</span><span class="p">(</span><span class="n">wrap_centre</span><span class="p">,</span> <span class="n">site_pose_sph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transfer the site_pose in the Spherical coordinate into Catersian coordinate,</span>
+<span class="sd">    relative to the wrap_centre (for sphere objects)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        wrap_centre: the centre location of the wrapping object, in Catersian coordinate</span>
+<span class="sd">        site_pose_sph: the position of the site point, in Spherical coordinate:</span>
+<span class="sd">            r: float, ra [0, inf]</span>
+<span class="sd">            theta: float, vectical angle [0, pi]</span>
+<span class="sd">            phi: float, horizental angle [-pi, pi]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># x = r*cos(\phi)*sin(\theta)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># y = r*sin(\phi)*sin(\theta)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">site_pose_sph</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># z = r*cos(\theta)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="cartesian2spherical"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.cartesian2spherical">[docs]</a><span class="k">def</span> <span class="nf">cartesian2spherical</span><span class="p">(</span><span class="n">wrap_centre</span><span class="p">,</span> <span class="n">site_pose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transfer the site_pose in the Catersian coordinate into Spherical coordinate,</span>
+<span class="sd">    relative to the wrap_centre (for sphere objects)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        wrap_centre: the centre location of the wrapping object, in Catersian coordinate</span>
+<span class="sd">        site_pose: the position of the site point, in Catersian coordinate</span>
+<span class="sd">        </span>
+<span class="sd">    Outputs:</span>
+<span class="sd">        r: float, [0, inf], radius of the sphere</span>
+<span class="sd">        theta: float, [0 pi], rotation angle with respect to the z axis</span>
+<span class="sd">        phi: float, [-pi, pi],  rotation angle in the x-y plane</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># calculate the radius first</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">site_pose</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>   <span class="c1"># calculate theta and phi, if r != 0</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">site_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>\
+                           <span class="n">site_pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">wrap_centre</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># \theta = arctan2(y, x)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">site_pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">wrap_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">site_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># \phi = arctan2(y, x)</span>
+
+    <span class="k">else</span><span class="p">:</span>   <span class="c1"># if r == 0, theta and pi both equal 0</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="quaternionRotaionInv"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.quaternionRotaionInv">[docs]</a><span class="k">def</span> <span class="nf">quaternionRotaionInv</span><span class="p">(</span><span class="n">unitQuat</span><span class="p">,</span> <span class="n">site_pose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotation the site_pose based on the unit quaternion rotation vector.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        unitQuat: unit vector of the quaternion rotation angles</span>
+<span class="sd">        site_pose: the catesian space location of the site point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># calculate rotation matrix A based on the unit quaternion vector</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="c1"># A = np.array([[1 - 2*(qj**2 + qk**2), 2*(qi*qj - qk*qr), 2*(qi*qk + qj*qr)],</span>
+    <span class="c1">#      [2*(qi*qj + qk*qr), 1 - 2*(qi**2 + qk**2), 2*(qj*qk - qi*qr)],</span>
+    <span class="c1">#      [2*(qi*qk - qj*qr), 2*(qj*qk + qi*qr), 1 - 2*(qi**2 + qj**2)]])</span>
+    
+    
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">c</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">]])</span>
+    
+    <span class="n">new_site_pose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="n">site_pose</span><span class="p">)</span>  <span class="c1"># calculate new pose after rotation.</span>
+    
+    <span class="k">return</span> <span class="n">new_site_pose</span></div>
+
+<div class="viewcode-block" id="quaternionRotaion"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.quaternionRotaion">[docs]</a><span class="k">def</span> <span class="nf">quaternionRotaion</span><span class="p">(</span><span class="n">unitQuat</span><span class="p">,</span> <span class="n">site_pose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotation the site_pose based on the unit quaternion rotation vector.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        unitQuat: unit vector of the quaternion rotation angles</span>
+<span class="sd">        site_pose: the catesian space location of the site point</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># calculate rotation matrix A based on the unit quaternion vector</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">unitQuat</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="c1"># A = np.array([[1 - 2*(qj**2 + qk**2), 2*(qi*qj - qk*qr), 2*(qi*qk + qj*qr)],</span>
+    <span class="c1">#      [2*(qi*qj + qk*qr), 1 - 2*(qi**2 + qk**2), 2*(qj*qk - qi*qr)],</span>
+    <span class="c1">#      [2*(qi*qk - qj*qr), 2*(qj*qk + qi*qr), 1 - 2*(qi**2 + qj**2)]])</span>
+    
+    
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">c</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">]])</span>
+    
+    <span class="n">new_site_pose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">site_pose</span><span class="p">)</span>  <span class="c1"># calculate new pose after rotation.</span>
+    
+    <span class="k">return</span> <span class="n">new_site_pose</span></div>
+
+
+<div class="viewcode-block" id="cartesian2cylindrical"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.cartesian2cylindrical">[docs]</a><span class="k">def</span> <span class="nf">cartesian2cylindrical</span><span class="p">(</span><span class="n">wrap_centre</span><span class="p">,</span> <span class="n">site_pose</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transfer the site_pose in the Catersian coordinate into Cylindrical coordinate,</span>
+<span class="sd">    relative to the wrap_centre (for sphere objects)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        wrap_centre: the centre location of the wrapping object, in Catersian coordinate</span>
+<span class="sd">        site_pose: the position of the site point, in Catersian coordinate</span>
+<span class="sd">        </span>
+<span class="sd">    Outputs:</span>
+<span class="sd">        rho: float, [0, inf], radius of the cylinder</span>
+<span class="sd">        phi: float, [-pi, pi], rotation angle</span>
+<span class="sd">        z: float, [-inf, inf], distance to the origin O, along the longitudinal axis        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># calculate the rho, phi, z values in cylindarical coordinate</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">site_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">site_pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># range [0, inf]</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">site_pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">site_pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># range [-pi, pi]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">site_pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>   <span class="c1"># range [-inf, inf]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rho</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="cylindarical2cartesian"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.cylindarical2cartesian">[docs]</a><span class="k">def</span> <span class="nf">cylindarical2cartesian</span><span class="p">(</span><span class="n">wrap_centre</span><span class="p">,</span> <span class="n">site_pose_cyl</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transfer the site_pose in the Cylindarical coordinate into Catersian coordinate,</span>
+<span class="sd">    relative to the wrap_centre (for sphere objects)</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        wrap_centre: the centre location of the wrapping object, in Catersian coordinate</span>
+<span class="sd">        site_pose_sph: the position of the site point, in Cylindarical coordinate</span>
+<span class="sd">        </span>
+<span class="sd">    Outputs:</span>
+<span class="sd">        x: float, [-inf, inf], x axis location of the local coordinate</span>
+<span class="sd">        y: float, [-inf, inf], y axis location of the local coordinate</span>
+<span class="sd">        z: float, [-inf, inf], z axis location of the local coordinate</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">site_pose_cyl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">site_pose_cyl</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">site_pose_cyl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">site_pose_cyl</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">site_pose_cyl</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">wrap_centre</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span></div>
+
+
+<span class="c1"># def quaternion2euler(unitQuat):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Transfer the united quaternion vector into three euler angles.</span>
+<span class="c1">#     Followed the conversion equation in Wiki: </span>
+<span class="c1">#     https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles</span>
+    
+<span class="c1">#     Parameters:</span>
+<span class="c1">#         unitQuat: united quaternion vector</span>
+        
+<span class="c1">#     Outputs:</span>
+<span class="c1">#         Euler rotation angles:</span>
+<span class="c1">#             yaw: float, [-pi, pi], yaw angle</span>
+<span class="c1">#             pitch: float, [-pi/2, pi/2], pitch angle</span>
+<span class="c1">#             roll: float, [-pi, pi], roll angle</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     q0 = unitQuat[0]   # cos(theta/2)</span>
+<span class="c1">#     q1 = unitQuat[1]   # bx*sin(theta/2)</span>
+<span class="c1">#     q2 = unitQuat[2]   # by*sin(theta/2)</span>
+<span class="c1">#     q3 = unitQuat[3]   # bz*sin(theta/2)</span>
+        
+<span class="c1">#     roll = np.arctan2(2*(q0*q1 + q2*q3), 1 - 2*(q1**2 + q2**2))</span>
+<span class="c1">#     pitch = np.arcsin(2*(q0*q2 - q3*q1))</span>
+<span class="c1">#     yaw = np.arctan2(2*(q0*q3 + q1*q2), 1-2*(q2**2 + q3**2))</span>
+    
+<span class="c1">#     return np.array([yaw, pitch, roll])</span>
+
+
+<span class="c1"># def euler2quaternion(eulerAng):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Transfer the euler angles into united quaternion vector.</span>
+<span class="c1">#     Followed the conversion equation in Wiki: </span>
+<span class="c1">#     https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles</span>
+    
+<span class="c1">#     Parameters:</span>
+<span class="c1">#         eulerAng: [yaw, pitch, roll]</span>
+        
+<span class="c1">#     Outputs:</span>
+<span class="c1">#         united quaternion vectors</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     cy = np.cos(eulerAng[0]/2)</span>
+<span class="c1">#     sy = np.sin(eulerAng[0]/2)</span>
+<span class="c1">#     cp = np.cos(eulerAng[1]/2)</span>
+<span class="c1">#     sp = np.sin(eulerAng[1]/2)</span>
+<span class="c1">#     cr = np.cos(eulerAng[2]/2)</span>
+<span class="c1">#     sr = np.sin(eulerAng[2]/2)</span>
+        
+<span class="c1">#     unitQuat = np.array([sr * cp * cy - cr * sp * sy,\</span>
+<span class="c1">#                         cr * sp * cy + sr * cp * sy,\</span>
+<span class="c1">#                         cr * cp * sy - sr * sp * cy,\</span>
+<span class="c1">#                         cr * cp * cy + sr * sp * sy])</span>
+    
+<span class="c1">#     return unitQuat</span>
+    
+
+
+<div class="viewcode-block" id="TaitBryanRotationMatrix"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.TaitBryanRotationMatrix">[docs]</a><span class="k">def</span> <span class="nf">TaitBryanRotationMatrix</span><span class="p">(</span><span class="n">Sequence</span><span class="p">,</span> <span class="n">angles</span><span class="p">):</span>
+    
+    
+    <span class="n">a</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>    
+    
+    <span class="k">if</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;xzy&#39;</span><span class="p">:</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)],</span>
+               <span class="p">[</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)],</span>
+               <span class="p">[</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)]]</span>
+        
+    <span class="k">elif</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;yzx&#39;</span><span class="p">:</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">s2</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">c3</span><span class="p">,</span> <span class="o">-</span><span class="n">c2</span><span class="o">*</span><span class="n">s3</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="n">c2</span><span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">s3</span> <span class="o">+</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">c3</span> <span class="o">-</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">]]</span>
+        
+    <span class="k">elif</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;zxy&#39;</span><span class="p">:</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c1</span><span class="o">*</span><span class="n">c3</span> <span class="o">-</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="o">-</span><span class="n">c2</span><span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">s3</span> <span class="o">+</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">c3</span><span class="o">*</span><span class="n">s1</span> <span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">c2</span><span class="p">,</span> <span class="n">s1</span><span class="o">*</span><span class="n">s3</span> <span class="o">-</span> <span class="n">c1</span><span class="o">*</span><span class="n">c3</span><span class="o">*</span><span class="n">s2</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="n">c2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">c3</span><span class="p">]]</span>
+        
+    <span class="k">elif</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;zyx&#39;</span><span class="p">:</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c1</span><span class="o">*</span><span class="n">c2</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span> <span class="o">-</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="n">s1</span><span class="o">*</span><span class="n">s3</span> <span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">c3</span><span class="o">*</span><span class="n">s2</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">c2</span><span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">c3</span> <span class="o">+</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="o">*</span><span class="n">s2</span> <span class="o">-</span> <span class="n">c1</span><span class="o">*</span><span class="n">s3</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="n">s2</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">c3</span><span class="p">]]</span>
+        
+    <span class="k">elif</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;yxz&#39;</span><span class="p">:</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">c1</span><span class="o">*</span><span class="n">c3</span> <span class="o">+</span> <span class="n">s1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="o">*</span><span class="n">s2</span> <span class="o">-</span> <span class="n">c1</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">s1</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">c2</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c2</span><span class="o">*</span><span class="n">c3</span><span class="p">,</span> <span class="o">-</span><span class="n">s2</span><span class="p">],</span>
+               <span class="p">[</span><span class="n">c1</span><span class="o">*</span><span class="n">s2</span><span class="o">*</span><span class="n">s3</span> <span class="o">-</span> <span class="n">c3</span><span class="o">*</span><span class="n">s1</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">c3</span><span class="o">*</span><span class="n">s2</span> <span class="o">+</span> <span class="n">s1</span><span class="o">*</span><span class="n">s3</span><span class="p">,</span> <span class="n">c1</span><span class="o">*</span><span class="n">c2</span><span class="p">]]</span>
+        
+    <span class="k">elif</span> <span class="n">Sequence</span> <span class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span> 
+        <span class="n">rot</span> <span class="o">=</span> <span class="p">[[</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)],</span>\
+    	      <span class="p">[</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)],</span>\
+    	      <span class="p">[</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)]]</span>
+            
+    <span class="k">return</span> <span class="n">rot</span></div>
+
+<div class="viewcode-block" id="euler_change_sequence"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.euler_change_sequence">[docs]</a><span class="k">def</span> <span class="nf">euler_change_sequence</span><span class="p">(</span><span class="n">oldSequence</span><span class="p">,</span> <span class="n">old_angles</span><span class="p">,</span> <span class="n">newSequence</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From the old sequence euler rotation angles, get euler rotation angles with</span>
+<span class="sd">    the sequence of x-y-z.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        oldSequence: the old order of sequence of the euler rotation</span>
+<span class="sd">    	old_angles: three euler angles in the old rotation sequence</span>
+<span class="sd">    	newSequence: the new order of sequence of the euler rotation</span>
+<span class="sd">    	</span>
+<span class="sd">    Outputs:</span>
+<span class="sd">    	eulerNew: the new euler angles with the new rotation sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">rot</span> <span class="o">=</span> <span class="n">TaitBryanRotationMatrix</span><span class="p">(</span><span class="n">oldSequence</span><span class="p">,</span> <span class="n">old_angles</span><span class="p">)</span>
+    	      
+    <span class="k">if</span> <span class="n">newSequence</span> <span class="o">==</span> <span class="s1">&#39;xzy&#39;</span><span class="p">:</span>
+        <span class="n">a_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">b_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">r_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">newSequence</span> <span class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
+        <span class="n">a_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">b_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">r_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        
+    <span class="k">return</span> <span class="p">[</span><span class="n">a_new</span><span class="p">,</span> <span class="n">b_new</span><span class="p">,</span> <span class="n">r_new</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="euler_change_sequence_bodyRotationFirst"><a class="viewcode-back" href="../../autoapi/utils/UtilsRotation/index.html#utils.UtilsRotation.euler_change_sequence_bodyRotationFirst">[docs]</a><span class="k">def</span> <span class="nf">euler_change_sequence_bodyRotationFirst</span><span class="p">(</span><span class="n">bodySequence</span><span class="p">,</span> <span class="n">body_angle</span><span class="p">,</span> <span class="n">oldSequence</span><span class="p">,</span> <span class="n">old_angles</span><span class="p">,</span> <span class="n">newSequence</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    From the old sequence euler rotation angles, get euler rotation angles with</span>
+<span class="sd">    the sequence of x-y-z.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        oldSequence: the old order of sequence of the euler rotation</span>
+<span class="sd">    	old_angles: three euler angles in the old rotation sequence</span>
+<span class="sd">    	newSequence: the new order of sequence of the euler rotation</span>
+<span class="sd">    	</span>
+<span class="sd">    Outputs:</span>
+<span class="sd">    	eulerNew: the new euler angles with the new rotation sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rot1</span> <span class="o">=</span> <span class="n">TaitBryanRotationMatrix</span><span class="p">(</span><span class="n">bodySequence</span><span class="p">,</span> <span class="n">body_angle</span><span class="p">)</span>
+    
+    <span class="n">rot2</span> <span class="o">=</span> <span class="n">TaitBryanRotationMatrix</span><span class="p">(</span><span class="n">oldSequence</span><span class="p">,</span> <span class="n">old_angles</span><span class="p">)</span>
+    
+    <span class="n">rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rot1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rot2</span><span class="p">))</span>
+    
+
+    <span class="k">if</span> <span class="n">newSequence</span> <span class="o">==</span> <span class="s1">&#39;xzy&#39;</span><span class="p">:</span>
+        <span class="n">a_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">b_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">r_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">newSequence</span> <span class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
+        <span class="n">a_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>  <span class="c1"># negative sign is removed, don&#39;t understand why yet!</span>
+        <span class="n">b_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">r_new</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">rot</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        
+    <span class="k">return</span> <span class="p">[</span><span class="n">a_new</span><span class="p">,</span> <span class="n">b_new</span><span class="p">,</span> <span class="n">r_new</span><span class="p">]</span></div>
+    
+    
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

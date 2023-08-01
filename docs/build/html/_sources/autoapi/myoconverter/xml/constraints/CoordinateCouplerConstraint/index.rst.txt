@@ -1,0 +1,32 @@
+:py:mod:`myoconverter.xml.constraints.CoordinateCouplerConstraint`
+==================================================================
+
+.. py:module:: myoconverter.xml.constraints.CoordinateCouplerConstraint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.constraints.CoordinateCouplerConstraint.CoordinateCouplerConstraint
+
+
+
+
+.. py:class:: CoordinateCouplerConstraint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+   .. py:method:: plot_figure(x_values, y_values, fit, independent_coordinate, dependent_coordinate, constraint_name)
+
+
+

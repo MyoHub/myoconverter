@@ -1,0 +1,35 @@
+:py:mod:`myoconverter.xml.path_points.MovingPathPoint`
+======================================================
+
+.. py:module:: myoconverter.xml.path_points.MovingPathPoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_points.MovingPathPoint.MovingPathPoint
+
+
+
+
+.. py:class:: MovingPathPoint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, tendon, force_name, dependencies=None, **kwargs)
+
+
+   .. py:method:: add_joint(new_body, name, joint, polycoef, range, axis)
+
+
+   .. py:method:: small_range(vec)
+
+
+

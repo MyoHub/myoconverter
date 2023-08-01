@@ -1,0 +1,24 @@
+:py:mod:`utils.generate_pdf`
+============================
+
+.. py:module:: utils.generate_pdf
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   utils.generate_pdf.generate_pdf
+
+
+
+.. py:function:: generate_pdf(mjc_vlt1_path, mjc_vlt2_path, mjc_vlt3_path)
+
+   Generate pdf report with all the validation plots
+
+

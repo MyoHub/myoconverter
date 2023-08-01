@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Step 1: XML Conversion &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Step 1: XML Conversion</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/step1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="step-1-xml-conversion">
+<span id="xml-conversion"></span><h1>Step 1: XML Conversion<a class="headerlink" href="#step-1-xml-conversion" title="Permalink to this headline">¶</a></h1>
+<p>In this step, the OpenSim OSIM file is converted to a MuJoCO XML file. The conversion process is based on and largely similar to the previous <a class="reference external" href="https://github.com/aikkala/O2MConverter">O2MConverter</a>, but rewritten in a way to modularize the code. The converter contains a separate Python class for each OpenSim XML element (called <cite>parsers</cite>), that is responsible for converting the element from OpenSim to MuJoCo. This architecture provides a flexible way to extend the parsers, or suggest improvements via pull requests.</p>
+<p>The module <a class="reference internal" href="autoapi/myoconverter/xml/index.html#module-myoconverter.xml" title="myoconverter.xml"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml</span></code></a> contains all code related to this conversion step – see especially <a class="reference internal" href="autoapi/myoconverter/xml/converter/index.html#myoconverter.xml.converter.convert" title="myoconverter.xml.converter.convert"><code class="xref py py-func docutils literal notranslate"><span class="pre">myoconverter.xml.converter.convert()</span></code></a>.</p>
+<div class="section" id="conversion-process">
+<h2>Conversion Process<a class="headerlink" href="#conversion-process" title="Permalink to this headline">¶</a></h2>
+<p>Below you can find a brief explanation of how each element of an OpenSim model is converted to MuJoCo.</p>
+<div class="section" id="ground">
+<h3>Ground<a class="headerlink" href="#ground" title="Permalink to this headline">¶</a></h3>
+<p>A <em>Ground</em> element may or may not be present in an OpenSim model. If a <em>Ground</em> is present, it is treated as a special case of an OpenSim <em>Body</em> element, see <em>BodySet</em> below.</p>
+</div>
+<div class="section" id="constraintset">
+<h3>ConstraintSet<a class="headerlink" href="#constraintset" title="Permalink to this headline">¶</a></h3>
+<p><em>ConstraintSet</em> may contain different types of constraints to e.g. define how a specific degree-of-freedom is dependent on another degree-of-freedom.</p>
+<p>Such constraints can also be defined in MuJoCo, with the exception that in OpenSim these dependencies may be defined with splines, whereas MuJoCo uses quartic functions. As we approximate splines with quartic functions, some inaccuracies may remain. During the conversion process these approximations are plotted as figures, see figure below for an example.</p>
+<a class="reference internal image-reference" href="_images/wrist_hand_r1_con.svg"><img alt="Approximation of a CoordinateCouplerConstraint" src="_images/wrist_hand_r1_con.svg" width="600" /></a>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/constraints/index.html#module-myoconverter.xml.constraints" title="myoconverter.xml.constraints"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.constraints</span></code></a> for all types of constraints that are currently supported.</p>
+</div>
+<div class="section" id="bodyset">
+<h3>BodySet<a class="headerlink" href="#bodyset" title="Permalink to this headline">¶</a></h3>
+<p><em>BodySet</em> includes all <em>Body</em> elements that define the skeleton of a model. Each <em>Body</em> may have one or multiple meshes, that are converted into STL file format for the MuJoCo model.</p>
+<p><em>Body</em> elements and related meshes are represented in a similar way in MuJoCo (via <em>body</em> and <em>geom</em> elements), making the conversion a straight-forward process.</p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/bodies/index.html#module-myoconverter.xml.bodies" title="myoconverter.xml.bodies"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.bodies</span></code></a> for all types of bodies that are currently supported.</p>
+</div>
+<div class="section" id="wrapobjectset">
+<h3>WrapObjectSet<a class="headerlink" href="#wrapobjectset" title="Permalink to this headline">¶</a></h3>
+<p><em>WrapObjectSet</em> defines wrapping objects, over which tendons may wrap. MuJoCo supports similar functionality via <em>tendon/spatial/geom</em>, but the selection of wrapping objects is slightly narrower; OpenSim has wrapping objects for cylinders, spheres, ellipsoids, and tori, whereas MuJoCo only offers <em>sphere</em> and <em>cylinder</em> geoms for this purpose. The OpenSim elements <em>WrappingTorus</em> and <em>WrappingEllipsoid</em> are approximated with <em>sphere</em> geoms, and the position of <em>WrapEllipsoid</em> is further optimised in subsequent optimisation steps.</p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/wrap_objects/index.html#module-myoconverter.xml.wrap_objects" title="myoconverter.xml.wrap_objects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.wrap_objects</span></code></a> for all types of wrap objects that are currently supported.</p>
+</div>
+<div class="section" id="jointset">
+<h3>JointSet<a class="headerlink" href="#jointset" title="Permalink to this headline">¶</a></h3>
+<p><em>Body</em> elements of a model are linked together via <em>Joint</em> elements, defined in the OpenSim model’s <em>JointSet</em>. Each <em>Joint</em> has a parent <em>Body</em> and a child <em>Body</em>, and the joint specifies how these bodies translate and rotate with respect to each other.</p>
+<p>As with <em>Body</em> elements, <em>Joint</em> elements are represented in a MuJoCo in a quite similar way (via <em>joint</em> elements). However, there are three major differences that make the conversion of <em>Joint</em> elements difficult: 1) the parameterisation of joints are different, 2) the attributes of joints are different, and 3) we model spline dependencies with quartic functions.</p>
+<ol class="arabic simple">
+<li><p>Parameterisation of joints</p></li>
+</ol>
+<p>Joints are parameterized differently in OpenSim and MuJoCo. In OpenSim, a <em>Coordinate</em> (e.g. <em>flexion</em> in the <em>mobl_arms</em> model) parameterises a <em>CustomJoint</em>. The Coordinate itself can have a range of values to which it is bound (e.g. for <em>flexion</em> the range is [-1.22, 1.22]). A CustomJoint has 3 rotational transforms and 3 spatial transforms. Each of these transforms can be dependent on the Coordinate. For example, <em>rotation3</em> in the <em>radiocarpal</em> CustomJoint (where <em>flexion</em> is defined), has a linear dependency on <em>flexion</em> , such that the original range of the Coordinate [-1.22, 1.22] is mapped to a new range [-0.61, 0.61]. In MuJoCo the joints aren’t parameterised in this way, but these dependencies can be modelled with equality constraints. During the conversion process, the Coordinate <em>flexion</em> is “designated” to be a specific MuJoCo joint, i.e., <em>rotation3</em> of the OpenSim model is basically defined to be the <em>flexion</em> joint in the MuJoCo model. To make matters worse, other joints in the OpenSim model (like <em>wrist_hand_r3</em>) can be dependent on the <em>flexion</em> Coordinate. But now <em>flexion</em> is defined to be a joint in the MuJoCo model, which can have a different range ([-0.61, 0.61] as per the <em>rotation3</em> joint) from the original range of the <em>flexion</em> Coordinate ([-1.22, 1.22]). Modelling these dependencies is tricky, and some inaccuracies may remain in the converted model.</p>
+<ol class="arabic simple" start="2">
+<li><p>Attributes of joints</p></li>
+</ol>
+<p>The attributes defining the dynamics of joint movement are different in OpenSim and MuJoCo. During the conversion process these attributes are converted as faithfully as possible, but, some inaccuracies may remain.</p>
+<ol class="arabic simple" start="3">
+<li><p>Modelling splines with quartic functions</p></li>
+</ol>
+<p>A specific degree-of-freedom (e.g. a translational transform of a <em>CustomJoint</em> element) may have a non-linear dependency on a <em>Coordinate</em> that parameterises the joint. In OpenSim these dependencies are often modelled with splines, which we approximate with quartic polynomials in the converted model. These approximations may introduce some inaccuracies in the movements of the joints. See figure below for an example of a such approximation.</p>
+<a class="reference internal image-reference" href="_images/knee_r_translation1.svg"><img alt="Approximation of a spline dependency between a dependent and an independent joint" src="_images/knee_r_translation1.svg" width="600" /></a>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/joints/index.html#module-myoconverter.xml.joints" title="myoconverter.xml.joints"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.joints</span></code></a> for all types of joints that are currently supported.</p>
+</div>
+<div class="section" id="forceset">
+<h3>ForceSet<a class="headerlink" href="#forceset" title="Permalink to this headline">¶</a></h3>
+<p><em>ForceSet</em> defines the actuators that produce forces acting on tendons that are fixed to the bodies. MuJoCo supports actuators that model similar musculo-tendon units as defined in OpenSim, but the implementation details are significantly different. These implementation details are a major source of inaccuracy during the conversion process. We try to copy the attributes as faithfully as possible during the conversion process, but this is not always possible. Some MuJoCo muscle parameters, such as <em>lengthrange</em>, <em>dynprm</em>, <em>gainprm</em>, <em>biasprm</em>, are set to arbitrary default values during conversion, but are then further optimised in subsequent optimisation steps. There may still remain some muscle parameters that are not converted nor optimised, and we note that the muscle/force parsers require further development.</p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/forces/index.html#module-myoconverter.xml.forces" title="myoconverter.xml.forces"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.forces</span></code></a> for all types of forces that are currently supported.</p>
+</div>
+<div class="section" id="pathpointset">
+<h3>PathPointSet<a class="headerlink" href="#pathpointset" title="Permalink to this headline">¶</a></h3>
+<p><em>PathPointSet</em> defines a tendon’s fixation points to bodies. MuJoCo supports similar functionality via <em>tendon/spatial/site</em> elements. There are two main sources of inaccuracy related to specifically the conversion process of OpenSim’s <em>ConditionalPathPoint</em> and <em>MovingPathPoint</em> elements.</p>
+<ol class="arabic simple">
+<li><p>Conversion of <em>MovingPathPoint</em></p></li>
+</ol>
+<p>A <em>MovingPathPoint</em> describes how a path point moves w.r.t a degree-of-freedom. To model the movement of a moving path point, we need to create an imaginary <em>body</em>, to which a path point is fixed, and a set of <em>joints</em> and <em>equality/joint</em> constraints to move the body according to the dependencies. These dependencies may be defined via splines in OpenSim, but in the converted model we use quartic polynomials, which introduce some inaccuracies. See the figures below for an example of a good approximation (left), and a not-so-good approximation (right).</p>
+<p><a class="reference internal" href="_images/rect_fem_r-P3_y.svg"><img alt="A good approximation of a spline dependency for a MovingPathPoint" src="_images/rect_fem_r-P3_y.svg" width="45%" /></a> <a class="reference internal" href="_images/rect_fem_r-P3_x.svg"><img alt="A not-so-good approximation of a spline dependency for a MovingPathPoint" src="_images/rect_fem_r-P3_x.svg" width="45%" /></a></p>
+<ol class="arabic simple" start="2">
+<li><p>Conversion of <em>ConditionalPathPoint</em></p></li>
+</ol>
+<p><em>ConditionalPathPoints</em> define path points for muscle tendons which are active only if a specific condition is met, e.g., if a joint value is between some range. In MuJoCo we can’t enable/disable tendon path points run-time, so we need to be more creative. Essentially the <em>ConditionalPathPoints</em> are modelled as <em>MovingPathPoints</em>, where the conditional path point coincides with an “anchoring” static path point when the condition is not met, and then moves to the actual position once the condition is met. If a conditional path point cannot be “anchored” to a static path point, then it is modelled as a static <em>PathPoint</em>.</p>
+<p>The movement of a conditional path point is modelled either as a step function (path point is active when joint value is higher/lower than a threshold), or as a rectangular function (path point is active when joint value is between some range). It is not possible to model a step or a rectangular function with a quartic function in MuJoCo, so we simply approximate the step function with a linear function (see left figure below), and the rectangular function with a quadratic function (see right figure below). These approximations are agnostic to where exactly the step or rectangle is located, but rather make sure the conditional path point never goes outside its defined range. We have found this to be a good enough approximation.</p>
+<p><a class="reference internal" href="_images/vas_int_r-P3_y.svg"><img alt="An approximation of a step function" src="_images/vas_int_r-P3_y.svg" width="45%" /></a> <a class="reference internal" href="_images/psoas_r-P3_x.svg"><img alt="An approximation of a rectangular function" src="_images/psoas_r-P3_x.svg" width="45%" /></a></p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/path_points/index.html#module-myoconverter.xml.path_points" title="myoconverter.xml.path_points"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.path_points</span></code></a> for all types of path points that are currently supported.</p>
+</div>
+<div class="section" id="pathwrapset">
+<h3>PathWrapSet<a class="headerlink" href="#pathwrapset" title="Permalink to this headline">¶</a></h3>
+<p><em>PathWrapSet</em> defines how a tendon wraps around <em>WrapObjects</em>. Although MuJoCo supports similar behaviour for <em>tendon</em> elements, the conversion process of <em>PathWraps</em> is likely the most difficult and imprecise part of the model conversion step.</p>
+<p>Parsing and converting wrapping site locations (<em>PathWrap</em> elements in the OpenSim model) is largely based on heuristics. If the wrapping site locations are not defined in the OpenSim model (via the <em>range</em> parameter of a <em>PathWrap</em>), we try to approximate wrapping site locations based on distances to wrapping objects. Specifically, we calculate distances between tendons (or segments of tendons) and all applicable wrapping objects, and decide the wrapping sites based on those distances – if a segment (two consecutive sites) is close enough to a wrapping object, we add a wrapping site to the MuJoCo model between those sites. This approach only works with static path points, and not <em>ConditionalPathPoints</em> or <em>MovingPathPoints</em>, and the approach also relies on the assumption that wrapping objects are always close to the tendons (distances are estimated when MuJoCo model is in default pose). However, the locations of wrapping sites are later further optimized in the moment arm optimisation step.</p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/path_wraps/index.html#module-myoconverter.xml.path_wraps" title="myoconverter.xml.path_wraps"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.path_wraps</span></code></a> for all types of path wraps that are currently supported.</p>
+</div>
+<div class="section" id="markerset">
+<h3>MarkerSet<a class="headerlink" href="#markerset" title="Permalink to this headline">¶</a></h3>
+<p><em>MarkerSet</em> defines positions of markers in the OpenSim model, that are originally meant for e.g. scaling of a biomechanical model to a specific subject’s anatomy. These marker positions are converted to the MuJoCo model as well, and we use them in the later optimisation steps.</p>
+<p>See <a class="reference internal" href="autoapi/myoconverter/xml/markers/index.html#module-myoconverter.xml.markers" title="myoconverter.xml.markers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.markers</span></code></a> for all types of markers that are currently supported.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

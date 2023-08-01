@@ -1,0 +1,55 @@
+:py:mod:`myoconverter.xml.forces.utils`
+=======================================
+
+.. py:module:: myoconverter.xml.forces.utils
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.forces.utils.mujoco_LO_loss
+   myoconverter.xml.forces.utils.estimate_fiber_length
+   myoconverter.xml.forces.utils.estimate_tendon_slack_length
+   myoconverter.xml.forces.utils.calculate_length_range
+
+
+
+.. py:function:: mujoco_LO_loss(length_range, range, optimal_fiber_length, tendon_slack_length, pennation_angle)
+
+   Computes squared Euclidean distance between MuJoCo and OpenSim model,
+   regarding both optimal fiber length and constant tendon length/tendon slack length.
+
+   Original code for this function was provided by Florian Fischer (2022)
+
+   :param length_range: array of MuJoCo tendon length (=complete actuator length) ranges
+   :param range: Operating length of muscle
+   :param optimal_fiber_length: OpenSim optimal fiber length
+   :param tendon_slack_length: OpenSim tendon slack length (or any reasonable constant tendon lengths)
+   :param pennation_angle: OpenSim pennation angle at optimum
+           (i.e., angle between tendon and fibers at optimal fiber length expressed in radians)
+   :param use_optPennationAngle: Boolean; if this set to True, MuJoCo optimal fiber lengths LO should match
+           OpenSim optimal fiber lengths LO_osim * cos(OpenSim pennation angle at optimum); otherwise, LO should match LO_osim
+   :return: squared (unweighted) Euclidean distance of optimal fiber length and constant tendon lengths between MuJoCo and OpenSim
+
+
+.. py:function:: estimate_fiber_length(length_range, range)
+
+   Code by Florian Fischer 
+
+
+.. py:function:: estimate_tendon_slack_length(length_range, range)
+
+   Code by Florian Fischer 
+
+
+.. py:function:: calculate_length_range(range, optimal_fiber_length, tendon_slack_length, pennation_angle)
+
+   Length range computations by Florian Fischer 
+
+

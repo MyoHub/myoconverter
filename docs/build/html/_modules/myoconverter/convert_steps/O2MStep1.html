@@ -1,0 +1,486 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.convert_steps.O2MStep1 &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.convert_steps.O2MStep1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.convert_steps.O2MStep1</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This script includes all the steps of transfering an OpenSim model to Mujoco.</span>
+
+<span class="sd">Created on Tue Jul 27 23:19:13 2021</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import the the first step model converter</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.converter</span> <span class="kn">import</span> <span class="n">convert</span>  
+
+<span class="c1"># import the end point calculation functions for the kinematics check</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsMujoco</span> <span class="kn">import</span> <span class="n">calculateEndPoints_mjc</span>  
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsOpensim</span> <span class="kn">import</span> <span class="n">calculateEndPoints_osim</span><span class="p">,</span> <span class="n">extractMarkerSet</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mc</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+
+<div class="viewcode-block" id="BasicModelConvert"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep1/index.html#myoconverter.convert_steps.O2MStep1.BasicModelConvert">[docs]</a><span class="k">class</span> <span class="nc">BasicModelConvert</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Class convert OpenSim MSK model to MuJoCo xml format.</span>
+<span class="sd">    </span>
+<span class="sd">        Bodies, joints, muscles, ligaments, sites, constraints</span>
+<span class="sd">        are all converted. </span>
+<span class="sd">        Forward kinematic check is perfomed for validating the</span>
+<span class="sd">        accuracy of the bone shapes and joint definitions.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">osim_model_file</span><span class="p">,</span> <span class="n">geometry_path</span><span class="p">,</span> <span class="n">saving_path</span><span class="p">,</span>\
+                 <span class="n">add_ground_geom</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Paremters</span>
+<span class="sd">        </span>
+<span class="sd">        osim_model_file: string</span>
+<span class="sd">            The path of osim model to be converted.</span>
+<span class="sd">            </span>
+<span class="sd">        geometry_path: string</span>
+<span class="sd">            The path of the osim model mesh files.</span>
+<span class="sd">            </span>
+<span class="sd">        saving_path: string</span>
+<span class="sd">            The path to save converted model.</span>
+
+<span class="sd">        add_ground_geom: boolean</span>
+<span class="sd">            If true, add ground into the converted model</span>
+
+<span class="sd">        treat_as_normal_path_point: boolean</span>
+<span class="sd">            If true, treat moving and conditional points as fixed points</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check model file and path</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">osim_model_file</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Cannot find the osim file, please check the model path &amp; name&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">geometry_path</span><span class="p">)</span>
+            
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Cannot find the geometry path folder&quot;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">saving_path</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> 
+         
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Please provide a valid saving path&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span> <span class="o">=</span> <span class="n">osim_model_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_path</span> <span class="o">=</span> <span class="n">geometry_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">=</span> <span class="n">saving_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_ground_geom</span> <span class="o">=</span> <span class="n">add_ground_geom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="n">treat_as_normal_path_point</span>
+        
+<div class="viewcode-block" id="BasicModelConvert.cvt1_ModelConvert"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep1/index.html#myoconverter.convert_steps.O2MStep1.BasicModelConvert.cvt1_ModelConvert">[docs]</a>    <span class="k">def</span> <span class="nf">cvt1_ModelConvert</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Convert the osim model into mujoco using the functions in xml folder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># define the model saving path</span>
+        <span class="n">model_saving_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)]</span>
+        <span class="n">osim_file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):]</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># define kwargs inputs</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;geometry_folder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_path</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;add_ground_geom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ground_geom</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;treat_as_normal_path_point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">treat_as_normal_path_point</span>
+
+        <span class="c1">## convert the OpenSim model into MuJoCo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">converted_mjc_model_file</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">,</span> <span class="n">model_saving_path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted_mjc_model_file</span></div>
+
+<div class="viewcode-block" id="BasicModelConvert.vlt1_forwardKinematicsValidation"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep1/index.html#myoconverter.convert_steps.O2MStep1.BasicModelConvert.vlt1_forwardKinematicsValidation">[docs]</a>    <span class="k">def</span> <span class="nf">vlt1_forwardKinematicsValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjc_model_path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_points_osim</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Forward kinematic check</span>
+<span class="sd">            Use markers at the surface of the body to compare the end point positions</span>
+<span class="sd">            based on the same joint angle setups in both models.</span>
+<span class="sd">            </span>
+<span class="sd">            Parameters:</span>
+<span class="sd">            </span>
+<span class="sd">            mjc_model_path: string</span>
+<span class="sd">                The mujoco model path.</span>
+<span class="sd">                </span>
+<span class="sd">            end_points_osim: list of strings</span>
+<span class="sd">                A list of marker names that defined in the Osim model for the forward kinematic check</span>
+<span class="sd">                </span>
+<span class="sd">            speedy: boolean</span>
+<span class="sd">                If True, run lower number of posture check [5 &lt;--&gt; 10].</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s1">&#39;/end_points&#39;</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        
+        <span class="c1"># For validation, if the endpoints not provided, then extract all markers in the osim model</span>
+        <span class="k">if</span> <span class="n">end_points_osim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Extract marker names (as endpoints) from osim model&quot;</span><span class="p">)</span>
+            <span class="n">end_points_osim</span> <span class="o">=</span> <span class="n">extractMarkerSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">)</span>
+
+        <span class="c1"># if mjc model not provided, then use the converted model</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mjc_model_path</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted_mjc_model_file</span><span class="p">:</span>
+                <span class="n">mjc_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">converted_mjc_model_file</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;Cvt 1 model path not provided, please either run Cvt1, or provide the Cvt1 model path.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># add &#39;_marker&#39; to the osim marker names for mujoco model</span>
+        <span class="n">end_points_mjc</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">end_points_osim</span><span class="p">:</span>
+            <span class="n">end_points_mjc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">marker</span> <span class="o">+</span> <span class="s1">&#39;_marker&#39;</span><span class="p">)</span>
+            
+        <span class="c1"># choose evalN based on speedy setting</span>
+        <span class="k">if</span> <span class="n">speedy</span><span class="p">:</span>
+            <span class="n">evalN</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">evalN</span> <span class="o">=</span> <span class="mi">10</span>
+
+        <span class="c1"># get the marker location of two models when explore different postures</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Get the endpoint locations by meshing the joint angles within the range limits&quot;</span><span class="p">)</span>
+        <span class="n">jnt_ranges_osim</span><span class="p">,</span> <span class="n">end_pos_osim</span> <span class="o">=</span> <span class="n">calculateEndPoints_osim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model_file</span><span class="p">,</span> <span class="n">end_points_osim</span><span class="p">,</span> <span class="n">evalN</span><span class="p">)</span>
+        <span class="n">jnt_ranges_mjc</span><span class="p">,</span> <span class="n">end_pos_mjc</span> <span class="o">=</span> <span class="n">calculateEndPoints_mjc</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">end_points_mjc</span><span class="p">,</span> <span class="n">evalN</span><span class="p">)</span>
+        
+        <span class="c1"># check the joionts, joint range, and the marker locaitons</span>
+        <span class="c1"># first check if the list of joints are match nor not</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Check if the joint motion ranges are the same between Osim and Mjc models&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">jnt_ranges_osim</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">jnt_ranges_mjc</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Joint names are not matching&quot;</span><span class="p">)</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Joints in OpenSim and MuJoCo are different for the evaluation</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="k">for</span> <span class="n">jnt</span> <span class="ow">in</span> <span class="n">jnt_ranges_osim</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                
+                <span class="c1"># count for decimal round </span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">jnt_ranges_osim</span><span class="p">[</span><span class="n">jnt</span><span class="p">]</span> <span class="o">-</span> <span class="n">jnt_ranges_mjc</span><span class="p">[</span><span class="n">jnt</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">0.005</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Joint range at </span><span class="si">{</span><span class="n">jnt</span><span class="si">}</span><span class="s2"> are not matching&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;Joint: &#39;</span> <span class="o">+</span> <span class="n">jnt</span> <span class="o">+</span> <span class="s1">&#39;operation ranges are different between two models! </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="c1"># save the geo results</span>
+            <span class="n">jnt_ranges_osim_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s1">&#39;/jnt_ranges_osim.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">jnt_ranges_osim</span><span class="p">,</span> <span class="n">jnt_ranges_osim_file</span><span class="p">)</span>
+            <span class="n">jnt_ranges_osim_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            
+            <span class="n">jnt_ranges_mjc_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s1">&#39;/jnt_ranges_mjc.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">jnt_ranges_mjc</span><span class="p">,</span> <span class="n">jnt_ranges_mjc_file</span><span class="p">)</span>
+            <span class="n">jnt_ranges_mjc_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finished with joint operation range check. Saved Results&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">endPointsPlot</span><span class="p">(</span><span class="n">end_pos_osim</span><span class="p">,</span> <span class="n">end_pos_mjc</span><span class="p">,</span> <span class="n">end_points_osim</span><span class="p">)</span></div>
+    
+
+<div class="viewcode-block" id="BasicModelConvert.endPointsPlot"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep1/index.html#myoconverter.convert_steps.O2MStep1.BasicModelConvert.endPointsPlot">[docs]</a>    <span class="k">def</span> <span class="nf">endPointsPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_pos_osim</span><span class="p">,</span> <span class="n">end_pos_mjc</span><span class="p">,</span> <span class="n">end_points</span><span class="p">):</span>
+        
+        <span class="c1"># plot each marker location error in x, y, z</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plot each endpoint&#39;s location errors in x, y, z.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># mlist = [&#39;o&#39;, &#39;^&#39;, &#39;s&#39;, &#39;&lt;&#39;, &#39;+&#39;, &#39;X&#39;, &#39;&gt;&#39;, &#39;d&#39;, &#39;1&#39;, &#39;*&#39;]</span>
+        <span class="c1"># clist = list(mc.TABLEAU_COLORS.keys())*10</span>
+        
+        <span class="c1"># run over the markers</span>
+        <span class="n">marNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_points</span><span class="p">)</span>
+
+        <span class="n">mr_rms</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># RMS of the end point location differeOUTPUT_FOLDERnces</span>
+        
+        <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">marNum</span><span class="p">):</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Endpoint : </span><span class="si">{</span><span class="n">end_points</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1">## plot in a x, y, x subplot way, all markers will be included in to one subplot</span>
+            <span class="n">xyzPlot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+            <span class="n">axx</span> <span class="o">=</span> <span class="n">xyzPlot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axy</span> <span class="o">=</span> <span class="n">xyzPlot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">axz</span> <span class="o">=</span> <span class="n">xyzPlot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+        
+            <span class="c1"># extract all the position data of this marker</span>
+            <span class="n">osim_mr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">end_pos_osim</span><span class="p">:</span>
+                <span class="n">osim_mr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">nm</span><span class="p">])</span>
+            <span class="c1"># convert to array</span>
+            <span class="n">osim_mr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">osim_mr</span><span class="p">)</span>
+                            
+            <span class="n">mjc_mr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">end_pos_mjc</span><span class="p">:</span>
+                <span class="n">mjc_mr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">nm</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="c1"># convert to array</span>
+            <span class="n">mjc_mr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mjc_mr</span><span class="p">)</span>
+            
+            <span class="n">mr_rms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">osim_mr</span> <span class="o">-</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">mjc_mr</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            
+            <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mjc_mr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mjc_mr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+        
+            <span class="c1"># opensim and mujoco have different coordinate, here we use the opensim</span>
+            <span class="c1"># one for plotting, need to plot mujoco data in openSim coordindate</span>
+            <span class="k">if</span> <span class="n">nm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">axx</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">osim_mr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Osim&#39;</span><span class="p">)</span>
+                <span class="n">axx</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mjc_mr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mjc_Cvt1&#39;</span><span class="p">)</span>
+                <span class="c1"># axx.set_title(&#39;Forward Kinematics Check&#39;)</span>
+
+            <span class="n">axx</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">osim_mr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="n">end_points</span><span class="p">[</span><span class="n">nm</span><span class="p">])</span>
+            <span class="n">axx</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">osim_mr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axx</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mjc_mr</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axx</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;X axis /m&#39;</span><span class="p">)</span>
+            <span class="n">axx</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+            
+            <span class="n">axy</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">osim_mr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axy</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mjc_mr</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axy</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y axis /m&#39;</span><span class="p">)</span>
+            
+            <span class="n">axz</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">osim_mr</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axz</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">mjc_mr</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">axz</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Z axis /m&#39;</span><span class="p">)</span>
+            <span class="n">axz</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Mesh Ponits&#39;</span><span class="p">)</span>
+            
+            <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Forward Kinematics Check&#39;</span><span class="p">)</span>
+            
+            <span class="n">xyzPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s1">&#39;/end_points/&#39;</span><span class="o">+</span> <span class="n">end_points</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span> <span class="o">+</span><span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">xyzPlot</span><span class="p">)</span>
+        
+        <span class="c1">## plot error bar of the end points at different testing points</span>
+        <span class="n">subPlotMarkerNum</span> <span class="o">=</span> <span class="mi">10</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generate overall error Bar plot&quot;</span><span class="p">)</span>
+
+        <span class="n">figname2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">saving_path</span> <span class="o">+</span> <span class="s1">&#39;/end_points/overall_comp_error_bar.svg&#39;</span>
+        <span class="n">barPlot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="n">numSubPlot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">marNum</span><span class="o">/</span><span class="n">subPlotMarkerNum</span><span class="p">))</span>
+        <span class="n">resSubPlotMar</span> <span class="o">=</span> <span class="n">marNum</span> <span class="o">%</span> <span class="n">subPlotMarkerNum</span>
+
+        <span class="k">for</span> <span class="n">subPlot</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSubPlot</span><span class="p">):</span>
+            <span class="n">axx</span> <span class="o">=</span> <span class="n">barPlot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">numSubPlot</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subPlot</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">mr_rms</span><span class="p">[</span><span class="n">subPlot</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">:(</span><span class="n">subPlot</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">subPlot</span> <span class="o">==</span> <span class="n">numSubPlot</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">resSubPlotMar</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># if resSubPlotMarker is not 0.</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">resSubPlotMar</span><span class="p">,</span> <span class="n">resSubPlotMar</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">end_points</span><span class="p">[</span><span class="n">subPlot</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">:(</span><span class="n">subPlot</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">subPlotMarkerNum</span><span class="p">,</span> <span class="n">subPlotMarkerNum</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">end_points</span><span class="p">[</span><span class="n">subPlot</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">:(</span><span class="n">subPlot</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">subPlotMarkerNum</span><span class="p">])</span>
+            <span class="c1"># plt.xticks(rotation=90)</span>
+            <span class="k">if</span> <span class="n">subPlot</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;RMS errors of end points at checking postures&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">barPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname2</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+        
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

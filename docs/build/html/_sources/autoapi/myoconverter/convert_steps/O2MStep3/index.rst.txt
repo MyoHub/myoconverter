@@ -1,0 +1,48 @@
+:py:mod:`myoconverter.convert_steps.O2MStep3`
+=============================================
+
+.. py:module:: myoconverter.convert_steps.O2MStep3
+
+.. autoapi-nested-parse::
+
+   Created on Fri Apr  1 13:51:09 2022
+
+   @author: hwang
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.convert_steps.O2MStep3.MuscleForceOpt
+
+
+
+
+.. py:class:: MuscleForceOpt(mjc_model_path, osim_model_path, saving_path, muscle_list=None, osim_data_overwrite=False, speedy=False)
+
+   Class to optimize muscle force properties of MJC model
+
+   .. py:method:: optMuscleForce()
+
+
+   .. py:method:: compMuscleForceResults(mjc_model_path=None)
+
+
+   .. py:method:: curveplotForceLength(muscle, length_mtu_osim, mtu_force_osim, mtu_force_osim_passive, length_mtu_mjc, mjc_force_mjc, mtu_force_mjc_passive, act_arr)
+
+      Plot the muscle force length curves        
+
+
+   .. py:method:: barplotMF(muscle_list, rms_org, rms_opt)
+
+      "
+      Bar plot to compare the overall muscle force errors
+
+
+

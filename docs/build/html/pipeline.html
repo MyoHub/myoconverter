@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Pipeline &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link rel="prev" title="Models" href="models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pipeline">
+<h1>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this headline">¶</a></h1>
+<p>The conversion pipeline contains three major conversion steps (cvt#) as well as three validation steps (vlt#).</p>
+<p>In the first step an OpenSim XML file is converted into a MuJoCo XML file. As OpenSim and MuJoCo model specifications do not have unique one-to-one mappings, the produced MuJoCo model is only an approximation of the original OpenSim model. The quality of this approximation is improved in the second and third steps, where the muscle properties of the converted MuJoCo model are further optimized to better match with the original OpenSim model.</p>
+<ul>
+<li><p><a class="reference internal" href="step1.html#xml-conversion"><span class="std std-ref">Step 1: XML Conversion</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>cvt1</dt><dd><p>In the first step, an OpenSim model (.osim file) is converted into a MuJoCo model XML file. This conversion copies the fundamental elements of musculoskeletal models, such as body segments, joints, muscles, muscle paths, wrapping objects, wrapping paths, from the OpenSim file into a MuJoCo file as faithfully as possible.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vlt1</dt><dd><p>We expect the first conversion step to provide a relatively accurate multi-body kinematic tree. Therefore, we use a validation step to check the match of body kinematics between the converted MuJoCo model and the reference OpenSim model.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="step2.html#muscle-kinematics-optimization"><span class="std std-ref">Step 2: Muscle Kinematics Optimization</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>cvt2</dt><dd><p>The second step adjusts the muscle kinematic properties (moment arms).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vlt2</dt><dd><p>The validation of step 2 plots the comparison figures of muscle moment arm curves for each muscle.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="step3.html#muscle-kinetics-optimization"><span class="std std-ref">Step 3: Muscle Kinetics Optimization</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>cvt3</dt><dd><p>The third step adjusts the muscle kinetic properties (force-length relationship).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>vlt3</dt><dd><p>The validation of step 3 plots the comparison figures of muscle force-length curves for each muscle.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>It is highly recommended to use the main access point of the pipeline, which will perform all three steps. See the API of this access point in <a class="reference internal" href="autoapi/myoconverter/O2MPipeline/index.html#module-myoconverter.O2MPipeline" title="myoconverter.O2MPipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.O2MPipeline</span></code></a></p>
+<p>Below you can find an example of how to use the O2MPipeline.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myoconverter.O2MPipeline</span> <span class="kn">import</span> <span class="n">O2MPipeline</span>
+
+<span class="c1"># General configure</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># define kwargs inputs</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;convert_steps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>             <span class="c1"># All three steps selected</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;muscle_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>                    <span class="c1"># No specific muscle selected, optimize all of them</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;osim_data_overwrite&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>            <span class="c1"># Overwrite the Osim model state files</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;conversion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>                     <span class="c1"># Yes, perform &#39;Cvt#&#39; process</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>                     <span class="c1"># Yes, perform &#39;Vlt#&#39; process</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;generate_pdf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>                  <span class="c1"># Do not generate validation pdf report</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;speedy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>                        <span class="c1"># Do not reduce the checking notes to increase speed</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;add_ground_geom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>                <span class="c1"># Add ground to the model</span>
+<span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;treat_as_normal_path_point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># Use original constraints to represent moving and conditional path points</span>
+
+<span class="c1"># Osim model info &amp; target saving folder</span>
+<span class="n">osim_file</span> <span class="o">=</span> <span class="s1">&#39;./models/osim/Leg6Dof9Musc/leg6dof9musc.osim&#39;</span>
+<span class="n">geometry_folder</span> <span class="o">=</span> <span class="s1">&#39;./models/osim/Geometry&#39;</span>
+<span class="n">output_folder</span> <span class="o">=</span> <span class="s1">&#39;./models/converted/Leg6Dof9Musc&#39;</span>
+
+<span class="c1"># Run pipeline</span>
+<span class="n">O2MPipeline</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">geometry_folder</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Outcomes of the pipeline are saved in the output folder. Four folders and a few files will be generated depending on the choice of argument options. All possible outcomes are listed below:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt><cite>Geometry</cite> folder:</dt><dd><p>Contains the .stl mesh files for the model geometries, which are copied or converted from original geometry files.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>Step1_xmlConvert</cite> folder:</dt><dd><p>This folder contains the outcomes of the first conversion and validation step.
+Specifically, the original OpenSim and converted MuJoCo model’s joint list and their ranges are stored as .pkl files.
+The endpoints kinematics check comparison plots are plotted and saved as .svg files.
+The plots of approximation of custom joints, moving and conditional path points are generated to indicate how good the approximation are.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>Step2_MuscleKinematics</cite> folder:</dt><dd><p>This folder contains the outcomes of the second optimization and validation step.
+Specifically, the muscle kinematics states of the reference OpenSim model are saved as .pkl files.
+The muscle moment arm comparison plots between OpenSim and MuJoCo models are saved as .svg files.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>Step3_MuscleKinetics</cite> folder:</dt><dd><p>This folder contains the outcomes of the third optimization and validation step.
+Specifically, the muscle kinetic states of the reference OpenSim model are saved as .pkl files.
+The muscle force comparison plots between the reference OpenSim and MuJoCo models are saved as .svg files.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>[osim model name]_conversion.log</cite> file:</dt><dd><p>This log file saves all the log information while converting the OpenSim model. This is useful to understand what steps/processes the pipeline performed. When sunbmitting issues to the git repo, it is highly recommended to include this log file.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>[osim model name]_cvt1.xml</cite> file:</dt><dd><p>This is the converted MuJoCo model after the first conversion step.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>[osim model name]_cvt2.xml</cite> file:</dt><dd><p>This is the converted MuJoCo model after the second optimization step.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>[osim model name]_cvt3.xml</cite> file:</dt><dd><p>This is the converted MuJoCo model after the third optimization step. We recommend to always use this model, to have good muscle kinematics and kinetics.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><cite>[osim model name]_conversion_report.pdf</cite> file:</dt><dd><p>This pdf file summarizes the validation of the converted MuJoCo model. Similarly, the three validation steps (vlt1, vlt2, vlt3) are presented.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

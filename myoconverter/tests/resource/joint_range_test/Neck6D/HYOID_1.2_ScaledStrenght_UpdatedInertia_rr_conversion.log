@@ -1,0 +1,438 @@
+2023-06-25 20:57:25.581 | INFO     | myoconverter.O2MPipeline:O2MPipeline:46 - Start the conversion pipeline for : HYOID_1.2_ScaledStrenght_UpdatedInertia_rr
+2023-06-25 20:57:25.581 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:69 - Coordinate the input configurations, remove conflicts.
+2023-06-25 20:57:25.581 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:79 -    Checking configurations for step 2 conversion.
+2023-06-25 20:57:25.581 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:96 -        All good now.
+2023-06-25 20:57:25.582 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:113 -    Checking configurations for step 3 conversion.
+2023-06-25 20:57:25.582 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:130 -        All good now.
+2023-06-25 20:57:25.582 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:84 - Given OpenSim model file: ./models/osim/Neck6D/HYOID_1.2_ScaledStrenght_UpdatedInertia_rr.osim
+2023-06-25 20:57:25.582 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:85 - Reading mesh files from folder ./models/osim/Neck6D/Geometry
+2023-06-25 20:57:25.582 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:86 - Converted model will be saved in folder ./myoconverter/tests/resource/model/Neck6D
+2023-06-25 20:57:25.582 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:124 - Started step 1 conversion - cvt1.
+2023-06-25 20:57:25.764 | INFO     | myoconverter.xml.converter:convert:40 - Commencing the conversion procedure!
+2023-06-25 20:57:25.764 | INFO     | myoconverter.xml.converter:_parse_ground:138 - Parsing the ground
+2023-06-25 20:57:25.765 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Ground] ground
+2023-06-25 20:57:25.765 | INFO     | myoconverter.xml.converter:_parse_constraints:147 - Starting to parse constraints
+2023-06-25 20:57:25.765 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux7jnt_r1_con
+2023-06-25 20:57:25.926 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux7jnt_r2_con
+2023-06-25 20:57:26.032 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux7jnt_r3_con
+2023-06-25 20:57:26.183 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux6jnt_r1_con
+2023-06-25 20:57:26.288 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux6jnt_r2_con
+2023-06-25 20:57:26.400 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux6jnt_r3_con
+2023-06-25 20:57:26.512 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux5jnt_r1_con
+2023-06-25 20:57:26.624 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux5jnt_r2_con
+2023-06-25 20:57:26.736 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux5jnt_r3_con
+2023-06-25 20:57:26.848 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux4jnt_r1_con
+2023-06-25 20:57:26.960 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux4jnt_r2_con
+2023-06-25 20:57:27.071 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux4jnt_r3_con
+2023-06-25 20:57:27.177 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux3jnt_r1_con
+2023-06-25 20:57:27.282 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux3jnt_r2_con
+2023-06-25 20:57:27.388 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux3jnt_r3_con
+2023-06-25 20:57:27.500 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux1jnt_r1_con
+2023-06-25 20:57:27.606 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux1jnt_r2_con
+2023-06-25 20:57:27.718 | INFO     | myoconverter.xml.parsers:parse:55 - [ConstraintParser: CoordinateCouplerConstraint] aux1jnt_r3_con
+2023-06-25 20:57:27.830 | INFO     | myoconverter.xml.converter:_parse_bodies_and_joints:80 - Starting to parse bodies, wrapping objects, and joints
+2023-06-25 20:57:27.830 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] spine
+2023-06-25 20:57:27.851 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] spine
+2023-06-25 20:57:27.853 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] rscapula
+2023-06-25 20:57:27.862 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] rscapulajnt
+2023-06-25 20:57:27.862 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] rclavicle
+2023-06-25 20:57:27.865 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] rclaviclejnt
+2023-06-25 20:57:27.865 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] lscapula
+2023-06-25 20:57:27.874 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] lscapulajnt
+2023-06-25 20:57:27.874 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] lclavicle
+2023-06-25 20:57:27.877 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] lclaviclejnt
+2023-06-25 20:57:27.877 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] ribcage
+2023-06-25 20:57:27.902 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] ribcagejnt
+2023-06-25 20:57:27.902 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv7
+2023-06-25 20:57:27.904 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] auxt1jnt
+2023-06-25 20:57:27.910 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv6
+2023-06-25 20:57:27.912 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux7jnt
+2023-06-25 20:57:27.913 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv5
+2023-06-25 20:57:27.915 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux6jnt
+2023-06-25 20:57:27.916 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv4
+2023-06-25 20:57:27.918 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux5jnt
+2023-06-25 20:57:27.919 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv3
+2023-06-25 20:57:27.921 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux4jnt
+2023-06-25 20:57:27.922 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv2
+2023-06-25 20:57:27.923 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux3jnt
+2023-06-25 20:57:27.924 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] cerv1
+2023-06-25 20:57:27.928 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux2jnt
+2023-06-25 20:57:27.933 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] skull
+2023-06-25 20:57:27.962 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: CustomJoint] aux1jnt
+2023-06-25 20:57:27.963 | INFO     | myoconverter.xml.parsers:parse:55 - [BodyParser: Body] jaw
+2023-06-25 20:57:27.976 | INFO     | myoconverter.xml.parsers:parse:55 - [JointParser: WeldJoint] jawjnt
+2023-06-25 20:57:27.976 | INFO     | myoconverter.xml.converter:_parse_forces:156 - Starting to parse forces, including path points and wrap paths
+2023-06-25 20:57:27.976 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: PointActuator] Skull_Impact
+2023-06-25 20:57:27.976 | WARNING  | myoconverter.xml.forces.PointActuator:parse:20 - PointActuator parser has not been implemented, skipping Skull_Impact
+2023-06-25 20:57:27.977 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: TorqueActuator] Skull_Moment
+2023-06-25 20:57:27.977 | WARNING  | myoconverter.xml.forces.TorqueActuator:parse:20 - TorqueActuator parser has not been implemented, skipping Skull_Moment
+2023-06-25 20:57:27.977 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] digastric_post
+2023-06-25 20:57:27.977 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.977 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] digastric_ant
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Geniohyoid
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.978 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Mylohyoid_Post
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Mylohyoid_Ant
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.979 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Stylohyoid_Lat
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Stylohyoid_Med
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Sterno_hyoid
+2023-06-25 20:57:27.980 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] SternoThyroid
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Omo_hyoid
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.981 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] digastric_post_L
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] digastric_ant_L
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.982 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Geniohyoid_L
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Mylohyoid_Post_L
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Mylohyoid_Ant_L
+2023-06-25 20:57:27.983 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Stylohyoid_Lat_L
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Stylohyoid_Med_L
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P1
+2023-06-25 20:57:27.984 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] digastricpost-P2
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Sterno_hyoid_L
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] SternoThyroid_L
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.985 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] Omo_hyoid_L
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] default
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] stern_mast
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P1
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast-P2
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] stern_mast_L
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast_L-P1
+2023-06-25 20:57:27.986 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] stern_mast_L-P2
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] cleid_mast
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_mast-P1
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_mast-P2
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] cleid_mast_L
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_mast_L-P1
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_mast_L-P2
+2023-06-25 20:57:27.987 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] cleid_occ
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_occ-P1
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_occ-P2
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] cleid_occ_L
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_occ_L-P1
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] cleid_occ_L-P2
+2023-06-25 20:57:27.988 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_ant
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_ant-P1
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_ant-P2
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_ant_L
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_ant_L-P1
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_ant_L-P2
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_med
+2023-06-25 20:57:27.989 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_med-P1
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_med-P2
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_med_L
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_med_L-P1
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_med_L-P2
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_post
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_post-P1
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_post-P2
+2023-06-25 20:57:27.990 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] scalenus_post_L
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_post_L-P1
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] scalenus_post_L-P2
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_cap_sklc4
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4-P1
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4-P2
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4-P3
+2023-06-25 20:57:27.991 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4-P4
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4-P5
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_cap_sklc4_L
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4_L-P1
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4_L-P2
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4_L-P3
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4_L-P4
+2023-06-25 20:57:27.992 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_cap_sklc4_L-P5
+2023-06-25 20:57:27.993 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c1thx
+2023-06-25 20:57:27.993 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P1
+2023-06-25 20:57:27.993 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P2
+2023-06-25 20:57:27.993 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P3
+2023-06-25 20:57:27.994 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P4
+2023-06-25 20:57:27.994 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P5
+2023-06-25 20:57:27.994 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P6
+2023-06-25 20:57:27.994 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P7
+2023-06-25 20:57:27.994 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx-P8
+2023-06-25 20:57:27.995 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c1thx_L
+2023-06-25 20:57:27.995 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P1
+2023-06-25 20:57:27.995 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P2
+2023-06-25 20:57:27.995 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P3
+2023-06-25 20:57:27.995 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P4
+2023-06-25 20:57:27.996 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P5
+2023-06-25 20:57:27.996 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P6
+2023-06-25 20:57:27.996 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P7
+2023-06-25 20:57:27.996 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1thx_L-P8
+2023-06-25 20:57:27.996 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c1c5
+2023-06-25 20:57:27.997 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5-P1
+2023-06-25 20:57:27.997 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5-P2
+2023-06-25 20:57:27.997 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5-P3
+2023-06-25 20:57:27.998 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5-P4
+2023-06-25 20:57:27.998 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c1c5_L
+2023-06-25 20:57:27.998 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5_L-P1
+2023-06-25 20:57:27.998 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5_L-P2
+2023-06-25 20:57:27.999 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5_L-P3
+2023-06-25 20:57:27.999 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c1c5_L-P4
+2023-06-25 20:57:27.999 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c5thx
+2023-06-25 20:57:27.999 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P1
+2023-06-25 20:57:27.999 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P2
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P3
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P4
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P5
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P6
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P7
+2023-06-25 20:57:28.000 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx-P8
+2023-06-25 20:57:28.001 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] long_col_c5thx_L
+2023-06-25 20:57:28.001 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P1
+2023-06-25 20:57:28.001 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P2
+2023-06-25 20:57:28.001 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P3
+2023-06-25 20:57:28.001 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P4
+2023-06-25 20:57:28.002 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P5
+2023-06-25 20:57:28.002 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P6
+2023-06-25 20:57:28.002 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P7
+2023-06-25 20:57:28.002 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] long_col_c5thx_L-P8
+2023-06-25 20:57:28.002 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] trap_cl
+2023-06-25 20:57:28.003 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_cl-P1
+2023-06-25 20:57:28.003 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_cl-P2
+2023-06-25 20:57:28.003 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] trap_cl_L
+2023-06-25 20:57:28.004 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_cl_L-P1
+2023-06-25 20:57:28.004 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_cl_L-P2
+2023-06-25 20:57:28.004 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] trap_acr
+2023-06-25 20:57:28.004 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_acr-P1
+2023-06-25 20:57:28.005 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_acr-P2
+2023-06-25 20:57:28.005 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] trap_acr_L
+2023-06-25 20:57:28.005 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_acr_L-P1
+2023-06-25 20:57:28.005 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] trap_acr_L-P2
+2023-06-25 20:57:28.005 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cap_sklc6
+2023-06-25 20:57:28.006 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklc6-P1
+2023-06-25 20:57:28.006 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklc6-P2
+2023-06-25 20:57:28.006 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cap_sklc6_L
+2023-06-25 20:57:28.006 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklc6_L-P1
+2023-06-25 20:57:28.007 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklc6_L-P2
+2023-06-25 20:57:28.007 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cap_sklthx
+2023-06-25 20:57:28.007 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklthx-P1
+2023-06-25 20:57:28.007 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklthx-P2
+2023-06-25 20:57:28.007 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cap_sklthx_L
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklthx_L-P1
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cap_sklthx_L-P2
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cerv_c3thx
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cerv_c3thx-P1
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cerv_c3thx-P2
+2023-06-25 20:57:28.008 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] splen_cerv_c3thx_L
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cerv_c3thx_L-P1
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] splen_cerv_c3thx_L-P2
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cap_sklc5
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklc5-P1
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklc5-P2
+2023-06-25 20:57:28.009 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cap_sklc5_L
+2023-06-25 20:57:28.010 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklc5_L-P1
+2023-06-25 20:57:28.010 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklc5_L-P2
+2023-06-25 20:57:28.010 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cap_sklthx
+2023-06-25 20:57:28.010 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklthx-P1
+2023-06-25 20:57:28.010 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklthx-P2
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cap_sklthx_L
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklthx_L-P1
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cap_sklthx_L-P2
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cerv_c3thx
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cerv_c3thx-P1
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cerv_c3thx-P2
+2023-06-25 20:57:28.011 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] semi_cerv_c3thx_L
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cerv_c3thx_L-P1
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] semi_cerv_c3thx_L-P2
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] levator_scap
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] levator_scap-P1
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] levator_scap-P2
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] levator_scap_L
+2023-06-25 20:57:28.012 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] levator_scap_L-P1
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] levator_scap_L-P2
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] longissi_cap_sklc6
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cap_sklc6-P1
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cap_sklc6-P2
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] longissi_cap_sklc6_L
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cap_sklc6_L-P1
+2023-06-25 20:57:28.013 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cap_sklc6_L-P2
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] longissi_cerv_c4thx
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx-P1
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx-P2
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx-P3
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx-P4
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx-P5
+2023-06-25 20:57:28.014 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] longissi_cerv_c4thx_L
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx_L-P1
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx_L-P2
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx_L-P3
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx_L-P4
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] longissi_cerv_c4thx_L-P5
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] iliocost_cerv_c5rib
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib-P1
+2023-06-25 20:57:28.015 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib-P2
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib-P3
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] iliocost_cerv_c5rib_L
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib_L-P1
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib_L-P2
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] iliocost_cerv_c5rib_L-P3
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] rectcap_post_maj
+2023-06-25 20:57:28.016 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_maj-P1
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_maj-P2
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] rectcap_post_maj_L
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_maj_L-P1
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_maj_L-P2
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] rectcap_post_min
+2023-06-25 20:57:28.017 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_min-P1
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_min-P2
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] rectcap_post_min_L
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_min_L-P1
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] rectcap_post_min_L-P2
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] obl_cap_sup
+2023-06-25 20:57:28.018 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_sup-P1
+2023-06-25 20:57:28.019 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_sup-P2
+2023-06-25 20:57:28.019 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] obl_cap_sup_L
+2023-06-25 20:57:28.019 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_sup_L-P1
+2023-06-25 20:57:28.019 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_sup_L-P2
+2023-06-25 20:57:28.019 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] obl_cap_inf
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_inf-P1
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_inf-P2
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: Millard2012EquilibriumMuscle] obl_cap_inf_L
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_inf_L-P1
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [PathPointParser: PathPoint] obl_cap_inf_L-P2
+2023-06-25 20:57:28.020 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] Spine_C7_Bushing
+2023-06-25 20:57:28.021 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping Spine_C7_Bushing
+2023-06-25 20:57:28.021 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C7_C6_Bushing
+2023-06-25 20:57:28.021 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C7_C6_Bushing
+2023-06-25 20:57:28.021 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C6_C5_Bushing
+2023-06-25 20:57:28.021 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C6_C5_Bushing
+2023-06-25 20:57:28.021 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C5_C4_Bushing
+2023-06-25 20:57:28.021 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C5_C4_Bushing
+2023-06-25 20:57:28.021 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C4_C3_Bushing
+2023-06-25 20:57:28.021 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C4_C3_Bushing
+2023-06-25 20:57:28.021 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C3_C2_Bushing
+2023-06-25 20:57:28.022 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C3_C2_Bushing
+2023-06-25 20:57:28.022 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C2_C1_Bushing
+2023-06-25 20:57:28.022 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C2_C1_Bushing
+2023-06-25 20:57:28.022 | INFO     | myoconverter.xml.parsers:parse:55 - [ForceParser: BushingForce] C1_skull_Bushing
+2023-06-25 20:57:28.022 | WARNING  | myoconverter.xml.forces.BushingForce:parse:20 - BushingForce parser has not been implemented, skipping C1_skull_Bushing
+2023-06-25 20:57:28.022 | INFO     | myoconverter.xml.converter:_parse_markers:165 - Starting to parse markers
+2023-06-25 20:57:28.022 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] SJN
+2023-06-25 20:57:28.022 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] RAH
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] LAH
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] RPH
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] LPH
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] RCAJ
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.parsers:parse:55 - [MarkerParser: Marker] LCAJ
+2023-06-25 20:57:28.023 | INFO     | myoconverter.xml.converter:_set_keyframe:176 - Setting the default keyframe
+2023-06-25 20:57:28.025 | INFO     | myoconverter.xml.converter:convert:65 - Writing the converted model into ./myoconverter/tests/resource/model/Neck6D/HYOID_1.2_ScaledStrenght_UpdatedInertia_rr_cvt1.xml
+2023-06-25 20:57:28.026 | INFO     | myoconverter.xml.converter:convert:68 - All good, conversion procedure is finished
+2023-06-25 20:57:28.026 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:126 - Finished step 1 conversion - cvt1.
+2023-06-25 20:57:28.026 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:132 - Started step 1 validation - val1.
+2023-06-25 20:57:28.026 | INFO     | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:124 - Extract marker names (as endpoints) from osim model
+2023-06-25 20:57:28.077 | INFO     | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:146 - Get the endpoint locations by meshing the joint angles within the range limits
+2023-06-25 20:57:28.615 | INFO     | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:153 - Check if the joint motion ranges are the same between Osim and Mjc models
+2023-06-25 20:57:28.615 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at pitch2 are not matching
+2023-06-25 20:57:28.615 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at roll2 are not matching
+2023-06-25 20:57:28.616 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at yaw2 are not matching
+2023-06-25 20:57:28.616 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at pitch1 are not matching
+2023-06-25 20:57:28.616 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at roll1 are not matching
+2023-06-25 20:57:28.616 | WARNING  | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:164 - Joint range at yaw1 are not matching
+2023-06-25 20:57:28.616 | INFO     | myoconverter.conversion_steps.O2MStep1:vlt1_forwardKinematicsValidation:175 - Finished with joint operation range check. Saved Results
+2023-06-25 20:57:28.616 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:183 - Plot each endpoint's location errors in x, y, z.
+2023-06-25 20:57:28.616 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : SJN
+2023-06-25 20:57:28.828 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : RAH
+2023-06-25 20:57:29.077 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : LAH
+2023-06-25 20:57:29.263 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : RPH
+2023-06-25 20:57:29.452 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : LPH
+2023-06-25 20:57:29.636 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : RCAJ
+2023-06-25 20:57:29.822 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:195 - Endpoint : LCAJ
+2023-06-25 20:57:30.010 | INFO     | myoconverter.conversion_steps.O2MStep1:endPointsPlot:261 - Generate overall error Bar plot
+2023-06-25 20:57:30.104 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:142 - Finished step 1 validation - val1.
+2023-06-25 20:57:30.104 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:171 - xxx_cvt2 model already exist, process from it
+2023-06-25 20:57:30.169 | INFO     | myoconverter.conversion_steps.O2MStep2:__init__:103 - Overwrite command confirmed
+2023-06-25 20:57:30.170 | INFO     | myoconverter.conversion_steps.O2MStep2:__init__:104 - Generating MA data from OsimMuscleStates, may take a while
+2023-06-25 20:57:30.170 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getWrapingCoords:65 - Extract the joints that muscle wrapped over from Osim model
+2023-06-25 20:57:30.563 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getMomentArms:163 - Calculate moment arms from Osim model
+2023-06-25 20:57:30.565 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getMomentArms:168 - Muscle: longissi_cerv_c4thx_L
+2023-06-25 20:57:32.940 | INFO     | myoconverter.conversion_steps.O2MStep2:__init__:174 - Finished cvt2 initialize
+2023-06-25 20:57:32.941 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:198 - Started step 2 conversion - cvt2.
+2023-06-25 20:57:32.941 | INFO     | myoconverter.conversion_steps.O2MStep2:optMomentArms:192 - Running MA optimization with the given muscle list one by one
+2023-06-25 20:57:32.941 | INFO     | myoconverter.conversion_steps.O2MStep2:optMomentArms:196 - Muscle : longissi_cerv_c4thx_L 
+2023-06-25 20:57:32.942 | INFO     | myoconverter.conversion_steps.O2MStep2:optMomentArms:209 -     At joints: pitch2
+2023-06-25 20:57:32.977 | INFO     | myoconverter.conversion_steps.O2MStep2:optMomentArms:228 -     Start MA optimization
+2023-06-25 20:57:32.978 | INFO     | myoconverter.conversion_steps.O2MStep2:optMomentArms:232 -     No wrapping information extracted, skipped
+2023-06-25 20:57:32.981 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:200 - Finished step 2 conversion - cvt2.
+2023-06-25 20:57:32.981 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:206 - Started step 2 validation - val2.
+2023-06-25 20:57:34.039 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:208 - Finished step 2 validation - val2.
+2023-06-25 20:57:34.040 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:233 - xxx_cvt3 model already exist, process from it
+2023-06-25 20:57:34.106 | INFO     | myoconverter.conversion_steps.O2MStep3:__init__:97 - Overwrite command confirmed
+2023-06-25 20:57:34.106 | INFO     | myoconverter.conversion_steps.O2MStep3:__init__:98 - Generating force map data from OsimMuscleStates, may take a while
+2023-06-25 20:57:34.107 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getWrapingCoords:65 - Extract the joints that muscle wrapped over from Osim model
+2023-06-25 20:57:34.511 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getMuscleForceMaps:268 - Calculate muscle force curves from Osim model
+2023-06-25 20:57:34.512 | INFO     | myoconverter.optimization.model_states.OsimMuscleStates:getMuscleForceMaps:273 - Muscle: longissi_cerv_c4thx_L
+2023-06-25 20:57:37.276 | INFO     | myoconverter.conversion_steps.O2MStep3:__init__:196 - Finished cvt3 initialize ...
+2023-06-25 20:57:37.277 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:260 - Started step 3 conversion - cvt3.
+2023-06-25 20:57:37.278 | INFO     | myoconverter.conversion_steps.O2MStep3:optMuscleForce:209 - Running MA optimization with the given muscle list one by one
+2023-06-25 20:57:37.284 | INFO     | myoconverter.conversion_steps.O2MStep3:optMuscleForce:274 - Muscle : longissi_cerv_c4thx_L 
+2023-06-25 20:57:38.702 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 0 ; 0 percentage similarities; Best obj: 0.10527
+2023-06-25 20:57:39.331 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 1 ; 1 percentage similarities; Best obj: 0.10527
+2023-06-25 20:57:39.851 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 2 ; 1 percentage similarities; Best obj: 0.09478
+2023-06-25 20:57:40.336 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 3 ; 1 percentage similarities; Best obj: 0.08461
+2023-06-25 20:57:40.802 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 4 ; 1 percentage similarities; Best obj: 0.08311
+2023-06-25 20:57:41.274 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 5 ; 1 percentage similarities; Best obj: 0.0828
+2023-06-25 20:57:41.672 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 6 ; 1 percentage similarities; Best obj: 0.06502
+2023-06-25 20:57:42.094 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 7 ; 1 percentage similarities; Best obj: 0.05582
+2023-06-25 20:57:42.517 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 8 ; 1 percentage similarities; Best obj: 0.05521
+2023-06-25 20:57:42.927 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 9 ; 1 percentage similarities; Best obj: 0.05149
+2023-06-25 20:57:43.317 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 10 ; 2 percentage similarities; Best obj: 0.04633
+2023-06-25 20:57:43.707 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 11 ; 1 percentage similarities; Best obj: 0.04359
+2023-06-25 20:57:44.099 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 12 ; 1 percentage similarities; Best obj: 0.04266
+2023-06-25 20:57:44.494 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 13 ; 1 percentage similarities; Best obj: 0.04092
+2023-06-25 20:57:44.895 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 14 ; 1 percentage similarities; Best obj: 0.04003
+2023-06-25 20:57:45.300 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 15 ; 2 percentage similarities; Best obj: 0.03965
+2023-06-25 20:57:45.695 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 16 ; 4 percentage similarities; Best obj: 0.03924
+2023-06-25 20:57:46.094 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 17 ; 4 percentage similarities; Best obj: 0.03903
+2023-06-25 20:57:46.491 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 18 ; 5 percentage similarities; Best obj: 0.03861
+2023-06-25 20:57:46.884 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 19 ; 6 percentage similarities; Best obj: 0.03828
+2023-06-25 20:57:47.279 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 20 ; 6 percentage similarities; Best obj: 0.03817
+2023-06-25 20:57:47.692 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 21 ; 9 percentage similarities; Best obj: 0.03812
+2023-06-25 20:57:48.111 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 22 ; 10 percentage similarities; Best obj: 0.03811
+2023-06-25 20:57:48.530 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 23 ; 14 percentage similarities; Best obj: 0.03805
+2023-06-25 20:57:48.947 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 24 ; 19 percentage similarities; Best obj: 0.03801
+2023-06-25 20:57:49.345 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 25 ; 34 percentage similarities; Best obj: 0.03799
+2023-06-25 20:57:49.747 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 26 ; 38 percentage similarities; Best obj: 0.03796
+2023-06-25 20:57:50.156 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:192 -         PSO iteration: 27 ; 50 percentage similarities; Best obj: 0.03795
+2023-06-25 20:57:50.156 | INFO     | myoconverter.optimization.utils.UtilsForceOpt:fmOptPSO_cust:200 -         Break the optimization, since certain number of similar particles reached
+2023-06-25 20:57:50.216 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:262 - Finished step 3 conversion - cvt3.
+2023-06-25 20:57:50.217 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:268 - Started step 3 validation - val3.
+2023-06-25 20:57:50.466 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:270 - Finished step 3 validation - val3.
+2023-06-25 20:57:50.466 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:281 - Generating pdf report based on the validation results.
+2023-06-25 20:57:50.466 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:282 -    This may take a while, suggest to do this after all validation steps...
+2023-06-25 20:57:50.479 | INFO     | myoconverter.utils.generate_pdf:add_step1_plots:163 -    Adding vlt1 results.
+2023-06-25 20:58:24.962 | INFO     | myoconverter.utils.generate_pdf:add_step2_plots:244 -    Adding vlt2 results.
+2023-06-25 20:58:36.878 | INFO     | myoconverter.utils.generate_pdf:add_step3_plots:287 -    Adding vlt3 results.

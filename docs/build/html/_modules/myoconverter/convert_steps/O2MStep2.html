@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.convert_steps.O2MStep2 &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.convert_steps.O2MStep2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.convert_steps.O2MStep2</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sat Mar  5 22:29:33 2022</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsLengthOpt</span> <span class="kn">import</span> <span class="n">getMomentArmDiff</span><span class="p">,</span> <span class="n">maOptPSO_cust</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.model_states.OsimMuscleStates</span> <span class="kn">import</span> <span class="n">OsimMuscleStates</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsMujoco</span> <span class="kn">import</span> <span class="n">sortMuscleWrapSiteJoint</span><span class="p">,</span> \
+      <span class="n">computeMomentArmMuscleJoints</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">mujoco_py</span>
+<span class="kn">import</span> <span class="nn">opensim</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">glob</span>
+
+
+<div class="viewcode-block" id="MomentArmOpt"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt">[docs]</a><span class="k">class</span> <span class="nc">MomentArmOpt</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to optimize muscle moment arms of mujoco model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjc_model_path</span><span class="p">,</span> <span class="n">osim_model_path</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">muscle_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>\
+                 <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">                 </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mjc_model_path : string</span>
+<span class="sd">            The model path of mjc model</span>
+<span class="sd">            </span>
+<span class="sd">        osim_model_path : string</span>
+<span class="sd">            The model path of osim model</span>
+<span class="sd">            </span>
+<span class="sd">        save_path : string</span>
+<span class="sd">            The path to save moment arm results</span>
+<span class="sd">            </span>
+<span class="sd">        muscle_list : list of string, optional</span>
+<span class="sd">            List of muscle names whose moment arms will be optimized</span>
+<span class="sd">            </span>
+<span class="sd">        osim_data_overwrite : boolean, optional</span>
+<span class="sd">            If True, overwrite osim state data</span>
+
+<span class="sd">        speedy : boolean, optional</span>
+<span class="sd">            If True, select a lower number of particles, checking notes, iterations</span>
+<span class="sd">            to speed up the optimization process.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># load mujoco model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span> <span class="o">=</span> <span class="n">mjc_model_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span>
+        <span class="c1"># load osim model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span> <span class="o">=</span> <span class="n">opensim</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">osim_model_path</span><span class="p">)</span>
+        
+        <span class="c1">### </span>
+        <span class="c1"># DO NOT NEED ANYMORE! The siteside location was initilized inside the center</span>
+        <span class="c1"># of the wrapping objects in step 1.</span>
+
+        <span class="c1"># self.mjc_model = updateSiteSide(self.mjc_model)  # update site side</span>
+        
+        <span class="c1"># save to new model file and load model from it. Without saving the </span>
+        <span class="c1"># optimization won&#39;t work since when site side is [0, 0, 0], from the</span>
+        <span class="c1"># first converting step, the moment arms won&#39;t change at all even assign</span>
+        <span class="c1"># a new site side location</span>
+        <span class="c1"># save the updated model</span>
+        <span class="c1"># mujocoModelSim = mujoco_py.MjSim(self.mjc_model)</span>
+        
+        <span class="c1"># cvt2_model_path = self.mjc_model_path[0:-8] + &#39;Cvt2_temp.xml&#39;</span>
+        <span class="c1"># with open(cvt2_model_path, &#39;w+&#39;) as xml_file:</span>
+        <span class="c1">#     mujocoModelSim.save(xml_file)</span>
+
+        <span class="c1"># self.mjc_model = mujoco_py.load_model_from_path(cvt2_model_path)</span>
+        <span class="c1">###</span>
+
+        <span class="c1"># if muscle list is not provided, then explore all muscles that included</span>
+        <span class="c1"># in the OpenSim model.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">muscle_list</span><span class="p">:</span>
+
+            <span class="n">osim_muscles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="o">.</span><span class="n">getMuscles</span><span class="p">()</span>  <span class="c1"># osim muscle class</span>
+            
+            <span class="c1"># update the global muscle list variable with all muscle names inside</span>
+            <span class="c1"># the OpenSim model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="p">[]</span>
+                        
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">osim_muscles</span><span class="o">.</span><span class="n">getSize</span><span class="p">()):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">osim_muscles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="n">muscle_list</span>  <span class="c1"># provided muscle list, could be None.</span>
+                
+        <span class="c1"># saving path has to be valid</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> 
+         
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s2">&quot;Please provide a valid saving path&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span> <span class="o">=</span> <span class="n">speedy</span>
+            
+        <span class="c1"># Check if the osim_data needs to be over write or not.</span>
+        <span class="c1"># If so, generate them using the modelState/OsimMuscleStates class</span>
+        <span class="c1"># Another case to regenerate is that there is no data file saved </span>
+        <span class="c1"># in the saving path of the provided muscle</span>
+
+        <span class="k">if</span> <span class="n">osim_data_overwrite</span><span class="p">:</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Overwrite command confirmed&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating MA data from OsimMuscleStates, may take a while&quot;</span><span class="p">)</span>
+
+            <span class="c1"># This will take a while, previous generated MA data files of selected muscles will be overwrited</span>
+            <span class="n">osim_mus_sta</span> <span class="o">=</span> <span class="n">OsimMuscleStates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">)</span>
+
+            <span class="c1"># regenerate moment arms</span>
+            <span class="n">osim_mus_sta</span><span class="o">.</span><span class="n">getMomentArms</span><span class="p">(</span><span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span>\
+                                       <span class="n">speedy</span> <span class="o">=</span> <span class="n">speedy</span><span class="p">)</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Overwrite not required&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;checking if the muscle data file exist&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Overwrite not required, checking if the muscle data file exist</span>
+            <span class="c1"># If not, will be regenerated</span>
+
+            <span class="k">for</span> <span class="n">mus_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mus_name</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">mus_name</span><span class="si">}</span><span class="s2"> data file does not exist, regenerating&quot;</span><span class="p">)</span>
+
+                    <span class="n">osim_mus_sta</span> <span class="o">=</span> <span class="n">OsimMuscleStates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">osim_model</span><span class="p">,</span> <span class="n">mus_name</span><span class="p">)</span>
+                    <span class="c1"># regenerate moment arms</span>
+                    <span class="n">osim_mus_sta</span><span class="o">.</span><span class="n">getMomentArms</span><span class="p">(</span><span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span>\
+                                            <span class="n">speedy</span> <span class="o">=</span> <span class="n">speedy</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">mus_name</span><span class="si">}</span><span class="s2"> data file exist, will reuse it in the optimization&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Finished cvt2 initialize&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MomentArmOpt.optMomentArms"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt.optMomentArms">[docs]</a>    <span class="k">def</span> <span class="nf">optMomentArms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function optimize wrapping sites in order to have matching moment</span>
+<span class="sd">        arms with a given data set (osim_ma_data)</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cvt2_model_path: string</span>
+<span class="sd">            The optimized #####_cvt2.xml model path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Running MA optimization with the given muscle list one by one&#39;</span><span class="p">)</span>            
+            
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle : </span><span class="si">{</span><span class="n">muscle</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+
+            <span class="c1"># load saved muscle ma data file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">muscle_file</span><span class="p">:</span>
+                <span class="n">muscle_para_osim</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">muscle_file</span><span class="p">)</span>
+
+            <span class="c1"># add information of wrapping objects and site points </span>
+            <span class="n">muscle_para</span> <span class="o">=</span> <span class="n">sortMuscleWrapSiteJoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">muscle_para_osim</span><span class="p">)</span>
+
+            <span class="n">opt_res_list</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">])</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>  <span class="c1"># initilize results list</span>
+
+            <span class="k">for</span> <span class="n">i_jnt</span><span class="p">,</span> <span class="n">joints</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">]):</span>  <span class="c1"># run through the joint combinations</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    At joints: </span><span class="si">{</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># check if MA differences are larger than the thresholds</span>
+                <span class="c1"># absolulte error larger than 0.001 and relative error larger than 5%</span>
+                <span class="n">err_ind</span><span class="p">,</span> <span class="n">cost_org</span> <span class="o">=</span> <span class="n">getMomentArmDiff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">,</span>\
+                                                        <span class="n">muscle</span><span class="p">,</span>
+                                                        <span class="n">joints</span><span class="p">,</span>\
+                                                        <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                        <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                        <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">err_ind</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;    MA errors between Osim and Mjc models are smaller than throshold, optimization skipped&#39;</span><span class="p">)</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;    Start MA optimization&#39;</span><span class="p">)</span>
+
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;wrapping_info&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">]:</span>  <span class="c1"># if the wrapping information is None, do not run optimization</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;    No wrapping information extracted, skipped&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">wrap_info</span> <span class="o">=</span> <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;wrapping_info&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">]</span>  <span class="c1"># extract the wrapping information </span>
+                    <span class="c1"># site_info = muscle_para[&#39;wrapping_info&#39;][i_jnt][-1]  # Right now, assume just one affecting wrapping point</span>
+
+                    <span class="c1"># extract wrapping info</span>
+                    <span class="n">wrap_name</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">wrap_id</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">pos_wrap</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">size_wrap</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="n">rot_wrap</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                    <span class="n">wrap_type</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+                    <span class="n">side_id</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">side_pos</span> <span class="o">=</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                            
+                    <span class="c1"># initilize the optimizing parameters</span>
+                    <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+                    <span class="k">if</span> <span class="s1">&#39;torus&#39;</span> <span class="ow">in</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;    Wrapping object type is Torus, optimization skipped&#39;</span><span class="p">)</span>
+
+                        <span class="c1"># if torus, then do nothing, since muscle is already going through</span>
+                        <span class="c1"># the wrapping object, which is sphere. Just save empty results</span>
+
+                        <span class="c1"># save opt results</span>
+                        <span class="n">opt_res_list</span><span class="p">[</span><span class="n">i_jnt</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;cost_org&#39;</span><span class="p">:</span> <span class="n">cost_org</span><span class="p">,</span> <span class="s1">&#39;cost_opt&#39;</span><span class="p">:</span> <span class="n">cost_org</span><span class="p">,</span> <span class="s1">&#39;par_opt&#39;</span><span class="p">:</span> <span class="n">side_pos</span><span class="p">}]</span>
+
+                        <span class="k">continue</span>
+
+                    <span class="k">elif</span> <span class="s1">&#39;cylinder&#39;</span> <span class="ow">in</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="c1"># do normal optimzation of the sidesite location</span>
+
+                        <span class="c1"># save the updated model</span>
+                        <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">)</span>
+                        
+                        <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+                            <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">keep_inertials</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+                        <span class="n">wrap_type_opt</span> <span class="o">=</span> <span class="s1">&#39;CYLINDER&#39;</span>
+                                
+                        <span class="c1"># rotation bounds, only optimize the rotation location of the site</span>
+                        <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="p">)</span>  
+                        <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                        
+                        <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  
+                        <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        
+                        <span class="c1"># run optimization with PSO optimizer</span>
+                        <span class="n">opt_site</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span>  <span class="o">=</span> <span class="n">maOptPSO_cust</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">side_id</span><span class="p">,</span> <span class="n">wrap_type_opt</span><span class="p">,</span> <span class="n">wrap_id</span><span class="p">,</span> <span class="n">pos_wrap</span><span class="p">,</span>\
+                                                            <span class="n">size_wrap</span><span class="p">,</span> <span class="n">rot_wrap</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span><span class="p">,</span> <span class="n">cost_org</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+                    
+                    
+                        <span class="n">opt_res_list</span><span class="p">[</span><span class="n">i_jnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">opt_site</span>  <span class="c1"># save opt results</span>
+
+                    <span class="k">elif</span> <span class="s1">&#39;sphere&#39;</span> <span class="ow">in</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="c1"># do normal optimzation of the sidesite location</span>
+
+                        <span class="c1"># save the updated model</span>
+                        <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">)</span>
+                        
+                        <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+                            <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">keep_inertials</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+                        <span class="n">wrap_type_opt</span> <span class="o">=</span> <span class="s1">&#39;SPHERE&#39;</span>
+                                     
+                        <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># rotation bounds</span>
+                        <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                                
+                        <span class="c1"># second rotation bounds</span>
+                        <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                        
+                        <span class="c1"># run optimization with PSO optimizer</span>
+                        <span class="n">opt_site</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span>  <span class="o">=</span> <span class="n">maOptPSO_cust</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">side_id</span><span class="p">,</span> <span class="n">wrap_type_opt</span><span class="p">,</span> <span class="n">wrap_id</span><span class="p">,</span> <span class="n">pos_wrap</span><span class="p">,</span>\
+                                                            <span class="n">size_wrap</span><span class="p">,</span> <span class="n">rot_wrap</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span><span class="p">,</span> <span class="n">cost_org</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+                        
+                        
+                        <span class="n">opt_res_list</span><span class="p">[</span><span class="n">i_jnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">opt_site</span>  <span class="c1"># save opt results</span>
+
+                    <span class="k">elif</span> <span class="s1">&#39;ellipsoid&#39;</span> <span class="ow">in</span> <span class="n">wrap_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="c1"># do optimization of both sidesite and ellipsoid sizes</span>
+
+                        <span class="c1"># if the wrapping objects were converted from ellipsoid, then</span>
+                        <span class="c1"># its position and rotation may need optimized to have the </span>
+                        <span class="c1"># best MA matches</span>
+                    
+                        <span class="k">if</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;CYLINDER&#39;</span><span class="p">:</span>  <span class="c1"># check converted wrap type</span>
+
+                            <span class="c1"># save the updated model</span>
+                            <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">)</span>
+                            
+                            <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+                            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+                                <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">keep_inertials</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+                            
+                            <span class="n">wrap_type_opt</span> <span class="o">=</span> <span class="s1">&#39;ELLIPSOID_CYLINDER&#39;</span>
+
+                            <span class="n">opt_range</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># range of the wrap object size change</span>
+                        
+                            <span class="c1"># bounds of cylinder radius</span>
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        
+                            <span class="c1"># bounds of cylinder lengths</span>
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        
+                            <span class="c1"># bounds of cylinder position, in the range of radius change</span>
+                            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pos_wrap</span><span class="p">:</span>
+                                <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">opt_range</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                                <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="n">opt_range</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># rotation bounds of sidesite</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                            
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># the translation bounds</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                                                    
+                            <span class="c1"># run optimization with PSO optimizer</span>
+                            <span class="n">opt_site</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span>  <span class="o">=</span> <span class="n">maOptPSO_cust</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">side_id</span><span class="p">,</span> <span class="n">wrap_type_opt</span><span class="p">,</span> <span class="n">wrap_id</span><span class="p">,</span> <span class="n">pos_wrap</span><span class="p">,</span>\
+                                                            <span class="n">size_wrap</span><span class="p">,</span> <span class="n">rot_wrap</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span><span class="p">,</span> <span class="n">cost_org</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+
+                            <span class="n">opt_res_list</span><span class="p">[</span><span class="n">i_jnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">opt_site</span>  <span class="c1"># save opt results</span>
+
+                        <span class="k">if</span> <span class="n">wrap_type</span> <span class="o">==</span> <span class="s1">&#39;SPHERE&#39;</span><span class="p">:</span>
+
+                            <span class="c1"># save the updated model</span>
+                            <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">)</span>
+                            
+                            <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+                            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+                                <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">keep_inertials</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+                        
+                            <span class="n">wrap_type_opt</span> <span class="o">=</span> <span class="s1">&#39;ELLIPSOID_SPHERE&#39;</span>
+                        
+                            <span class="n">opt_range</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># range of the wrap object size change</span>
+                        
+                            <span class="c1"># bounds of sphere radius</span>
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">opt_range</span><span class="p">)</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            
+                            <span class="c1"># bounds of sphere position, in the range of radius change</span>
+                            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pos_wrap</span><span class="p">:</span>
+                                <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">opt_range</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                                <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="n">opt_range</span><span class="o">*</span><span class="n">size_wrap</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                            
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># rotation bounds</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                            
+                            <span class="n">optParam_lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># second rotation bounds</span>
+                            <span class="n">optParam_ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+                            
+                            <span class="c1"># run optimization with PSO optimizer</span>
+                            <span class="n">opt_site</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span>  <span class="o">=</span> <span class="n">maOptPSO_cust</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">side_id</span><span class="p">,</span> <span class="n">wrap_type_opt</span><span class="p">,</span> <span class="n">wrap_id</span><span class="p">,</span> <span class="n">pos_wrap</span><span class="p">,</span>\
+                                                            <span class="n">size_wrap</span><span class="p">,</span> <span class="n">rot_wrap</span><span class="p">,</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">i_jnt</span><span class="p">],</span>\
+                                                            <span class="n">optParam_lb</span><span class="p">,</span> <span class="n">optParam_ub</span><span class="p">,</span> <span class="n">cost_org</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedy</span><span class="p">)</span>
+
+                            <span class="n">opt_res_list</span><span class="p">[</span><span class="n">i_jnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">opt_site</span>  <span class="c1"># save opt results</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Unknow wrapping type detected, error occur&quot;</span><span class="p">)</span>
+                        <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;Unknow wrapping type detected, error occur, please check... </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="n">muscle_para</span><span class="p">[</span><span class="s1">&#39;opt_results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">opt_res_list</span>
+
+            <span class="c1"># save the data based to the muscle parameter file</span>
+            <span class="n">muscle_file_saving</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">muscle_para</span><span class="p">,</span> <span class="n">muscle_file_saving</span><span class="p">)</span>
+            <span class="n">muscle_file_saving</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># save the updated model</span>
+        <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">)</span>
+        
+        <span class="n">cvt2_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt2_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+            <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;xml&#39;</span><span class="p">,</span> <span class="n">keep_inertials</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cvt2_model_path</span></div>
+    
+<div class="viewcode-block" id="MomentArmOpt.compMomentArmResults"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt.compMomentArmResults">[docs]</a>    <span class="k">def</span> <span class="nf">compMomentArmResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjc_model_path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the moment arm results before and after the above optimization step</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mjc_model_path: string, optional</span>
+<span class="sd">            mujoco model path</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/moment_arms&#39;</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># load mujoco model if given.</span>
+        <span class="k">if</span> <span class="n">mjc_model_path</span><span class="p">:</span>
+            <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mjc_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;cvt2.xml&#39;</span>
+            <span class="n">mjcModel</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+            <span class="n">muscle_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span>  <span class="c1"># if selected muscle given, only validate these</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Scan the result folder to find all the &lt;muscle_name&gt;.pkl files and plot all of them</span>
+            <span class="n">muscle_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s2">&quot;/*.pkl&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># find all the joints from mjc model</span>
+        <span class="n">joint_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">joint_names</span>
+
+        <span class="n">rMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">muscle_list</span><span class="p">)</span>
+        <span class="n">cMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">joint_list</span><span class="p">)</span>
+        
+        <span class="n">cost_org_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rMax</span><span class="p">,</span> <span class="n">cMax</span><span class="p">))</span>
+        <span class="n">cost_opt_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rMax</span><span class="p">,</span> <span class="n">cMax</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">i_mus</span><span class="p">,</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">muscle_list</span><span class="p">):</span>
+            <span class="c1"># load the mus_para data from the saved files</span>
+            <span class="n">muscle_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s2">&quot;rb+&quot;</span><span class="p">)</span>
+            <span class="n">muscle_para_opt</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">muscle_file</span><span class="p">)</span>
+
+            <span class="c1"># Generate the moment arm curves for comparison plots. Moment arm of Osim model</span>
+            <span class="c1"># will just use the reference data that pre-generated for optimization. Moment arm</span>
+            <span class="c1"># of Mjc model will be regenerated to increase the mesh density. This is to check</span>
+            <span class="c1"># if there are any random jumpping paths (that were not covered by the optimization)</span>
+
+            <span class="n">mjc_ma_data</span><span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">joints</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;wrapping_coordinates&#39;</span><span class="p">]):</span>
+
+                <span class="n">nEval</span> <span class="o">=</span> <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;evalN&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">]</span>
+                <span class="n">nJnt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span>
+                <span class="n">jntRanges</span> <span class="o">=</span> <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;coordinate_ranges&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">]</span>
+
+                <span class="c1"># sort the osim moment arms into matrices</span>
+                <span class="n">ma_mat_osim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maVectorSort</span><span class="p">(</span><span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;osim_ma_data&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">],</span> <span class="n">nJnt</span><span class="p">,</span> <span class="n">nEval</span><span class="p">)</span>
+
+                <span class="c1"># calculate mujoco moment arms and sort it into matrices</span>
+                <span class="n">ma_vec_mjc</span> <span class="o">=</span> <span class="n">computeMomentArmMuscleJoints</span><span class="p">(</span><span class="n">mjcModel</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                    <span class="n">jntRanges</span><span class="p">,</span> <span class="n">nEval</span><span class="p">)</span>
+                
+                <span class="n">ma_mat_mjc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maVectorSort</span><span class="p">(</span><span class="n">ma_vec_mjc</span><span class="p">,</span> <span class="n">nJnt</span><span class="p">,</span> <span class="n">nEval</span><span class="p">)</span>
+
+                <span class="c1"># plot the moment arm plots</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">individualMuscleMAPlot</span><span class="p">(</span><span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">nJnt</span><span class="p">,</span> <span class="n">jntRanges</span><span class="p">,</span> <span class="n">ma_mat_osim</span><span class="p">,</span>\
+                                             <span class="n">ma_mat_mjc</span><span class="p">,</span> <span class="n">nEval</span><span class="p">,</span> <span class="n">nEval</span><span class="p">)</span>
+                
+                <span class="n">mjc_ma_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ma_vec_mjc</span><span class="p">)</span>
+                        
+                <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joint_list</span><span class="p">:</span>
+                        <span class="n">joint_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+
+                    <span class="n">jnt_index</span> <span class="o">=</span> <span class="n">joint_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;opt_results&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">]:</span>  <span class="c1"># if results exist</span>
+                        <span class="n">cost_org_mat</span><span class="p">[</span><span class="n">i_mus</span><span class="p">,</span> <span class="n">jnt_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;opt_results&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">][</span><span class="s1">&#39;cost_org&#39;</span><span class="p">]</span>
+                        <span class="n">cost_opt_mat</span><span class="p">[</span><span class="n">i_mus</span><span class="p">,</span> <span class="n">jnt_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;opt_results&#39;</span><span class="p">][</span><span class="n">ij</span><span class="p">][</span><span class="s1">&#39;cost_opt&#39;</span><span class="p">]</span>
+
+            <span class="n">muscle_para_opt</span><span class="p">[</span><span class="s1">&#39;mjc_ma_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mjc_ma_data</span>
+
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">muscle_para_opt</span><span class="p">,</span> <span class="n">muscle_file</span><span class="p">)</span>
+            <span class="n">muscle_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># generate the overall heat map                 </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heatMap</span><span class="p">(</span><span class="n">muscle_list</span><span class="p">,</span> <span class="n">joint_list</span><span class="p">,</span> <span class="n">cost_org_mat</span><span class="p">,</span> <span class="n">cost_opt_mat</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MomentArmOpt.maVectorSort"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt.maVectorSort">[docs]</a>    <span class="k">def</span> <span class="nf">maVectorSort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ma_vec</span><span class="p">,</span> <span class="n">nJnt</span><span class="p">,</span> <span class="n">nEval</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function sort the moment arm vector that generated by optimization procedures.</span>
+<span class="sd">        Results of this sort function are joint specific lists that contains the moment arms</span>
+<span class="sd">        of it. The number of list depends on the mesh points of the other coupled joints. The</span>
+<span class="sd">        length of each list represent the checking points of this joint angle.</span>
+
+<span class="sd">        In the optimization, itertools.product will generate the angle mesh list in this structure:</span>
+<span class="sd">          [Ang11, Ang21, Ang31], [Ang11, Ang21, Ang32], ...</span>
+<span class="sd">          [Ang11, Ang22, Ang31], [Ang11, Ang22, Ang32], ...</span>
+<span class="sd">          ...</span>
+<span class="sd">          [Ang12, Ang21, Ang31], [Ang12, Ang21, Ang32], ...</span>
+<span class="sd">          ...</span>
+<span class="sd">          ...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># run through each joint</span>
+        <span class="n">ma_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nJnt</span><span class="p">,</span> <span class="n">nEval</span><span class="p">,</span> <span class="n">nEval</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">nj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nJnt</span><span class="p">):</span>  <span class="c1"># run through joints</span>
+            <span class="n">njVec</span> <span class="o">=</span> <span class="n">ma_vec</span><span class="p">[</span><span class="n">nj</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">ne</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nEval</span><span class="p">):</span>  <span class="c1"># run through evaulation joints</span>
+                <span class="k">for</span> <span class="n">ne2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nEval</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+                    <span class="n">ma_mat</span><span class="p">[</span><span class="n">nj</span><span class="p">,</span> <span class="n">ne</span><span class="p">,</span> <span class="n">ne2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma_vec</span><span class="p">[</span><span class="n">ne</span><span class="o">*</span><span class="n">nEval</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ne2</span><span class="p">][</span><span class="n">nj</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">ma_mat</span></div>
+
+
+<div class="viewcode-block" id="MomentArmOpt.individualMuscleMAPlot"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt.individualMuscleMAPlot">[docs]</a>    <span class="k">def</span> <span class="nf">individualMuscleMAPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span> <span class="n">nJnt</span><span class="p">,</span> <span class="n">joint_ranges</span><span class="p">,</span> <span class="n">ma_mat_osim</span><span class="p">,</span> <span class="n">ma_mat_mjc</span><span class="p">,</span> <span class="n">nEval_osim</span><span class="p">,</span> <span class="n">nEval_mjc</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">        Plot individual muscle moment arm curves. Osim and Mjc are plotted side by side</span>
+<span class="sd">        for the situation that multiple joints are coupling in the plot joint moment arm.</span>
+<span class="sd">        In this case, a number of mesh points are checked on these coupling joints. And in</span>
+<span class="sd">        this case, plot Osim and Mjc moment arms on top of each other.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># super title</span>
+        <span class="n">supTitle</span> <span class="o">=</span> <span class="n">muscle</span>
+        <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>
+            <span class="n">supTitle</span> <span class="o">=</span> <span class="n">supTitle</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">joint</span>
+        
+        <span class="k">for</span> <span class="n">ij</span><span class="p">,</span> <span class="n">joint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+
+            <span class="n">joint_range</span> <span class="o">=</span> <span class="n">joint_ranges</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span>
+            
+            <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+            <span class="n">ax1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">x_osim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nEval_osim</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">x_mjc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">joint_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">joint_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nEval_mjc</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># find the minimal and maximum values in mjc and osim ma data, to set the axis equal</span>
+            <span class="c1"># osim and mjc model have oppsite signs in moment arms</span>
+            <span class="n">max_ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">ma_mat_osim</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="o">-</span><span class="n">ma_mat_mjc</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+            <span class="n">min_ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">ma_mat_osim</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="o">-</span><span class="n">ma_mat_mjc</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+           
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nEval_osim</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+                <span class="n">line_color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">nEval_mjc</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">nEval_mjc</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_osim</span><span class="p">,</span> <span class="n">ma_mat_osim</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">line_color</span><span class="p">)</span>
+
+            <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;moment arms (cm)&quot;</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">joint</span> <span class="o">+</span> <span class="s2">&quot; (rad)&quot;</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">min_ma</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_ma</span><span class="o">*</span><span class="mi">100</span><span class="p">])</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;OSIM&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nEval_mjc</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+                <span class="n">line_color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">nEval_mjc</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">nEval_mjc</span><span class="o">**</span><span class="p">(</span><span class="n">nJnt</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_mjc</span><span class="p">,</span> <span class="o">-</span><span class="n">ma_mat_mjc</span><span class="p">[</span><span class="n">ij</span><span class="p">,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">line_color</span><span class="p">)</span>
+
+            <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;moment arms (cm)&quot;</span><span class="p">)</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">joint</span> <span class="o">+</span> <span class="s2">&quot; (rad)&quot;</span><span class="p">)</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">min_ma</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_ma</span><span class="o">*</span><span class="mi">100</span><span class="p">])</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;MJC&quot;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">supTitle</span><span class="p">)</span>
+
+            <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/moment_arms/&#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">joint</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MomentArmOpt.heatMap"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep2/index.html#myoconverter.convert_steps.O2MStep2.MomentArmOpt.heatMap">[docs]</a>    <span class="k">def</span> <span class="nf">heatMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_list</span><span class="p">,</span> <span class="n">y_list</span><span class="p">,</span> <span class="n">mat_1</span><span class="p">,</span> <span class="n">mat_2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the moment arm heat map comparison.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">maxV</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mat_1</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">mat_2</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">*</span><span class="mi">100</span>  <span class="c1"># change to cm</span>
+        
+        <span class="c1"># plot the heat mapping</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="n">ax1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">diverging_palette</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">as_cmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">mat_1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">x_list</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">y_list</span><span class="p">)]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span> <span class="n">maxV</span><span class="p">,</span>\
+                    <span class="n">center</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">square</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;shrink&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+            
+        <span class="n">xtick</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_list</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_list</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">ytick</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_list</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_list</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ytick</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">xtick</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">y_list</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">x_list</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Before Opt&#39;</span><span class="p">)</span>
+    
+        <span class="n">ax2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">diverging_palette</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">as_cmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">mat_2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">x_list</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">y_list</span><span class="p">)]</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span> <span class="n">maxV</span><span class="p">,</span>\
+                    <span class="n">center</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">square</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;shrink&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+            
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ytick</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">xtick</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">y_list</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">x_list</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;After Opt&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Moment arm comparison of all muscles (cm)&quot;</span><span class="p">)</span>
+        
+        <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/moment_arms/overall_comp_heatmap.svg&#39;</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;svg&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

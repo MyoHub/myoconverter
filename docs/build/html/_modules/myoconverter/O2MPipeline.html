@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.O2MPipeline &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.O2MPipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.O2MPipeline</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Created on Thu May  5 11:16:03 2022</span>
+<span class="c1"># @author: Huawei Wang</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">myoconverter.convert_steps.O2MSteps</span> <span class="kn">import</span> <span class="n">O2MSteps</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="O2MPipeline"><a class="viewcode-back" href="../../autoapi/myoconverter/O2MPipeline/index.html#myoconverter.O2MPipeline.O2MPipeline">[docs]</a><span class="k">def</span> <span class="nf">O2MPipeline</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">geometry_folder</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param osim_file: Path to the OpenSim OSIM model file</span>
+<span class="sd">    :param geometry_folder: Path to the Geometry folder</span>
+<span class="sd">    :param output_folder: Path to folder where converted model is saved</span>
+<span class="sd">    :param : Selected conversion steps, any subset of [1, 2, 3]</span>
+<span class="sd">    :param kwargs: convert_step, muscle_list, osim_data_overwrite, convert, </span>
+<span class="sd">        validation, generate_pdf, speedy, add_ground_geom, </span>
+<span class="sd">        treat_as_normal_path_point</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># based on updated configure options, run the pipeline</span>
+    <span class="n">convert_steps</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;convert_steps&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">muscle_list</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;muscle_list&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;osim_data_overwrite&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">conversion</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conversion&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">validation</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;validation&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">generate_pdf</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;generate_pdf&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">speedy</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;speedy&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">add_ground_geom</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_ground_geom&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;treat_as_normal_path_point&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># set logging</span>
+    <span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">osim_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">OUTPUT_LOG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MODEL_NAME</span><span class="si">}</span><span class="s2">_conversion.log&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If there is an existing log file, remove it</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">OUTPUT_LOG_FILE</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">OUTPUT_LOG_FILE</span><span class="p">)</span>
+
+    <span class="c1"># Set the log file</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">OUTPUT_LOG_FILE</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start the conversion pipeline for : </span><span class="si">{</span><span class="n">MODEL_NAME</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># coordinate configure options</span>
+    <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="n">coordinate_kwargs</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">convert_steps</span><span class="p">,</span>\
+                                   <span class="n">osim_data_overwrite</span><span class="p">,</span> <span class="n">conversion</span><span class="p">,</span> <span class="n">validation</span><span class="p">,</span> <span class="n">speedy</span><span class="p">)</span>
+
+    <span class="n">O2MSteps_inst</span> <span class="o">=</span> <span class="n">O2MSteps</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">geometry_folder</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span>\
+                 <span class="n">convert_steps</span> <span class="o">=</span> <span class="n">convert_steps</span><span class="p">,</span> <span class="n">muscle_list</span> <span class="o">=</span> <span class="n">muscle_list</span><span class="p">,</span>\
+                 <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="n">osim_data_overwrite</span><span class="p">,</span> <span class="n">convert</span> <span class="o">=</span> <span class="n">conversion</span><span class="p">,</span>\
+                 <span class="n">validation</span> <span class="o">=</span> <span class="n">validation</span><span class="p">,</span> <span class="n">generate_pdf</span> <span class="o">=</span> <span class="n">generate_pdf</span><span class="p">,</span> <span class="n">speedy</span> <span class="o">=</span> <span class="n">speedy</span><span class="p">,</span>\
+                 <span class="n">add_ground_geom</span> <span class="o">=</span> <span class="n">add_ground_geom</span><span class="p">,</span> <span class="n">treat_as_normal_path_point</span> <span class="o">=</span> <span class="n">treat_as_normal_path_point</span><span class="p">)</span>
+    
+    <span class="n">O2MSteps_inst</span><span class="o">.</span><span class="n">PipelineExecution</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="coordinate_kwargs"><a class="viewcode-back" href="../../autoapi/myoconverter/O2MPipeline/index.html#myoconverter.O2MPipeline.coordinate_kwargs">[docs]</a><span class="k">def</span> <span class="nf">coordinate_kwargs</span><span class="p">(</span><span class="n">osim_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">convert_steps</span><span class="p">,</span>\
+                                   <span class="n">osim_data_overwrite</span><span class="p">,</span> <span class="n">conversion</span><span class="p">,</span> <span class="n">validation</span><span class="p">,</span> <span class="n">speedy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Some config flags may conflicting with each other, this coordinate step is to manage them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># write down the configure coordinate info</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Coordinate the input configurations, remove conflicts.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># if conversion is not selected, then no need to regenerate osim dataset</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">conversion</span><span class="p">:</span>
+        <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Optimization process was not selected, set osim_data_overwrite to FALSE.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># then check the last saved configure files in the second and third steps</span>
+    <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">convert_steps</span><span class="p">:</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Checking configurations for step 2 conversion.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step2_MuscleKinematics/config.pkl&#39;</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step2_MuscleKinematics/config.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">old_configure_file</span><span class="p">:</span>
+                <span class="n">old_config</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">old_configure_file</span><span class="p">)</span>
+
+            <span class="c1"># if speedy flag changes, overwriting is always needed for optimization</span>
+            <span class="k">if</span> <span class="n">old_config</span><span class="p">[</span><span class="s2">&quot;speedy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">speedy</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">conversion</span><span class="p">:</span>
+                    <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       Speedy flag is different from last run, set osim_data_overwrite to TRUE.&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       Configure of previous run does not exist, set osim_data_overwrite to TRUE.&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       All good now.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># save kwargs</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;convert_steps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_steps</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;osim_data_overwrite&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">osim_data_overwrite</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conversion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conversion</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;speedy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">speedy</span>
+
+        <span class="c1"># save the update kwargs to config.pkl in step 2 folder</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step2_muscleKinematics&#39;</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">config_save</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step2_muscleKinematics/config.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">config_save</span><span class="p">)</span>
+        <span class="n">config_save</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">convert_steps</span><span class="p">:</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Checking configurations for step 3 conversion.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step3_MuscleKinetics/config.pkl&#39;</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step3_MuscleKinetics/config.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">old_configure_file</span><span class="p">:</span>
+                <span class="n">old_config</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">old_configure_file</span><span class="p">)</span>
+
+            <span class="c1"># if speedy flag changes, overwriting is always needed for optimization</span>
+            <span class="k">if</span> <span class="n">old_config</span><span class="p">[</span><span class="s2">&quot;speedy&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">speedy</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">conversion</span><span class="p">:</span>
+                    <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       Speedy flag is different from last run, set osim_data_overwrite to TRUE.&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">osim_data_overwrite</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       Configure of previous run does not exist, set osim_data_overwrite to TRUE.&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;       All good now.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># save kwargs</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;convert_steps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_steps</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;osim_data_overwrite&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">osim_data_overwrite</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conversion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">conversion</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;speedy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">speedy</span>
+
+        <span class="c1"># save the update kwargs to config.pkl in step 3 folder</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step3_muscleKinetics&#39;</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">config_save</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/Step3_muscleKinetics/config.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;bw&#39;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">config_save</span><span class="p">)</span>
+        <span class="n">config_save</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">osim_data_overwrite</span></div>
+
+    
+                
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="argparser"><a class="viewcode-back" href="../../autoapi/myoconverter/O2MPipeline/index.html#myoconverter.O2MPipeline.argparser">[docs]</a>    <span class="n">argparser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Convert an OpenSim model into a MuJoCo model with accurate muscle kinetics.&#39;</span></div>
+                                                 <span class="s1">&#39;Only Works with OpenSim v4 models.&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;osim_file&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to an OpenSim model OSIM file&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;geometry_folder&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the Geometry folder (by default uses folder of given OpenSim file)&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;output_folder&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to an output folder. The converted model will be saved here.&quot;</span><span class="p">)</span>
+    
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--convert_steps&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Selected conversion steps, could be any subset of [1, 2, 3] based on the needs&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--muscle_list&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Selected muscles for the conversion steps&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--osim_data_overwrite&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If ture, overwrite extracted Osim model state files&#39;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--conversion&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, perform the conversion functions of selected steps&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--validation&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, perform the validation functions of selected steps&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--speedy&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, reduce the number of checking notes in optimization steps&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--generate_pdf&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, generate a pdf report of the validation results&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--add_ground_geom&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, a geom (of type plane) is added to the MuJoCo model as ground&quot;</span><span class="p">)</span>
+    <span class="n">argparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--treat_as_normal_path_point&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If true, MovingPathPoints and ConditionalPathPoints will be treated as normal &quot;</span>
+                                <span class="s2">&quot;PathPoints&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argparser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># Do the pipeline</span>
+    <span class="n">O2MPipeline</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+:py:mod:`myoconverter.xml.parsers`
+==================================
+
+.. py:module:: myoconverter.xml.parsers
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.parsers.BaseParser
+   myoconverter.xml.parsers.BodyParser
+   myoconverter.xml.parsers.ConstraintParser
+   myoconverter.xml.parsers.JointParser
+   myoconverter.xml.parsers.ForceParser
+   myoconverter.xml.parsers.PathPointParser
+   myoconverter.xml.parsers.WrapObjectParser
+   myoconverter.xml.parsers.PathWrapParser
+   myoconverter.xml.parsers.PathWrapSetParser
+   myoconverter.xml.parsers.MarkerParser
+   myoconverter.xml.parsers.IParser
+
+
+
+
+.. py:class:: BaseParser(component, ignore_files=set())
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+   .. py:method:: parse_all(objects, **kwargs)
+
+
+   .. py:method:: _collect_parsers(files)
+
+
+
+.. py:class:: BodyParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: ConstraintParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: JointParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: ForceParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: PathPointParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: WrapObjectParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: PathWrapParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: PathWrapSetParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: MarkerParser
+
+   Bases: :py:obj:`BaseParser`
+
+
+.. py:class:: IParser
+
+   Bases: :py:obj:`abc.ABC`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(**kwargs)
+      :abstractmethod:
+
+
+

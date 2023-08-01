@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.converter &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.converter</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../_sources/autoapi/myoconverter/xml/converter/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-myoconverter.xml.converter">
+<span id="myoconverter-xml-converter"></span><h1><a class="reference internal" href="#module-myoconverter.xml.converter" title="myoconverter.xml.converter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.converter</span></code></a><a class="headerlink" href="#module-myoconverter.xml.converter" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.convert" title="myoconverter.xml.converter.convert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert</span></code></a>(xml_file, output_folder, **kwargs)</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">param xml_file</dt>
+<dd class="field-odd"><p>Path to the OpenSim XML model file</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.converter.parse_bodies_and_joints" title="myoconverter.xml.converter.parse_bodies_and_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_bodies_and_joints</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.add_bodies_and_joints" title="myoconverter.xml.converter.add_bodies_and_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_bodies_and_joints</span></code></a>(parent_name, current_body[, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.converter.parse_ground" title="myoconverter.xml.converter.parse_ground"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_ground</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.parse_constraints" title="myoconverter.xml.converter.parse_constraints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_constraints</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.converter.parse_forces" title="myoconverter.xml.converter.parse_forces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_forces</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.parse_markers" title="myoconverter.xml.converter.parse_markers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_markers</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.converter.set_keyframe" title="myoconverter.xml.converter.set_keyframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_keyframe</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.copy_credits" title="myoconverter.xml.converter.copy_credits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy_credits</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.converter.argparser" title="myoconverter.xml.converter.argparser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argparser</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.convert">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.convert" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xml_file</strong> – Path to the OpenSim XML model file</p></li>
+<li><p><strong>output_folder</strong> – Path to folder where converted model is saved</p></li>
+<li><p><strong>kwargs</strong> – geometry_folder, add_ground_geom, treat_as_normal_path_point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.parse_bodies_and_joints">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">parse_bodies_and_joints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#parse_bodies_and_joints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.parse_bodies_and_joints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.add_bodies_and_joints">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">add_bodies_and_joints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_body</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#add_bodies_and_joints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.add_bodies_and_joints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.parse_ground">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">parse_ground</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#parse_ground"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.parse_ground" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.parse_constraints">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">parse_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#parse_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.parse_constraints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.parse_forces">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">parse_forces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#parse_forces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.parse_forces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.parse_markers">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">parse_markers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#parse_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.parse_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.set_keyframe">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">set_keyframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#set_keyframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.set_keyframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.copy_credits">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">copy_credits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#copy_credits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.copy_credits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.converter.argparser">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.converter.</span></span><span class="sig-name descname"><span class="pre">argparser</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/converter.html#argparser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.converter.argparser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

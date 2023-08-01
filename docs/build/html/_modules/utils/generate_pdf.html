@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.generate_pdf &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>utils.generate_pdf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for utils.generate_pdf</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">fpdf</span> <span class="kn">import</span> <span class="n">FPDF</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<div class="viewcode-block" id="generate_pdf"><a class="viewcode-back" href="../../autoapi/utils/generate_pdf/index.html#utils.generate_pdf.generate_pdf">[docs]</a><span class="k">def</span> <span class="nf">generate_pdf</span><span class="p">(</span><span class="n">mjc_vlt1_path</span><span class="p">,</span> <span class="n">mjc_vlt2_path</span><span class="p">,</span> <span class="n">mjc_vlt3_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate pdf report with all the validation plots</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># if generate pdf report, then initilize the pdf file</span>
+    <span class="n">pdf</span> <span class="o">=</span> <span class="n">FPDF</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">)</span> <span class="c1"># Landscape A4 (210 by 297 mm)</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Massachusetts&#39;</span><span class="p">,</span> <span class="s1">&#39;New Hampshire&#39;</span><span class="p">]</span>
+       
+    <span class="c1"># Landscape A4 (297 by 210 mm)</span>
+    <span class="c1"># general settings</span>
+    <span class="n">x_ind0</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">x_ind1</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">x_ind2</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">x_ind3</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; First Page &#39;&#39;&#39;</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;MuJoCo Model Convertion Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    <span class="n">y_cell1</span> <span class="o">=</span> <span class="mi">60</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 1: Forward Kinematic Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind2</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Check correctness of bone meshes and joint definitions&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    <span class="n">y_cell2</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell2</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 2: Muscle Moment Arm Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind2</span><span class="p">,</span> <span class="n">y_cell2</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Check how muscle wrapping over the joints&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    <span class="n">y_cell3</span> <span class="o">=</span> <span class="mi">140</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell3</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 3: Muscle Force Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind2</span><span class="p">,</span> <span class="n">y_cell3</span> <span class="o">+</span> <span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Check the muscle force-length relationship&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="c1"># run through the step 1 folder and add all the plots</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 1: Forward Kinematic Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">y_cell1</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Randomly pose the model with 10 confgurations within the joint limits.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">180</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;In each pose, the endpoints(markers) global locations of Osim and Mjc models &quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">25</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;are extracted and compared.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">40</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Box plot of their mean-std errros are plotted together.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">55</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Individual endpoint differences of these 10 postures are also ploted in the VLT folder,&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">70</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;but not included inside this report&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Adding vlt1 results.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Scan the end_points folder to find all .svg files and add the overall comparison to the pdf report</span>
+    <span class="n">vlt1_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/end_points/*.svg&quot;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vlt1_plot_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># only empty overall_comp plot generated, no end point plots</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NO end point found in the model.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c1"># first add the overall comparsion plots</span>
+        <span class="k">for</span> <span class="n">vlt1_name</span> <span class="ow">in</span> <span class="n">vlt1_plot_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;overall_comp&quot;</span> <span class="ow">in</span> <span class="n">vlt1_name</span><span class="p">:</span>
+                <span class="c1"># pdf.add_page()</span>
+                <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s1">&#39;/end_points/&#39;</span> <span class="o">+</span> <span class="n">vlt1_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="c1"># Scan the coordinate_coupler_constraints folder to find all .svg files and add the overall comparison to the pdf report</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/coordinate_coupler_constraints&quot;</span><span class="p">):</span>
+
+        <span class="c1"># title page of the custom joints</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Approximation of custom joints&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+        <span class="n">vlt1_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/coordinate_coupler_constraints/*.svg&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># add all plots</span>
+        <span class="k">for</span> <span class="n">vlt1_name</span> <span class="ow">in</span> <span class="n">vlt1_plot_list</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s1">&#39;/coordinate_coupler_constraints/&#39;</span> <span class="o">+</span> <span class="n">vlt1_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">240</span><span class="p">)</span>
+    
+    <span class="c1"># Scan the custom joints folder to find all .svg files and add the overall comparison to the pdf report</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/custom_joints&quot;</span><span class="p">):</span>
+
+        <span class="c1"># title page of the custom joints</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Approximation of custom joints&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+        <span class="n">vlt1_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/custom_joints/*.svg&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># add all plots</span>
+        <span class="k">for</span> <span class="n">vlt1_name</span> <span class="ow">in</span> <span class="n">vlt1_plot_list</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s1">&#39;/custom_joints/&#39;</span> <span class="o">+</span> <span class="n">vlt1_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">240</span><span class="p">)</span>
+
+    
+    <span class="c1"># Scan the moving path folder to find all .svg files and add the overall comparison to the pdf report</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/moving_path_points&quot;</span><span class="p">):</span>
+
+        <span class="c1"># title page of the moving path points</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Approximation of moving path points&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+        <span class="n">vlt1_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/moving_path_points/*.svg&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># add all plots</span>
+        <span class="k">for</span> <span class="n">vlt1_name</span> <span class="ow">in</span> <span class="n">vlt1_plot_list</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s1">&#39;/moving_path_points/&#39;</span> <span class="o">+</span> <span class="n">vlt1_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">240</span><span class="p">)</span>
+
+    <span class="c1"># Scan the moving path folder to find all .svg files and add the overall comparison to the pdf report</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/conditional_path_points&quot;</span><span class="p">):</span>
+
+            <span class="c1"># title page of the moving path points</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Approximation of conditional path points&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+        <span class="n">vlt1_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s2">&quot;/conditional_path_points/*.svg&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># add all plots</span>
+        <span class="k">for</span> <span class="n">vlt1_name</span> <span class="ow">in</span> <span class="n">vlt1_plot_list</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt1_path</span> <span class="o">+</span> <span class="s1">&#39;/conditional_path_points/&#39;</span> <span class="o">+</span> <span class="n">vlt1_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">240</span><span class="p">)</span>
+
+            
+    <span class="c1"># run through the step 2 folder and add all the plots</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 2: Muscle Moment Arm Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">y_cell1</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Moment arm of each muscle at each joint are compared between Osim and converted MJC model.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;A overall heatmap is included to indicate the overall moment arm errors before and after optimization.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Then detail moment arm curves are plotted for comparison.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;For the muscles that wrap over muitiple joints, moment arms with respect to one joint maybe affected by several other joints&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;In this case, several mesh points were check of these affecting joints, when plotting moment arms at one joint&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;This is why there are multiple lines (with different grey levels) plotted for one muscle on one joint&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;How to inteprate the plot&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">115</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Global title indicate the muscle and joints that affecting the moment arms in the plots&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">130</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;X axis indicate the joint that moment arms were extracted&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">145</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Grey level of the lines indicate the mesh postures of other relvant joints (in the global tile, but not the x axis)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Adding vlt2 results.&quot;</span><span class="p">)</span>
+    <span class="c1"># Scan the result folder to find all the &lt;muscle_name&gt;.png files and add all of them to the pdf report</span>
+    <span class="n">vlt2_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt2_path</span> <span class="o">+</span> <span class="s2">&quot;/moment_arms/*.svg&quot;</span><span class="p">)]</span>
+
+    <span class="c1"># first add the overall comparsion plots</span>
+    <span class="k">for</span> <span class="n">vlt2_name</span> <span class="ow">in</span> <span class="n">vlt2_plot_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;overall_comp&quot;</span> <span class="ow">in</span> <span class="n">vlt2_name</span><span class="p">:</span>
+            <span class="c1"># pdf.add_page()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt2_path</span> <span class="o">+</span> <span class="s1">&#39;/moment_arms/&#39;</span> <span class="o">+</span> <span class="n">vlt2_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">180</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">vlt2_name</span> <span class="ow">in</span> <span class="n">vlt2_plot_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;overall_comp&quot;</span> <span class="ow">in</span> <span class="n">vlt2_name</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt2_path</span> <span class="o">+</span> <span class="s1">&#39;/moment_arms/&#39;</span> <span class="o">+</span> <span class="n">vlt2_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">140</span><span class="p">)</span>
+
+    <span class="c1"># run through the step 3 folder and add all the plots</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind0</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;* Step 3: Muscle Force Validation&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">y_cell1</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Muscle force-length property are validated between Osim and Mjc models&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;This force-length property only depends on muscle-fiber-tendon unit lengths.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;We made it isolated with the moment arm, so that the change in moment arms will not affect the muscle force properties&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;The muscle-fiber-tendon unit lengths were roughly even extracted (from shorest to longest) with all possible body postures.&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;A bar plot of the froce errors of all muscle before and after optimization is included&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Then the detail force-length curve comparsion plot of each muscle is included&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">ln</span><span class="p">()</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;How to inteprate the plot&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p">(</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">115</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Global title indicate the muscle name&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">130</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;X axis indicate the muscle-fiber-tendon unit length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">set_xy</span><span class="p">(</span><span class="n">x_ind1</span><span class="p">,</span> <span class="n">y_cell1</span><span class="o">+</span><span class="mi">145</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;y axis is the muscle force (unnormalized)&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;   Adding vlt3 results.&quot;</span><span class="p">)</span>
+    <span class="c1"># Scan the result folder to find all the &lt;muscle_name&gt;.png files and add all of them to the pdf report</span>
+    <span class="n">vlt3_plot_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">mjc_vlt3_path</span> <span class="o">+</span> <span class="s2">&quot;/muscle_forces/*.svg&quot;</span><span class="p">)]</span>
+
+    <span class="c1"># first add the overall comparsion plots</span>
+    <span class="k">for</span> <span class="n">vlt3_name</span> <span class="ow">in</span> <span class="n">vlt3_plot_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;overall_comp&quot;</span> <span class="ow">in</span> <span class="n">vlt3_name</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt3_path</span> <span class="o">+</span> <span class="s1">&#39;/muscle_forces/&#39;</span> <span class="o">+</span> <span class="n">vlt3_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">140</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">vlt3_name</span> <span class="ow">in</span> <span class="n">vlt3_plot_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;overall_comp&quot;</span> <span class="ow">in</span> <span class="n">vlt3_name</span><span class="p">:</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">add_page</span><span class="p">()</span>
+            <span class="n">pdf</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">mjc_vlt3_path</span> <span class="o">+</span> <span class="s1">&#39;/muscle_forces/&#39;</span> <span class="o">+</span> <span class="n">vlt3_name</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">140</span><span class="p">)</span>
+
+
+    <span class="k">return</span> <span class="n">pdf</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

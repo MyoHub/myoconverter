@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.path_wraps.PathWrap &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.path_wraps.PathWrap</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.path_wraps.PathWrap</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.parsers</span> <span class="kn">import</span> <span class="n">IParser</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">calculate_mujoco_position</span><span class="p">,</span> <span class="n">str2vec</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.path_wraps.utils</span> <span class="kn">import</span> <span class="n">add_wrapping_site</span><span class="p">,</span> <span class="n">maybe_add_wrapping_site</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.wrap_objects.utils</span> <span class="kn">import</span> <span class="n">mujoco_wrap_object_name</span>
+
+
+<div class="viewcode-block" id="PathWrap"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/PathWrap/index.html#myoconverter.xml.path_wraps.PathWrap.PathWrap">[docs]</a><span class="k">class</span> <span class="nc">PathWrap</span><span class="p">(</span><span class="n">IParser</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PathWrap.parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/path_wraps/PathWrap/index.html#myoconverter.xml.path_wraps.PathWrap.PathWrap.parse">[docs]</a>  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">tendon</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+
+    <span class="c1"># Get original wrap object name</span>
+    <span class="n">osim_wrap_object_name</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;wrap_object&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="c1"># Get wrap object name with suffix</span>
+    <span class="n">wrap_object_name</span> <span class="o">=</span> <span class="n">mujoco_wrap_object_name</span><span class="p">(</span><span class="n">osim_wrap_object_name</span><span class="p">)</span>
+
+    <span class="c1"># Find wrapping object (geom), and the body it belongs to</span>
+    <span class="n">geom</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.//*geom[@name=&#39;</span><span class="si">{</span><span class="n">wrap_object_name</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+    <span class="n">wrap_object_body</span> <span class="o">=</span> <span class="n">geom</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+
+    <span class="c1"># Get radius of wrapping object</span>
+    <span class="n">wrap_object_radius</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Get (global) positions of wrapping object and the body it belongs to</span>
+    <span class="n">wrap_object_pos</span> <span class="o">=</span> <span class="n">calculate_mujoco_position</span><span class="p">(</span><span class="s2">&quot;geom&quot;</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">)</span>
+    <span class="n">wrap_object_body_pos</span> <span class="o">=</span> <span class="n">calculate_mujoco_position</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">wrap_object_body</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+    <span class="c1"># Get all path points / sites</span>
+    <span class="n">sites</span> <span class="o">=</span> <span class="n">tendon</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Get muscle name</span>
+    <span class="n">muscle_name</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Check range</span>
+    <span class="k">if</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">idxs</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">idxs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+
+    <span class="c1"># Issue a warning when adding non-predefined sites and one of the sites is a moving/conditional path point</span>
+    <span class="n">issue_warning</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+
+      <span class="c1"># if either idxs[0]==-1 or idxs[1]==-1, redefine them to be the first/last site</span>
+      <span class="k">if</span> <span class="n">idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="k">if</span> <span class="n">idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span>
+
+      <span class="c1"># Add all predefined sites</span>
+      <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idxs</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">params</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_wrapping_site</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span>
+                                        <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">wrap_object_radius</span><span class="p">,</span> <span class="n">wrap_object_body</span><span class="p">,</span> <span class="n">wrap_object_body_pos</span><span class="p">,</span>
+                                        <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+      <span class="c1"># Go through all segments, add wrapping sites where applicable</span>
+      <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)):</span>
+        <span class="n">p</span><span class="p">,</span> <span class="n">issue_warning</span> <span class="o">=</span> <span class="n">maybe_add_wrapping_site</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">sites</span><span class="p">,</span> <span class="n">muscle_name</span><span class="p">,</span> <span class="n">wrap_object_name</span><span class="p">,</span>
+                                                   <span class="n">wrap_object_pos</span><span class="p">,</span> <span class="n">wrap_object_radius</span><span class="p">,</span> <span class="n">wrap_object_body</span><span class="p">,</span>
+                                                   <span class="n">wrap_object_body_pos</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_WORLDBODY</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="k">return</span> <span class="n">issue_warning</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

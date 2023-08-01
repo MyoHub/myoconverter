@@ -1,0 +1,29 @@
+:py:mod:`myoconverter.xml.path_points.PathPoint`
+================================================
+
+.. py:module:: myoconverter.xml.path_points.PathPoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.path_points.PathPoint.PathPoint
+
+
+
+
+.. py:class:: PathPoint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, tendon, force_name, **kwargs)
+
+
+

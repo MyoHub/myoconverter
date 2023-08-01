@@ -1,0 +1,27 @@
+:py:mod:`myoconverter.convert_steps.O2MSteps`
+=============================================
+
+.. py:module:: myoconverter.convert_steps.O2MSteps
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.convert_steps.O2MSteps.O2MSteps
+
+
+
+
+.. py:class:: O2MSteps(osim_model_file, geom_folder, mjc_target_folder, convert_steps=[1, 2, 3], muscle_list=None, osim_data_overwrite=False, convert=False, validation=False, generate_pdf=False, speedy=False, add_ground_geom=False, treat_as_normal_path_point=False)
+
+   Class to coordinate all conversion steps
+
+   .. py:method:: PipelineExecution()
+
+
+

@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.forces.Muscle &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.forces.Muscle</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.forces.Muscle</h1><div class="highlight"><pre>
+<span></span><span class="c1"># 2022 Created by Aleksi Ikkala; muscle conversion calculations by Florian Fischer</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">final</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.parsers</span> <span class="kn">import</span> <span class="n">IParser</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">str2bool</span><span class="p">,</span> <span class="n">element_txt2num</span><span class="p">,</span> <span class="n">val2str</span><span class="p">,</span> <span class="n">filter_nan_values</span><span class="p">,</span> <span class="n">str2vec</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.forces.utils</span> <span class="kn">import</span> <span class="n">calculate_length_range</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+
+
+<div class="viewcode-block" id="Muscle"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/forces/Muscle/index.html#myoconverter.xml.forces.Muscle.Muscle">[docs]</a><span class="k">class</span> <span class="nc">Muscle</span><span class="p">(</span><span class="n">IParser</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; A parent class to handle common parsing tasks for muscle forces (actuators), like parsing path points &quot;&quot;&quot;</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># We might need to pass some element names from child classes</span>
+
+    <span class="c1"># Initialise a dict where parameters will be saved. Initialised child objects can overwrite these parameters</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+  <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="Muscle._parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/forces/Muscle/index.html#myoconverter.xml.forces.Muscle.Muscle._parse">[docs]</a>  <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Child classes must implement this method. This is called from the &#39;parse&#39; method below. Add any calculations /</span>
+<span class="sd">    conversions that weren&#39;t included in the default calculations / conversions below. &quot;&quot;&quot;</span></div>
+
+  <span class="nd">@final</span>
+<div class="viewcode-block" id="Muscle.parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/forces/Muscle/index.html#myoconverter.xml.forces.Muscle.Muscle.parse">[docs]</a>  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="c1"># Do some default parsing; most of these seem to apply to all muscles</span>
+
+    <span class="c1"># If this actuator is not enabled, return</span>
+    <span class="k">if</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;appliesForce&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">str2bool</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;appliesForce&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+      <span class="k">return</span>
+
+    <span class="c1"># Collect attributes in a dict</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Use a larger scale ratio than literature suggests, e.g. Garner and Pandy (2002) uses [0.5, 1.5]</span>
+    <span class="c1"># (https://web.ecs.baylor.edu/faculty/garner/Research/GarnerPandy2003ParamEst.pdf)</span>
+    <span class="c1">#self._params[&quot;range&quot;] = np.array([0.5, 2])</span>
+
+    <span class="c1"># Get optimal fiber length, tendon slack length, and pennation angle</span>
+    <span class="n">optimal_fiber_length</span> <span class="o">=</span> <span class="n">element_txt2num</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="s2">&quot;optimal_fiber_length&quot;</span><span class="p">)</span>
+    <span class="n">tendon_slack_length</span> <span class="o">=</span> <span class="n">element_txt2num</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="s2">&quot;tendon_slack_length&quot;</span><span class="p">)</span>
+    <span class="n">pennation_angle</span> <span class="o">=</span> <span class="n">element_txt2num</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="s2">&quot;pennation_angle_at_optimal&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Try to optimize length range</span>
+    <span class="c1">#self._params[&quot;lengthrange&quot;] = calculate_length_range(self._params[&quot;range&quot;], optimal_fiber_length,</span>
+    <span class="c1">#                                                     tendon_slack_length, pennation_angle)</span>
+    <span class="c1"># Use an arbitrary value for length range</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;lengthrange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Let&#39;s use max isometric force as an approximation for peak active force at rest</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;force&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;max_isometric_force&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="c1"># Parse control limits; note that mujoco clamps control values internally to [0, 1], so we&#39;ll use that as default</span>
+    <span class="c1"># (see https://mujoco.readthedocs.io/en/stable/modeling.html#cmuscle); this default is set in the &quot;template.xml&quot;</span>
+    <span class="c1"># file</span>
+    <span class="n">muscle_defaults</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">MUJOCO</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//default[@class=&#39;muscle&#39;]/muscle&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">muscle_defaults</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">&quot;ctrlrange&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">muscle_defaults</span><span class="o">.</span><span class="n">attrib</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not find required defaults for class &#39;muscle&#39; in the mujoco file&quot;</span><span class="p">)</span>
+      <span class="k">raise</span> <span class="ne">RuntimeError</span>
+    <span class="n">m_ctrlrange</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">muscle_defaults</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;ctrlrange&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Get control range from the osim file, if it is defined</span>
+    <span class="n">o_ctrlrange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">element_txt2num</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="s2">&quot;min_control&quot;</span><span class="p">),</span> <span class="n">element_txt2num</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="s2">&quot;max_control&quot;</span><span class="p">)])</span>
+
+    <span class="c1"># Update ctrlrange if it is not the same as the default</span>
+    <span class="n">finite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">o_ctrlrange</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">finite</span><span class="p">):</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">o_ctrlrange</span><span class="p">[</span><span class="n">finite</span><span class="p">],</span> <span class="n">m_ctrlrange</span><span class="p">[</span><span class="n">finite</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;ctrlrange&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ctrlrange</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;ctrlrange&quot;</span><span class="p">][</span><span class="n">finite</span><span class="p">]</span> <span class="o">=</span> <span class="n">o_ctrlrange</span><span class="p">[</span><span class="n">finite</span><span class="p">]</span>
+
+    <span class="c1"># Add tendon and class</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;tendon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_tendon&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;muscle&quot;</span>
+
+    <span class="c1"># At this point do child class specific parsing</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Add the muscle to MuJoCo model</span>
+    <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_ACTUATOR</span><span class="p">,</span> <span class="s2">&quot;muscle&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="n">val2str</span><span class="p">(</span><span class="n">filter_nan_values</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">)))</span>
+
+    <span class="c1"># Add the tendon to MuJoCo model</span>
+    <span class="n">tendon</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_TENDON</span><span class="p">,</span> <span class="s2">&quot;spatial&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;tendon&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Parse path points; input muscle name as well, since some of the site names may be non-unique, so we should prepend</span>
+    <span class="c1"># their names with the name of the muscle</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">PATH_POINT_PARSER</span><span class="o">.</span><span class="n">parse_all</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;GeometryPath/PathPointSet/objects&quot;</span><span class="p">),</span> <span class="n">tendon</span><span class="o">=</span><span class="n">tendon</span><span class="p">,</span>
+                                <span class="n">force_name</span><span class="o">=</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Parse path wrap set. Note: PathWrapSetParser parses the whole PathWrapSet at once instead of individual objects</span>
+    <span class="c1"># found in the PathWrapSet. Input muscle name as well, since we want to create muscle-specific wrapping objects for</span>
+    <span class="c1"># ellipsoids which we can optimize separately later</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">PATH_WRAP_SET_PARSER</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;GeometryPath/PathWrapSet&quot;</span><span class="p">),</span> <span class="n">tendon</span><span class="o">=</span><span class="n">tendon</span><span class="p">,</span> <span class="n">force_name</span><span class="o">=</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

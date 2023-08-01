@@ -1,0 +1,29 @@
+:py:mod:`myoconverter.xml.joints.WeldJoint`
+===========================================
+
+.. py:module:: myoconverter.xml.joints.WeldJoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.joints.WeldJoint.WeldJoint
+
+
+
+
+.. py:class:: WeldJoint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   MuJoCo connects two bodies together as weld joints, if there are no joints defined 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+

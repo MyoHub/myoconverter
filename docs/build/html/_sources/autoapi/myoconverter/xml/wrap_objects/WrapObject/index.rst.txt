@@ -1,0 +1,45 @@
+:py:mod:`myoconverter.xml.wrap_objects.WrapObject`
+==================================================
+
+.. py:module:: myoconverter.xml.wrap_objects.WrapObject
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.wrap_objects.WrapObject.WrapObject
+
+
+
+
+.. py:class:: WrapObject(**kwargs)
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   A parent class to handle common parsing tasks for wrapping objects 
+
+   .. py:attribute:: _sidesite_dist
+      :value: 0.001
+
+      
+
+   .. py:method:: sidesite_dist()
+      :classmethod:
+
+
+   .. py:method:: _parse(xml, **kwargs)
+      :abstractmethod:
+
+      Child classes must implement this method. This is called from the 'parse' method below. Add any calculations /
+      conversions that weren't included in the default calculations / conversions below. 
+
+
+   .. py:method:: parse(xml, m_body, **kwargs)
+
+
+

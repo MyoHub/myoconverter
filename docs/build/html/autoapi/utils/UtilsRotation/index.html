@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsRotation &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsRotation</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/utils/UtilsRotation/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utils.UtilsRotation">
+<span id="utils-utilsrotation"></span><h1><a class="reference internal" href="#module-utils.UtilsRotation" title="utils.UtilsRotation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsRotation</span></code></a><a class="headerlink" href="#module-utils.UtilsRotation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsRotation.spherical2cartesian" title="utils.UtilsRotation.spherical2cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spherical2cartesian</span></code></a>(wrap_centre, site_pose_sph)</p></td>
+<td><p>Transfer the site_pose in the Spherical coordinate into Catersian coordinate,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsRotation.cartesian2spherical" title="utils.UtilsRotation.cartesian2spherical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian2spherical</span></code></a>(wrap_centre, site_pose)</p></td>
+<td><p>Transfer the site_pose in the Catersian coordinate into Spherical coordinate,</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsRotation.quaternionRotaionInv" title="utils.UtilsRotation.quaternionRotaionInv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quaternionRotaionInv</span></code></a>(unitQuat, site_pose)</p></td>
+<td><p>Rotation the site_pose based on the unit quaternion rotation vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsRotation.quaternionRotaion" title="utils.UtilsRotation.quaternionRotaion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quaternionRotaion</span></code></a>(unitQuat, site_pose)</p></td>
+<td><p>Rotation the site_pose based on the unit quaternion rotation vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsRotation.cartesian2cylindrical" title="utils.UtilsRotation.cartesian2cylindrical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian2cylindrical</span></code></a>(wrap_centre, site_pose)</p></td>
+<td><p>Transfer the site_pose in the Catersian coordinate into Cylindrical coordinate,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsRotation.cylindarical2cartesian" title="utils.UtilsRotation.cylindarical2cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cylindarical2cartesian</span></code></a>(wrap_centre, site_pose_cyl)</p></td>
+<td><p>Transfer the site_pose in the Cylindarical coordinate into Catersian coordinate,</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsRotation.TaitBryanRotationMatrix" title="utils.UtilsRotation.TaitBryanRotationMatrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TaitBryanRotationMatrix</span></code></a>(Sequence, angles)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsRotation.euler_change_sequence" title="utils.UtilsRotation.euler_change_sequence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">euler_change_sequence</span></code></a>(oldSequence, old_angles, newSequence)</p></td>
+<td><p>From the old sequence euler rotation angles, get euler rotation angles with</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsRotation.euler_change_sequence_bodyRotationFirst" title="utils.UtilsRotation.euler_change_sequence_bodyRotationFirst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">euler_change_sequence_bodyRotationFirst</span></code></a>(bodySequence, …)</p></td>
+<td><p>From the old sequence euler rotation angles, get euler rotation angles with</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.spherical2cartesian">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">spherical2cartesian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wrap_centre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose_sph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#spherical2cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.spherical2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transfer the site_pose in the Spherical coordinate into Catersian coordinate,
+relative to the wrap_centre (for sphere objects)</p>
+<dl>
+<dt>Parameters:</dt><dd><p>wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+site_pose_sph: the position of the site point, in Spherical coordinate:</p>
+<blockquote>
+<div><p>r: float, ra [0, inf]
+theta: float, vectical angle [0, pi]
+phi: float, horizental angle [-pi, pi]</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.cartesian2spherical">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">cartesian2spherical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wrap_centre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#cartesian2spherical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.cartesian2spherical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transfer the site_pose in the Catersian coordinate into Spherical coordinate,
+relative to the wrap_centre (for sphere objects)</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+site_pose: the position of the site point, in Catersian coordinate</p>
+</dd>
+<dt>Outputs:</dt><dd><p>r: float, [0, inf], radius of the sphere
+theta: float, [0 pi], rotation angle with respect to the z axis
+phi: float, [-pi, pi],  rotation angle in the x-y plane</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.quaternionRotaionInv">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">quaternionRotaionInv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unitQuat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#quaternionRotaionInv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.quaternionRotaionInv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotation the site_pose based on the unit quaternion rotation vector.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>unitQuat: unit vector of the quaternion rotation angles
+site_pose: the catesian space location of the site point</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.quaternionRotaion">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">quaternionRotaion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unitQuat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#quaternionRotaion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.quaternionRotaion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotation the site_pose based on the unit quaternion rotation vector.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>unitQuat: unit vector of the quaternion rotation angles
+site_pose: the catesian space location of the site point</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.cartesian2cylindrical">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">cartesian2cylindrical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wrap_centre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#cartesian2cylindrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.cartesian2cylindrical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transfer the site_pose in the Catersian coordinate into Cylindrical coordinate,
+relative to the wrap_centre (for sphere objects)</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+site_pose: the position of the site point, in Catersian coordinate</p>
+</dd>
+<dt>Outputs:</dt><dd><p>rho: float, [0, inf], radius of the cylinder
+phi: float, [-pi, pi], rotation angle
+z: float, [-inf, inf], distance to the origin O, along the longitudinal axis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.cylindarical2cartesian">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">cylindarical2cartesian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wrap_centre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">site_pose_cyl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#cylindarical2cartesian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.cylindarical2cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transfer the site_pose in the Cylindarical coordinate into Catersian coordinate,
+relative to the wrap_centre (for sphere objects)</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>wrap_centre: the centre location of the wrapping object, in Catersian coordinate
+site_pose_sph: the position of the site point, in Cylindarical coordinate</p>
+</dd>
+<dt>Outputs:</dt><dd><p>x: float, [-inf, inf], x axis location of the local coordinate
+y: float, [-inf, inf], y axis location of the local coordinate
+z: float, [-inf, inf], z axis location of the local coordinate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.TaitBryanRotationMatrix">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">TaitBryanRotationMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#TaitBryanRotationMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.TaitBryanRotationMatrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.euler_change_sequence">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">euler_change_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oldSequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newSequence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#euler_change_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.euler_change_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the old sequence euler rotation angles, get euler rotation angles with
+the sequence of x-y-z.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>oldSequence: the old order of sequence of the euler rotation
+old_angles: three euler angles in the old rotation sequence
+newSequence: the new order of sequence of the euler rotation</p>
+</dd>
+<dt>Outputs:</dt><dd><p>eulerNew: the new euler angles with the new rotation sequence.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsRotation.euler_change_sequence_bodyRotationFirst">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsRotation.</span></span><span class="sig-name descname"><span class="pre">euler_change_sequence_bodyRotationFirst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bodySequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oldSequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newSequence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsRotation.html#euler_change_sequence_bodyRotationFirst"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsRotation.euler_change_sequence_bodyRotationFirst" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the old sequence euler rotation angles, get euler rotation angles with
+the sequence of x-y-z.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>oldSequence: the old order of sequence of the euler rotation
+old_angles: three euler angles in the old rotation sequence
+newSequence: the new order of sequence of the euler rotation</p>
+</dd>
+<dt>Outputs:</dt><dd><p>eulerNew: the new euler angles with the new rotation sequence.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

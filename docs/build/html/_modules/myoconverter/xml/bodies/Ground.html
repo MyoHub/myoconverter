@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.bodies.Ground &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.bodies.Ground</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.bodies.Ground</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scipy.spatial.transform</span> <span class="kn">import</span> <span class="n">Rotation</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.parsers</span> <span class="kn">import</span> <span class="n">IParser</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">vec2str</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.bodies.utils</span> <span class="kn">import</span> <span class="n">get_rgba</span><span class="p">,</span> <span class="n">copy_mesh_file</span>
+
+
+<div class="viewcode-block" id="Ground"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/bodies/Ground/index.html#myoconverter.xml.bodies.Ground.Ground">[docs]</a><span class="k">class</span> <span class="nc">Ground</span><span class="p">(</span><span class="n">IParser</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; This is a special case of a Body &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Ground.parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/bodies/Ground/index.html#myoconverter.xml.bodies.Ground.Ground.parse">[docs]</a>  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">add_ground_geom</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="c1"># Set name of ground body in MuJoCo</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">M_GROUND</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+    <span class="c1"># We need to rotate the body by 90 degrees wrt x axis</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_euler</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="n">degrees</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">M_GROUND</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;euler&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec2str</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_euler</span><span class="p">(</span><span class="s2">&quot;XYZ&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Add a ground geom if so instructed</span>
+    <span class="k">if</span> <span class="n">add_ground_geom</span><span class="p">:</span>
+      <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_GROUND</span><span class="p">,</span> <span class="s2">&quot;geom&quot;</span><span class="p">,</span>
+                       <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ground-plane&quot;</span><span class="p">,</span>
+                       <span class="n">pos</span><span class="o">=</span><span class="s2">&quot;0 0 0&quot;</span><span class="p">,</span>
+                       <span class="n">euler</span><span class="o">=</span><span class="n">vec2str</span><span class="p">(</span><span class="n">rotation</span><span class="o">.</span><span class="n">inv</span><span class="p">()</span><span class="o">.</span><span class="n">as_euler</span><span class="p">(</span><span class="s2">&quot;XYZ&quot;</span><span class="p">)),</span>
+                       <span class="n">size</span><span class="o">=</span><span class="s2">&quot;10 10 0.125&quot;</span><span class="p">,</span>
+                       <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;plane&quot;</span><span class="p">,</span>
+                       <span class="n">rgba</span><span class="o">=</span><span class="s2">&quot;1.0 0.7 0.4 1.0&quot;</span><span class="p">,</span>
+                       <span class="n">condim</span><span class="o">=</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if there are one or multiple components</span>
+    <span class="k">if</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;components&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;components&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_component</span><span class="p">(</span><span class="n">component</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">parse_component</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+
+    <span class="c1"># Parse wrapping objects, if there are any</span>
+    <span class="n">cfg</span><span class="o">.</span><span class="n">WRAP_OBJECT_PARSER</span><span class="o">.</span><span class="n">parse_all</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;WrapObjectSet/objects&quot;</span><span class="p">),</span> <span class="n">m_body</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_GROUND</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Ground.parse_component"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/bodies/Ground/index.html#myoconverter.xml.bodies.Ground.Ground.parse_component">[docs]</a>  <span class="k">def</span> <span class="nf">parse_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+
+    <span class="c1"># Check if these need to be translated or rotated</span>
+    <span class="n">translation</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;translation&quot;</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="s2">&quot;0 0 0&quot;</span> <span class="k">if</span> <span class="n">translation</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">translation</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;orientation&quot;</span><span class="p">)</span>
+    <span class="n">euler</span> <span class="o">=</span> <span class="s2">&quot;0 0 0&quot;</span> <span class="k">if</span> <span class="n">orientation</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">orientation</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="c1"># Check if there are attached geometries</span>
+    <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">xml</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;attached_geometry/Mesh&quot;</span><span class="p">):</span>
+      <span class="n">mesh_name</span><span class="p">,</span> <span class="n">mesh_file</span> <span class="o">=</span> <span class="n">copy_mesh_file</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;mesh_file&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">GEOMETRY_FOLDER</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_GEOMETRY_FOLDER</span><span class="p">)</span>
+      <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_ASSET</span><span class="p">,</span> <span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+                       <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">mesh_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="n">file</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;Geometry&quot;</span><span class="p">,</span> <span class="n">mesh_file</span><span class="p">),</span>
+                       <span class="n">scale</span><span class="o">=</span><span class="n">mesh</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;scale_factors&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_GROUND</span><span class="p">,</span> <span class="s2">&quot;geom&quot;</span><span class="p">,</span>
+                       <span class="n">name</span><span class="o">=</span><span class="n">mesh</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                       <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;mesh&quot;</span><span class="p">,</span>
+                       <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span>
+                       <span class="n">euler</span><span class="o">=</span><span class="n">euler</span><span class="p">,</span>
+                       <span class="n">mesh</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mesh</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">mesh_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="n">rgba</span><span class="o">=</span><span class="n">get_rgba</span><span class="p">(</span><span class="n">mesh</span><span class="p">),</span>
+                       <span class="n">group</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

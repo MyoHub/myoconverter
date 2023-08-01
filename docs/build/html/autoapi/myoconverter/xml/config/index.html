@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.config &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.config</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../_sources/autoapi/myoconverter/xml/config/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-myoconverter.xml.config">
+<span id="myoconverter-xml-config"></span><h1><a class="reference internal" href="#module-myoconverter.xml.config" title="myoconverter.xml.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">myoconverter.xml.config</span></code></a><a class="headerlink" href="#module-myoconverter.xml.config" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.initialise" title="myoconverter.xml.config.initialise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialise</span></code></a>(xml_file, output_folder, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.OUTPUT_FOLDER" title="myoconverter.xml.config.OUTPUT_FOLDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OUTPUT_FOLDER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.GEOMETRY_FOLDER" title="myoconverter.xml.config.GEOMETRY_FOLDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GEOMETRY_FOLDER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.OUTPUT_GEOMETRY_FOLDER" title="myoconverter.xml.config.OUTPUT_GEOMETRY_FOLDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OUTPUT_GEOMETRY_FOLDER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.MODEL_NAME" title="myoconverter.xml.config.MODEL_NAME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MODEL_NAME</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.OUTPUT_XML_FILE" title="myoconverter.xml.config.OUTPUT_XML_FILE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OUTPUT_XML_FILE</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.OUTPUT_LOG_FILE" title="myoconverter.xml.config.OUTPUT_LOG_FILE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OUTPUT_LOG_FILE</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.OUTPUT_PLOT_FOLDER" title="myoconverter.xml.config.OUTPUT_PLOT_FOLDER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OUTPUT_PLOT_FOLDER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.ADD_GROUND_GEOM" title="myoconverter.xml.config.ADD_GROUND_GEOM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ADD_GROUND_GEOM</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.TREAT_AS_NORMAL_PATH_POINT" title="myoconverter.xml.config.TREAT_AS_NORMAL_PATH_POINT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TREAT_AS_NORMAL_PATH_POINT</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.OPENSIM" title="myoconverter.xml.config.OPENSIM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OPENSIM</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.O_GROUND" title="myoconverter.xml.config.O_GROUND"><code class="xref py py-obj docutils literal notranslate"><span class="pre">O_GROUND</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.O_BODYSET" title="myoconverter.xml.config.O_BODYSET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">O_BODYSET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.O_JOINTSET" title="myoconverter.xml.config.O_JOINTSET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">O_JOINTSET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.O_FORCESET" title="myoconverter.xml.config.O_FORCESET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">O_FORCESET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.O_CONSTRAINTSET" title="myoconverter.xml.config.O_CONSTRAINTSET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">O_CONSTRAINTSET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.MUJOCO" title="myoconverter.xml.config.MUJOCO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MUJOCO</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_WORLDBODY" title="myoconverter.xml.config.M_WORLDBODY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_WORLDBODY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_GROUND" title="myoconverter.xml.config.M_GROUND"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_GROUND</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_ASSET" title="myoconverter.xml.config.M_ASSET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_ASSET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_TENDON" title="myoconverter.xml.config.M_TENDON"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_TENDON</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_ACTUATOR" title="myoconverter.xml.config.M_ACTUATOR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_ACTUATOR</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_EQUALITY" title="myoconverter.xml.config.M_EQUALITY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_EQUALITY</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.M_CONTACT" title="myoconverter.xml.config.M_CONTACT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">M_CONTACT</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.BODY_PARSER" title="myoconverter.xml.config.BODY_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BODY_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.CONSTRAINT_PARSER" title="myoconverter.xml.config.CONSTRAINT_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CONSTRAINT_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.FORCE_PARSER" title="myoconverter.xml.config.FORCE_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FORCE_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.JOINT_PARSER" title="myoconverter.xml.config.JOINT_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JOINT_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.PATH_POINT_PARSER" title="myoconverter.xml.config.PATH_POINT_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PATH_POINT_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.PATH_WRAP_PARSER" title="myoconverter.xml.config.PATH_WRAP_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PATH_WRAP_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.PATH_WRAP_SET_PARSER" title="myoconverter.xml.config.PATH_WRAP_SET_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PATH_WRAP_SET_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#myoconverter.xml.config.WRAP_OBJECT_PARSER" title="myoconverter.xml.config.WRAP_OBJECT_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WRAP_OBJECT_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#myoconverter.xml.config.MARKER_PARSER" title="myoconverter.xml.config.MARKER_PARSER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MARKER_PARSER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OUTPUT_FOLDER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_FOLDER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OUTPUT_FOLDER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OUTPUT_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.GEOMETRY_FOLDER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">GEOMETRY_FOLDER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#GEOMETRY_FOLDER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.GEOMETRY_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OUTPUT_GEOMETRY_FOLDER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_GEOMETRY_FOLDER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OUTPUT_GEOMETRY_FOLDER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OUTPUT_GEOMETRY_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.MODEL_NAME">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">MODEL_NAME</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#MODEL_NAME"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.MODEL_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OUTPUT_XML_FILE">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_XML_FILE</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OUTPUT_XML_FILE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OUTPUT_XML_FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OUTPUT_LOG_FILE">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_LOG_FILE</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OUTPUT_LOG_FILE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OUTPUT_LOG_FILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OUTPUT_PLOT_FOLDER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OUTPUT_PLOT_FOLDER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OUTPUT_PLOT_FOLDER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OUTPUT_PLOT_FOLDER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.ADD_GROUND_GEOM">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">ADD_GROUND_GEOM</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#ADD_GROUND_GEOM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.ADD_GROUND_GEOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.TREAT_AS_NORMAL_PATH_POINT">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">TREAT_AS_NORMAL_PATH_POINT</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#TREAT_AS_NORMAL_PATH_POINT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.TREAT_AS_NORMAL_PATH_POINT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.OPENSIM">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">OPENSIM</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#OPENSIM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.OPENSIM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.O_GROUND">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">O_GROUND</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#O_GROUND"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.O_GROUND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.O_BODYSET">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">O_BODYSET</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#O_BODYSET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.O_BODYSET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.O_JOINTSET">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">O_JOINTSET</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#O_JOINTSET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.O_JOINTSET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.O_FORCESET">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">O_FORCESET</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#O_FORCESET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.O_FORCESET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.O_CONSTRAINTSET">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">O_CONSTRAINTSET</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#O_CONSTRAINTSET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.O_CONSTRAINTSET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.MUJOCO">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">MUJOCO</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#MUJOCO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.MUJOCO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_WORLDBODY">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_WORLDBODY</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_WORLDBODY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_WORLDBODY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_GROUND">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_GROUND</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_GROUND"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_GROUND" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_ASSET">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_ASSET</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_ASSET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_ASSET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_TENDON">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_TENDON</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_TENDON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_TENDON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_ACTUATOR">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_ACTUATOR</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_ACTUATOR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_ACTUATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_EQUALITY">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_EQUALITY</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_EQUALITY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_EQUALITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.M_CONTACT">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">M_CONTACT</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#M_CONTACT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.M_CONTACT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.BODY_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">BODY_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#BODY_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.BODY_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.CONSTRAINT_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">CONSTRAINT_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#CONSTRAINT_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.CONSTRAINT_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.FORCE_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">FORCE_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#FORCE_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.FORCE_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.JOINT_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">JOINT_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#JOINT_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.JOINT_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.PATH_POINT_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">PATH_POINT_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#PATH_POINT_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.PATH_POINT_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.PATH_WRAP_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">PATH_WRAP_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#PATH_WRAP_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.PATH_WRAP_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.PATH_WRAP_SET_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">PATH_WRAP_SET_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#PATH_WRAP_SET_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.PATH_WRAP_SET_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.WRAP_OBJECT_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">WRAP_OBJECT_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#WRAP_OBJECT_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.WRAP_OBJECT_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="myoconverter.xml.config.MARKER_PARSER">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">MARKER_PARSER</span></span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#MARKER_PARSER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.MARKER_PARSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="myoconverter.xml.config.initialise">
+<span class="sig-prename descclassname"><span class="pre">myoconverter.xml.config.</span></span><span class="sig-name descname"><span class="pre">initialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/myoconverter/xml/config.html#initialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#myoconverter.xml.config.initialise" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

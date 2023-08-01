@@ -1,0 +1,189 @@
+:py:mod:`myoconverter.xml.config`
+=================================
+
+.. py:module:: myoconverter.xml.config
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.config.initialise
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.config.OUTPUT_FOLDER
+   myoconverter.xml.config.GEOMETRY_FOLDER
+   myoconverter.xml.config.OUTPUT_GEOMETRY_FOLDER
+   myoconverter.xml.config.MODEL_NAME
+   myoconverter.xml.config.OUTPUT_XML_FILE
+   myoconverter.xml.config.OUTPUT_LOG_FILE
+   myoconverter.xml.config.OUTPUT_PLOT_FOLDER
+   myoconverter.xml.config.ADD_GROUND_GEOM
+   myoconverter.xml.config.TREAT_AS_NORMAL_PATH_POINT
+   myoconverter.xml.config.OPENSIM
+   myoconverter.xml.config.O_GROUND
+   myoconverter.xml.config.O_BODYSET
+   myoconverter.xml.config.O_JOINTSET
+   myoconverter.xml.config.O_FORCESET
+   myoconverter.xml.config.O_CONSTRAINTSET
+   myoconverter.xml.config.MUJOCO
+   myoconverter.xml.config.M_WORLDBODY
+   myoconverter.xml.config.M_GROUND
+   myoconverter.xml.config.M_ASSET
+   myoconverter.xml.config.M_TENDON
+   myoconverter.xml.config.M_ACTUATOR
+   myoconverter.xml.config.M_EQUALITY
+   myoconverter.xml.config.M_CONTACT
+   myoconverter.xml.config.BODY_PARSER
+   myoconverter.xml.config.CONSTRAINT_PARSER
+   myoconverter.xml.config.FORCE_PARSER
+   myoconverter.xml.config.JOINT_PARSER
+   myoconverter.xml.config.PATH_POINT_PARSER
+   myoconverter.xml.config.PATH_WRAP_PARSER
+   myoconverter.xml.config.PATH_WRAP_SET_PARSER
+   myoconverter.xml.config.WRAP_OBJECT_PARSER
+   myoconverter.xml.config.MARKER_PARSER
+
+
+.. py:data:: OUTPUT_FOLDER
+
+   
+
+.. py:data:: GEOMETRY_FOLDER
+
+   
+
+.. py:data:: OUTPUT_GEOMETRY_FOLDER
+
+   
+
+.. py:data:: MODEL_NAME
+
+   
+
+.. py:data:: OUTPUT_XML_FILE
+
+   
+
+.. py:data:: OUTPUT_LOG_FILE
+
+   
+
+.. py:data:: OUTPUT_PLOT_FOLDER
+
+   
+
+.. py:data:: ADD_GROUND_GEOM
+
+   
+
+.. py:data:: TREAT_AS_NORMAL_PATH_POINT
+
+   
+
+.. py:data:: OPENSIM
+
+   
+
+.. py:data:: O_GROUND
+
+   
+
+.. py:data:: O_BODYSET
+
+   
+
+.. py:data:: O_JOINTSET
+
+   
+
+.. py:data:: O_FORCESET
+
+   
+
+.. py:data:: O_CONSTRAINTSET
+
+   
+
+.. py:data:: MUJOCO
+
+   
+
+.. py:data:: M_WORLDBODY
+
+   
+
+.. py:data:: M_GROUND
+
+   
+
+.. py:data:: M_ASSET
+
+   
+
+.. py:data:: M_TENDON
+
+   
+
+.. py:data:: M_ACTUATOR
+
+   
+
+.. py:data:: M_EQUALITY
+
+   
+
+.. py:data:: M_CONTACT
+
+   
+
+.. py:data:: BODY_PARSER
+
+   
+
+.. py:data:: CONSTRAINT_PARSER
+
+   
+
+.. py:data:: FORCE_PARSER
+
+   
+
+.. py:data:: JOINT_PARSER
+
+   
+
+.. py:data:: PATH_POINT_PARSER
+
+   
+
+.. py:data:: PATH_WRAP_PARSER
+
+   
+
+.. py:data:: PATH_WRAP_SET_PARSER
+
+   
+
+.. py:data:: WRAP_OBJECT_PARSER
+
+   
+
+.. py:data:: MARKER_PARSER
+
+   
+
+.. py:function:: initialise(xml_file, output_folder, **kwargs)
+
+

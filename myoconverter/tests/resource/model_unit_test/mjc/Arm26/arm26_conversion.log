@@ -1,0 +1,10 @@
+2023-07-03 13:48:15.852 | INFO     | myoconverter.O2MPipeline:O2MPipeline:46 - Start the conversion pipeline for : arm26
+2023-07-03 13:48:15.852 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:69 - Coordinate the input configurations, remove conflicts.
+2023-07-03 13:48:15.852 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:80 -    Checking configurations for step 2 conversion.
+2023-07-03 13:48:15.852 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:97 -        All good now.
+2023-07-03 13:48:15.853 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:114 -    Checking configurations for step 3 conversion.
+2023-07-03 13:48:15.853 | INFO     | myoconverter.O2MPipeline:coordinate_kwargs:131 -        All good now.
+2023-07-03 13:48:15.853 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:84 - Given OpenSim model file: ./myoconverter/tests/resource/model_unit_test/osim/Arm26/arm26.osim
+2023-07-03 13:48:15.853 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:85 - Reading mesh files from folder ./myoconverter/tests/resource/model_unit_test/osim/Arm26/Geometry
+2023-07-03 13:48:15.853 | INFO     | myoconverter.conversion_steps.O2MSteps:__init__:86 - Converted model will be saved in folder ./myoconverter/tests/resource/model_unit_test/mjc/Arm26
+2023-07-03 13:48:15.853 | INFO     | myoconverter.conversion_steps.O2MSteps:PipelineExecution:124 - Started step 1 conversion - cvt1.

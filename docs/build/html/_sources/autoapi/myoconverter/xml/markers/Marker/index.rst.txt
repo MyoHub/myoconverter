@@ -1,0 +1,29 @@
+:py:mod:`myoconverter.xml.markers.Marker`
+=========================================
+
+.. py:module:: myoconverter.xml.markers.Marker
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.markers.Marker.Marker
+
+
+
+
+.. py:class:: Marker
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+

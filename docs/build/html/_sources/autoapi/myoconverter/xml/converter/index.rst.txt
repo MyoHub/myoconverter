@@ -1,0 +1,71 @@
+:py:mod:`myoconverter.xml.converter`
+====================================
+
+.. py:module:: myoconverter.xml.converter
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.converter.convert
+   myoconverter.xml.converter.parse_bodies_and_joints
+   myoconverter.xml.converter.add_bodies_and_joints
+   myoconverter.xml.converter.parse_ground
+   myoconverter.xml.converter.parse_constraints
+   myoconverter.xml.converter.parse_forces
+   myoconverter.xml.converter.parse_markers
+   myoconverter.xml.converter.set_keyframe
+   myoconverter.xml.converter.copy_credits
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.converter.argparser
+
+
+.. py:function:: convert(xml_file, output_folder, **kwargs)
+
+   :param xml_file: Path to the OpenSim XML model file
+   :param output_folder: Path to folder where converted model is saved
+   :param kwargs: geometry_folder, add_ground_geom, treat_as_normal_path_point
+   :return:
+
+
+.. py:function:: parse_bodies_and_joints()
+
+
+.. py:function:: add_bodies_and_joints(parent_name, current_body, root_body=False)
+
+
+.. py:function:: parse_ground()
+
+
+.. py:function:: parse_constraints()
+
+
+.. py:function:: parse_forces()
+
+
+.. py:function:: parse_markers()
+
+
+.. py:function:: set_keyframe()
+
+
+.. py:function:: copy_credits()
+
+
+.. py:data:: argparser
+
+   
+

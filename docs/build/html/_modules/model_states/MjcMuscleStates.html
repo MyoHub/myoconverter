@@ -1,0 +1,486 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>model_states.MjcMuscleStates &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>model_states.MjcMuscleStates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for model_states.MjcMuscleStates</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sun Feb 20 21:43:21 2022</span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../utils&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">myoconverter.opt.utils.UtilsMujoco</span> <span class="kn">import</span> <span class="n">computeMomentArmMusclesJoints</span><span class="p">,</span> <span class="n">getMuscleForceLengthCurvesSim</span>
+        
+
+<div class="viewcode-block" id="MjcMuscleStates"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates">[docs]</a><span class="k">class</span> <span class="nc">MjcMuscleStates</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A class to extract the muscle states (moment arms and force properites)</span>
+<span class="sd">        of the given Mujoco model</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+             
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjc_model</span><span class="p">,</span> <span class="n">wrapping_coordinate</span><span class="p">,</span> <span class="n">muscle_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        mjc_model: loaded mujoco model</span>
+<span class="sd">        wrapping_coordinate: the wrapping coordinates from OpenSim model is </span>
+<span class="sd">                             needed here. Assume it will change for mjc model</span>
+<span class="sd">                             due to the direct geometry translation.</span>
+<span class="sd">        muscle_list: specified muscles whose states will be extracted. if None,</span>
+<span class="sd">                     then all muscles inside the mjc model will be calculated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># initilize the input osim model and muscle list as the global variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span> <span class="o">=</span> <span class="n">mjc_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="n">wrapping_coordinate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="n">muscle_list</span>
+        
+        <span class="c1"># dictionary for storing calculated moment arms and force properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        
+        
+<div class="viewcode-block" id="MjcMuscleStates.reset"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># reset all calculated variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+        
+        
+    <span class="c1"># get the wrapping coordinate of the given muscle list</span>
+<div class="viewcode-block" id="MjcMuscleStates.getWrapingCoords"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates.getWrapingCoords">[docs]</a>    <span class="k">def</span> <span class="nf">getWrapingCoords</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This information will directly take the result from Osim model, </span>
+<span class="sd">        from given input. </span>
+<span class="sd">        </span>
+<span class="sd">        In mjc models, muscles are treated as one type of actuators (type 3), </span>
+<span class="sd">        there are several other type of actuators. Here we only look at the </span>
+<span class="sd">        muscle actuators.</span>
+<span class="sd">        </span>
+<span class="sd">        For a given muscle list, outputs of this function is a dictionary:</span>
+<span class="sd">            </span>
+<span class="sd">            Keywords  ||  list of coordinates</span>
+<span class="sd">            muscle 1: coordinate 1, coordinate 2</span>
+<span class="sd">                      coordinate 3,</span>
+<span class="sd">                      </span>
+<span class="sd">            muscle 2: coordinate 1</span>
+<span class="sd">                      coordinate 3, coordinate 4</span>
+<span class="sd">                      coordinate 5, coordinate 6,</span>
+<span class="sd">                      </span>
+<span class="sd">            ...     </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+
+
+        <span class="c1"># if muscle list is not provided, then explore all muscles that included</span>
+        <span class="c1"># in the MuJoCo model.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+            <span class="c1"># update the global muscle list variable with all muscle names inside</span>
+            <span class="c1"># the mjc model, only the type of muscle actuator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">actuator_names</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> \
+                                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">actuator_trntype</span><span class="p">)</span>\
+                                <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">3</span><span class="p">]</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if the muscle list is provided, check if they are included in the mjc model</span>
+            <span class="n">mjc_muscle_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">actuator_names</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">muscle</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mjc_muscle_list</span><span class="p">:</span>
+                    <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;The provided muscle &#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39; is not included in the mjc model&#39;</span><span class="p">)</span>
+
+        <span class="c1"># check if the provided or extracted mjc muscle list be covered by the</span>
+        <span class="c1"># wrapping_coordinates that extracted from the opensim model</span>
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">muscle_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">muscle</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;The muscle &#39;</span> <span class="o">+</span> <span class="n">muscle</span> <span class="o">+</span> <span class="s1">&#39; is not included in the provided wrapping_coordinate&#39;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapping_coordinate</span></div>
+    
+    <span class="c1"># getting all coordinate ranges that wrapped by muscles</span>
+<div class="viewcode-block" id="MjcMuscleStates.getCoordRanges"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates.getCoordRanges">[docs]</a>    <span class="k">def</span> <span class="nf">getCoordRanges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the motion ranges of given coordinates in an mjc model.</span>
+<span class="sd">        </span>
+<span class="sd">        Outputs of this function is a dictionary with the coordinate names as </span>
+<span class="sd">        keywords</span>
+<span class="sd">        </span>
+<span class="sd">               Keywords  ||   list</span>
+<span class="sd">            </span>
+<span class="sd">            coordinate 1:  [lower bound, upper bound]</span>
+<span class="sd">            coordinate 2:  [lower bound, upper bound]</span>
+<span class="sd">            coordinate 3:  [lower bound, upper bound]</span>
+<span class="sd">            ...</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Extract joint motion range from Mjc model&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinate_range</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="n">jnt_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">joint_names</span>
+        <span class="n">jnt_ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="o">.</span><span class="n">jnt_range</span>
+            
+        <span class="c1"># go through a for loop of each joint to to formulate a dictionary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinate_range</span> <span class="o">=</span> <span class="p">{</span><span class="n">jnt_names</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">jnt_range</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">jnt_range</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jnt_ranges</span><span class="p">)}</span>
+                    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate_range</span></div>
+    
+<div class="viewcode-block" id="MjcMuscleStates.getMomentArms"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates.getMomentArms">[docs]</a>    <span class="k">def</span> <span class="nf">getMomentArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">coordinate_range</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">evalN</span> <span class="o">=</span> <span class="mi">7</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        calcualte moment arms of a muscle at different coordinates it wrapped.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wrapping_coordinate : dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the muscles list and their</span>
+<span class="sd">            wrapping coordinates. If not provide, will calculate from the above</span>
+<span class="sd">            getWrapingCoord function.</span>
+<span class="sd">            </span>
+<span class="sd">        coordinate_range: dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the motion ranges of the</span>
+<span class="sd">            joint lists that been wrapped by the muscles. if not provided,</span>
+<span class="sd">            generate from the above getWrapingCoord function.</span>
+<span class="sd">            </span>
+<span class="sd">        evalN: integer</span>
+<span class="sd">        DESCRIPTION: Number of nodes to evalute in between the coordinate range, default value 7.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.moment_arms: dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the moment arms that were</span>
+<span class="sd">            calculated from the opensim model with the given inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculate moment arms from Mjc model&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">wrapping_coordinate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if not provided, generate it</span>
+            <span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getWrapingCoords</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">coordinate_range</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if not provided, generate it</span>
+            <span class="n">coordinate_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCoordRanges</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="n">wrapping_coordinate</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>   <span class="c1"># run through all muscles</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">muscle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+            <span class="n">muscle_moment_arms</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">joints</span> <span class="ow">in</span> <span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">muscle</span><span class="p">]:</span>  <span class="c1"># run through all joints</span>
+                
+                <span class="n">motion_range</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>  <span class="c1"># extract the motion range</span>
+                
+                    <span class="c1"># setup the maximum mesh points depends on the number of </span>
+                    <span class="c1"># joint coupling together, otherwise it will take too long to</span>
+                    <span class="c1"># compute them!</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">25</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">11</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">joints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">7</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">evalN</span> <span class="o">=</span> <span class="mi">5</span>
+
+                    <span class="n">motion_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coordinate_range</span><span class="p">[</span><span class="n">joint</span><span class="p">])</span>
+                
+                <span class="c1"># calculate moment arms for this muscle and joints</span>
+                <span class="c1"># and save it to a list</span>
+                
+                <span class="n">muscle_moment_arms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">computeMomentArmMusclesJoints</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">,</span>\
+                                                                 <span class="n">muscle</span><span class="p">,</span> <span class="n">joints</span><span class="p">,</span>\
+                                                                 <span class="n">motion_range</span><span class="p">,</span> <span class="n">evalN</span><span class="p">))</span>
+                    
+            <span class="c1"># save the moment arms of the muscle into a dictionary</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span><span class="p">[</span><span class="n">muscle</span><span class="p">]</span><span class="o">=</span> <span class="n">muscle_moment_arms</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">moment_arms</span></div>
+    
+<div class="viewcode-block" id="MjcMuscleStates.getMuscleForceMaps"><a class="viewcode-back" href="../../autoapi/model_states/MjcMuscleStates/index.html#model_states.MjcMuscleStates.MjcMuscleStates.getMuscleForceMaps">[docs]</a>    <span class="k">def</span> <span class="nf">getMuscleForceMaps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">osim_force_maps</span><span class="p">,</span> <span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">coordinate_range</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">evalN</span> <span class="o">=</span> <span class="mi">11</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the muscle force maps from MuJoCo models. Strongly suggest to run </span>
+<span class="sd">        this step after optimizing the moment arms. This force length maps are </span>
+<span class="sd">        using the same joint angle vectors that been used in OpenSim model when</span>
+<span class="sd">        force maps were extracted. If there are large moment arm differences, </span>
+<span class="sd">        the muscle lengths will be very different, then comparison between the</span>
+<span class="sd">        OpenSim and MuJoCo muscle force maps are not vaildate any more.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        osim_force_maps: dictionary</span>
+<span class="sd">            DESCRIPTION: the force maps exracted from OpenSim model.</span>
+<span class="sd">            </span>
+<span class="sd">        wrapping_coordinate : dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the muscles list and their</span>
+<span class="sd">            wrapping coordinates. If not provide, will calculate from the above</span>
+<span class="sd">            getWrapingCoord function.</span>
+<span class="sd">            </span>
+<span class="sd">        coordinate_range: dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the motion ranges of the</span>
+<span class="sd">            joint lists that been wrapped by the muscles. if not provided,</span>
+<span class="sd">            generate from the above getWrapingCoord function.</span>
+<span class="sd">            </span>
+<span class="sd">        evalN: integer</span>
+<span class="sd">        DESCRIPTION: Number of nodes to evalute in between the coordinate range, default value 11.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self.force_maps: dictionary</span>
+<span class="sd">            DESCRIPTION: the dictionary that contains the muscle force maps that were</span>
+<span class="sd">            calculated from the opensim model with the given inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculate muscle force curves from Mjc model&quot;</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="n">wrapping_coordinate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if not provided, generate it</span>
+            <span class="n">wrapping_coordinate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getWrapingCoords</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">coordinate_range</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if not provided, generate it</span>
+            <span class="n">coordinate_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCoordRanges</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">force_maps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">muscle</span> <span class="ow">in</span> <span class="n">osim_force_maps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>   <span class="c1"># run through each muscle</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Muscle: </span><span class="si">{</span><span class="n">muscle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+            <span class="c1"># get a list of muscle lengths from minimal to maximum and the corresponding</span>
+            <span class="c1"># joint angle list</span>
+            <span class="n">force_map</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="n">jit_list_set</span> <span class="o">=</span> <span class="n">osim_force_maps</span><span class="p">[</span><span class="n">muscle</span><span class="p">][</span><span class="s1">&#39;jit_list_set&#39;</span><span class="p">]</span>
+            
+            <span class="n">motion_range</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">joints_uniq</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">joints</span> <span class="ow">in</span> <span class="n">wrapping_coordinate</span><span class="p">[</span><span class="n">muscle</span><span class="p">]:</span>  <span class="c1"># run through all joints</span>
+                <span class="k">for</span> <span class="n">joint</span> <span class="ow">in</span> <span class="n">joints</span><span class="p">:</span>  <span class="c1"># extract the motion range</span>
+                    <span class="k">if</span> <span class="n">joint</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">joints_uniq</span><span class="p">:</span>  <span class="c1"># only go through the unique joint coordinates</span>
+                        <span class="n">joints_uniq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+                        <span class="n">motion_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coordinate_range</span><span class="p">[</span><span class="n">joint</span><span class="p">])</span>
+
+            <span class="c1"># set the muscle activation shift from 0 to 1</span>
+            <span class="n">act_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                
+            <span class="c1"># get muscle tendon force,  and active/passive forces</span>
+            <span class="n">mtu_force_length</span><span class="p">,</span> <span class="n">mtu_len_set</span> <span class="o">=</span> \
+                <span class="n">getMuscleForceLengthCurvesSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjc_model</span><span class="p">,</span> <span class="n">muscle</span><span class="p">,</span> <span class="n">joints_uniq</span><span class="p">,</span> 
+                                   <span class="n">jit_list_set</span><span class="p">,</span> <span class="n">act_list</span><span class="p">)</span>
+                
+
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;mtu_len_set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu_len_set</span>
+            <span class="n">force_map</span><span class="p">[</span><span class="s1">&#39;mtu_force_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mtu_force_length</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">force_maps</span><span class="p">[</span><span class="n">muscle</span><span class="p">]</span> <span class="o">=</span> <span class="n">force_map</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">force_maps</span></div></div>
+    
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

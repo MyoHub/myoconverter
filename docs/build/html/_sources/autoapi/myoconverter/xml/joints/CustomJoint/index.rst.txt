@@ -1,0 +1,36 @@
+:py:mod:`myoconverter.xml.joints.CustomJoint`
+=============================================
+
+.. py:module:: myoconverter.xml.joints.CustomJoint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.joints.CustomJoint.CustomJoint
+
+
+
+
+.. py:class:: CustomJoint
+
+   Bases: :py:obj:`myoconverter.xml.joints.Joint.Joint`
+
+   A CustomJoint in OpenSim can represent any type of a joint through 3 translational and 3 rotational degrees
+   of freedom. 
+
+   .. py:method:: _parse(xml, socket_parent_frame, socket_child_frame, pointer)
+
+      Try to parse this given CustomJoint into a set of MuJoCo joints (1-6 depending on how many non-zero non-constant
+      joints there are)
+
+
+   .. py:method:: designate_dof(t, params, coordinate)
+
+
+

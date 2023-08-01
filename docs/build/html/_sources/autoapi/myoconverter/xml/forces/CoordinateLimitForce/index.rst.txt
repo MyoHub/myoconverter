@@ -1,0 +1,35 @@
+:py:mod:`myoconverter.xml.forces.CoordinateLimitForce`
+======================================================
+
+.. py:module:: myoconverter.xml.forces.CoordinateLimitForce
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.forces.CoordinateLimitForce.CoordinateLimitForce
+
+
+
+
+.. py:class:: CoordinateLimitForce
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   CoordinateLimitForce parser has not been implemented. These forces probably should be optimized after the
+   conversion process. I'll leave the old conversion code (from O2MConverter) here for reference, but it is not entirely correct,
+   and would require further development.
+
+   Another option to implementing CoordinateLimitForces might be to use MuJoCo tendons, with suitably chosen
+   springlengths. The issue with this approach is that there might be multiple tendons for each DoF; would also need
+   optimization after conversion process. 
+
+   .. py:method:: parse(xml, **kwargs)
+
+
+

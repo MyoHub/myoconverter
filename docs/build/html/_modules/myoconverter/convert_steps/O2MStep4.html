@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.convert_steps.O2MStep4 &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> MyoConverter
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Optimized Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Conversion Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.convert_steps.O2MStep4</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.convert_steps.O2MStep4</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sat May 14 21:27:00 2022</span>
+
+<span class="sd">mapping site side location and muscle parameters from one side muscle to the</span>
+<span class="sd">other side.</span>
+
+<span class="sd">Assume the bone geometry and muscle paths are already converted and identical </span>
+<span class="sd">from one side to the other. </span>
+
+<span class="sd">@author: hwang</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">mujoco_py</span> 
+
+<div class="viewcode-block" id="SymmetricMapping"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep4/index.html#myoconverter.convert_steps.O2MStep4.SymmetricMapping">[docs]</a><span class="k">class</span> <span class="nc">SymmetricMapping</span><span class="p">():</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mjc_model_file</span><span class="p">,</span> <span class="n">ref_side</span><span class="p">,</span> <span class="n">tar_side</span><span class="p">,</span> <span class="n">symm_axis</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_file</span> <span class="o">=</span> <span class="n">mjc_model_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">load_model_from_path</span><span class="p">(</span><span class="n">mjc_model_file</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ref_side</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;&quot;ref_side&quot; is request to use the symmertic mapping function ..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tar_side</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;&quot;tar_side&quot; is request to use the symmertic mapping function ..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">symm_axis</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;&quot;symm_axis&quot; is request to use the symmertic mapping function ..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">=</span> <span class="n">ref_side</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tar_side</span> <span class="o">=</span> <span class="n">tar_side</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">=</span> <span class="n">symm_axis</span>
+        
+ 
+<div class="viewcode-block" id="SymmetricMapping.wrapper_match"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep4/index.html#myoconverter.convert_steps.O2MStep4.SymmetricMapping.wrapper_match">[docs]</a>    <span class="k">def</span> <span class="nf">wrapper_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">######### first matching the location of wrapping objects  ############</span>
+        
+        <span class="c1"># find all wrapping object names</span>
+        <span class="n">wrapNames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">geoName</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;_wrap&#39;</span> <span class="ow">in</span> <span class="n">geoName</span><span class="p">:</span>
+                <span class="n">wrapNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geoName</span><span class="p">)</span>
+                
+        <span class="c1"># extract reference wrapping object names</span>
+        <span class="n">refWraps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">geoName</span> <span class="ow">in</span> <span class="n">wrapNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">geoName</span><span class="p">:</span>
+                <span class="n">refWraps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geoName</span><span class="p">)</span>
+                
+        <span class="c1"># extract target wrapping object names</span>
+        <span class="n">tarWraps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">geoName</span> <span class="ow">in</span> <span class="n">wrapNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tar_side</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">geoName</span><span class="p">:</span>
+                <span class="n">tarWraps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geoName</span><span class="p">)</span>
+                
+        <span class="c1"># run through each wrapping object, to match the location</span>
+        <span class="k">for</span> <span class="n">refWrap</span> <span class="ow">in</span> <span class="n">refWraps</span><span class="p">:</span>
+            <span class="n">commWrapName</span> <span class="o">=</span> <span class="n">refWrap</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">refWrap</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">))]</span>
+            
+            <span class="k">for</span> <span class="n">tarWrap</span> <span class="ow">in</span> <span class="n">tarWraps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">commWrapName</span> <span class="ow">in</span> <span class="n">tarWrap</span><span class="p">:</span>
+                    <span class="n">refWrapId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_name2id</span><span class="p">(</span><span class="n">refWrap</span><span class="p">)</span>
+                    <span class="n">tarWrapId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_name2id</span><span class="p">(</span><span class="n">tarWrap</span><span class="p">)</span>
+                    
+                    <span class="n">refWrapPos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">refWrapId</span><span class="p">]</span>
+                    <span class="n">tarWrapPos</span> <span class="o">=</span> <span class="n">refWrapPos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+                        <span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                        <span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span>
+                        <span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarWrapPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;Not understandable symmetric axis ..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                        
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">geom_pos</span><span class="p">[</span><span class="n">tarWrapId</span><span class="p">]</span> <span class="o">=</span> <span class="n">tarWrapPos</span></div>
+                    
+        <span class="c1">#######################################################################</span>
+
+<div class="viewcode-block" id="SymmetricMapping.site_side_match"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep4/index.html#myoconverter.convert_steps.O2MStep4.SymmetricMapping.site_side_match">[docs]</a>    <span class="k">def</span> <span class="nf">site_side_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">############ second matching the location of site sides  ##############</span>
+        
+        <span class="c1"># find all site sides names</span>
+        <span class="n">siteNames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">siteName</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;_site&#39;</span> <span class="ow">in</span> <span class="n">siteName</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;_side&#39;</span> <span class="ow">in</span> <span class="n">siteName</span><span class="p">):</span>
+                <span class="n">siteNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">siteName</span><span class="p">)</span>
+                
+        <span class="c1"># extract reference site side names</span>
+        <span class="n">refSites</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">siteName</span> <span class="ow">in</span> <span class="n">siteNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">siteName</span><span class="p">:</span>
+                <span class="n">refSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">siteName</span><span class="p">)</span>
+                
+        <span class="c1"># extract target site side names</span>
+        <span class="n">tarSites</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">siteName</span> <span class="ow">in</span> <span class="n">siteNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tar_side</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">siteName</span><span class="p">:</span>
+                <span class="n">tarSites</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">siteName</span><span class="p">)</span>
+                
+        <span class="c1"># run through each site side object, to match the location</span>
+        <span class="k">for</span> <span class="n">refSite</span> <span class="ow">in</span> <span class="n">refSites</span><span class="p">:</span>
+            <span class="n">commSiteName</span> <span class="o">=</span> <span class="n">refSite</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">refSite</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">+</span> <span class="s2">&quot;_site&quot;</span><span class="p">))]</span>
+            <span class="n">commMuscleName</span> <span class="o">=</span> <span class="n">refSite</span><span class="p">[</span><span class="n">refSite</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;_site_&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span><span class="p">:</span> <span class="n">refSite</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="o">+</span> <span class="s2">&quot;_side&quot;</span><span class="p">))]</span>
+            
+            <span class="k">for</span> <span class="n">tarSite</span> <span class="ow">in</span> <span class="n">tarSites</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">commSiteName</span> <span class="ow">in</span> <span class="n">tarSite</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">commMuscleName</span> <span class="ow">in</span> <span class="n">tarSite</span><span class="p">):</span>
+                    
+                    <span class="n">refSiteId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_name2id</span><span class="p">(</span><span class="n">refSite</span><span class="p">)</span>
+                    <span class="n">tarSiteId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_name2id</span><span class="p">(</span><span class="n">tarSite</span><span class="p">)</span>
+                    
+                    <span class="n">refSitePos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">refSiteId</span><span class="p">]</span>
+                    <span class="n">tarSitePos</span> <span class="o">=</span> <span class="n">refSitePos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+                        <span class="n">tarSitePos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarSitePos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                        <span class="n">tarSitePos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarSitePos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">symm_axis</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span>
+                        <span class="n">tarSitePos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">tarSitePos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span><span class="p">(</span><span class="s1">&#39;Not understandable symmetric axis ..</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                        
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">site_pos</span><span class="p">[</span><span class="n">tarSiteId</span><span class="p">]</span> <span class="o">=</span> <span class="n">tarSitePos</span></div>
+        
+        <span class="c1">##############################################################################</span>
+
+<div class="viewcode-block" id="SymmetricMapping.muscle_match"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep4/index.html#myoconverter.convert_steps.O2MStep4.SymmetricMapping.muscle_match">[docs]</a>    <span class="k">def</span> <span class="nf">muscle_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1">################# third matching the muscle parameters  ################</span>
+        
+        <span class="c1"># find all muscle names</span>
+        <span class="n">muscNames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">actuName</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_trntype</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_name2id</span><span class="p">(</span><span class="n">actuName</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">muscNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actuName</span><span class="p">)</span>
+                
+        <span class="c1"># extract reference muscle names</span>
+        <span class="n">refMuscs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">muscName</span> <span class="ow">in</span> <span class="n">muscNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span> <span class="ow">in</span> <span class="n">muscName</span><span class="p">:</span>
+                <span class="n">refMuscs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">muscName</span><span class="p">)</span>
+                
+        <span class="c1"># extract target muscle names</span>
+        <span class="n">tarMuscs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">muscName</span> <span class="ow">in</span> <span class="n">muscNames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tar_side</span> <span class="ow">in</span> <span class="n">muscName</span><span class="p">:</span>
+                <span class="n">tarMuscs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">muscName</span><span class="p">)</span>
+                
+        <span class="c1"># run through each muscle, to match the location</span>
+        <span class="k">for</span> <span class="n">refMusc</span> <span class="ow">in</span> <span class="n">refMuscs</span><span class="p">:</span>
+            <span class="n">commMuscName</span> <span class="o">=</span> <span class="n">refMusc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">refMusc</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref_side</span><span class="p">)]</span>
+            
+            <span class="k">for</span> <span class="n">tarMusc</span> <span class="ow">in</span> <span class="n">tarMuscs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">commMuscName</span> <span class="ow">in</span> <span class="n">tarMusc</span><span class="p">:</span>
+                    
+                    <span class="n">refMuscId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_name2id</span><span class="p">(</span><span class="n">refMusc</span><span class="p">)</span>
+                    <span class="n">tarMuscId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_name2id</span><span class="p">(</span><span class="n">tarMusc</span><span class="p">)</span>
+                    
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_lengthrange</span><span class="p">[</span><span class="n">tarMuscId</span><span class="p">]</span> <span class="o">=</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_lengthrange</span><span class="p">[</span><span class="n">refMuscId</span><span class="p">]</span>
+                        
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">tarMuscId</span><span class="p">]</span> <span class="o">=</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_biasprm</span><span class="p">[</span><span class="n">refMuscId</span><span class="p">]</span>
+                        
+                    <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">tarMuscId</span><span class="p">]</span> <span class="o">=</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="o">.</span><span class="n">actuator_gainprm</span><span class="p">[</span><span class="n">refMuscId</span><span class="p">]</span></div>
+                        
+                        
+<div class="viewcode-block" id="SymmetricMapping.model_save"><a class="viewcode-back" href="../../../autoapi/myoconverter/convert_steps/O2MStep4/index.html#myoconverter.convert_steps.O2MStep4.SymmetricMapping.model_save">[docs]</a>    <span class="k">def</span> <span class="nf">model_save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="c1"># save the updated model</span>
+        <span class="n">mujocoModelSim</span> <span class="o">=</span> <span class="n">mujoco_py</span><span class="o">.</span><span class="n">MjSim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mjcModel</span><span class="p">)</span>
+        
+        <span class="n">cvt4_model_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mjc_model_file</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;Cvt4.xml&#39;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cvt4_model_path</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">xml_file</span><span class="p">:</span>
+            <span class="n">mujocoModelSim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_file</span><span class="p">)</span></div></div>
+            
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Copyright © 2022 Meta Platforms, Inc.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

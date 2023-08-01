@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>tests.Test_MuscleState &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.Test_MuscleState</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/tests/Test_MuscleState/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-tests.Test_MuscleState">
+<span id="tests-test-musclestate"></span><h1><a class="reference internal" href="#module-tests.Test_MuscleState" title="tests.Test_MuscleState"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.Test_MuscleState</span></code></a><a class="headerlink" href="#module-tests.Test_MuscleState" title="Permalink to this headline">¶</a></h1>
+<p>OsimMuscleStates Testing</p>
+<p>Created on Tue Nov  1 22:57:35 2022</p>
+<p>&#64;author: hwang</p>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.osim_model_path">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">osim_model_path</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'../../../models/osim/mobl_arms/MOBL_ARMS_fixed_41.osim'</span></em><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#osim_model_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.osim_model_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.osim_model">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">osim_model</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#osim_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.osim_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.osimMusSta">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">osimMusSta</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#osimMusSta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.osimMusSta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.wrapping_coordinate">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">wrapping_coordinate</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#wrapping_coordinate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.wrapping_coordinate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.osim_coordinate_range">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">osim_coordinate_range</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#osim_coordinate_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.osim_coordinate_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.osim_moment_arms">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">osim_moment_arms</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#osim_moment_arms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.osim_moment_arms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.mjc_model_path">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">mjc_model_path</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'../../../models/converted/mobl_arms/MOBL_ARMS_fixed_41.xml'</span></em><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#mjc_model_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.mjc_model_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.mjc_model">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">mjc_model</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#mjc_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.mjc_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.mjcMusSta">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">mjcMusSta</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#mjcMusSta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.mjcMusSta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.mjc_coordinate_range">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">mjc_coordinate_range</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#mjc_coordinate_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.mjc_coordinate_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="tests.Test_MuscleState.mjc_moment_arms">
+<span class="sig-prename descclassname"><span class="pre">tests.Test_MuscleState.</span></span><span class="sig-name descname"><span class="pre">mjc_moment_arms</span></span><a class="reference internal" href="../../../_modules/tests/Test_MuscleState.html#mjc_moment_arms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.Test_MuscleState.mjc_moment_arms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

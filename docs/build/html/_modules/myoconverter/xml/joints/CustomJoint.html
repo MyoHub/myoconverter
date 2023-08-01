@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>myoconverter.xml.joints.CustomJoint &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html">
+          
+
+          
+            
+            <img src="../../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>myoconverter.xml.joints.CustomJoint</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for myoconverter.xml.joints.CustomJoint</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">myoconverter.xml.joints.Joint</span> <span class="kn">import</span> <span class="n">Joint</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.joints.utils</span> <span class="kn">import</span> <span class="n">parse_coordinates</span><span class="p">,</span> <span class="n">estimate_axis</span><span class="p">,</span> <span class="n">plot_and_save_figure</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml.utils</span> <span class="kn">import</span> <span class="n">str2bool</span><span class="p">,</span> <span class="n">str2vec</span><span class="p">,</span> <span class="n">val2str</span><span class="p">,</span> <span class="n">vec2str</span><span class="p">,</span> <span class="n">filter_keys</span><span class="p">,</span> <span class="n">fit_spline</span><span class="p">,</span> <span class="n">is_linear</span>
+<span class="kn">from</span> <span class="nn">myoconverter.xml</span> <span class="kn">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cfg</span>
+
+
+<div class="viewcode-block" id="CustomJoint"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/joints/CustomJoint/index.html#myoconverter.xml.joints.CustomJoint.CustomJoint">[docs]</a><span class="k">class</span> <span class="nc">CustomJoint</span><span class="p">(</span><span class="n">Joint</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot; A CustomJoint in OpenSim can represent any type of a joint through 3 translational and 3 rotational degrees</span>
+<span class="sd">  of freedom. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CustomJoint._parse"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/joints/CustomJoint/index.html#myoconverter.xml.joints.CustomJoint.CustomJoint._parse">[docs]</a>  <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">socket_parent_frame</span><span class="p">,</span> <span class="n">socket_child_frame</span><span class="p">,</span> <span class="n">pointer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Try to parse this given CustomJoint into a set of MuJoCo joints (1-6 depending on how many non-zero non-constant</span>
+<span class="sd">    joints there are)&quot;&quot;&quot;</span>
+
+    <span class="c1"># Return all XML definitions of joints and their params as lists</span>
+    <span class="n">all_joints</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_params</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Get transform axes</span>
+    <span class="n">transform_axes</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;SpatialTransform/TransformAxis&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Start by parsing the coordinates</span>
+    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">parse_coordinates</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">))</span>
+
+    <span class="c1"># NOTE! Coordinates in CoordinateSet parameterize this joint. In theory all six DoFs could be dependent</span>
+    <span class="c1"># on one Coordinate. Here we assume that only one (MuJoCo) DoF is equivalent to a Coordinate, that is, there exists</span>
+    <span class="c1"># an identity mapping between a Coordinate and a DoF, which is different to OpenSim where there might be no</span>
+    <span class="c1"># identity mappings. In OpenSim a Coordinate is just a value and all DoFs might have some kind of mapping with</span>
+    <span class="c1"># it, see e.g. &quot;flexion&quot; Coordinate in MoBL_ARMS_module6_7_CMC.osim model. MuJoCo doesn&#39;t have such abstract</span>
+    <span class="c1"># notion of a &quot;Coordinate&quot;, and thus there cannot be a non-identity mapping from a DoF to itself</span>
+
+    <span class="c1"># Go through all six transforms</span>
+    <span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;rotation1&quot;</span><span class="p">,</span> <span class="s2">&quot;rotation2&quot;</span><span class="p">,</span> <span class="s2">&quot;rotation3&quot;</span><span class="p">,</span> <span class="s2">&quot;translation1&quot;</span><span class="p">,</span> <span class="s2">&quot;translation2&quot;</span><span class="p">,</span> <span class="s2">&quot;translation3&quot;</span><span class="p">]</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">dof_designated</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+
+      <span class="n">t</span> <span class="o">=</span> <span class="n">transform_axes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+      <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">transforms</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Joints are parsed in incorrect order&quot;</span><span class="p">)</span>
+
+      <span class="c1"># Use the Coordinate parameters we parsed earlier; note that these do not exist for all joints (e.g</span>
+      <span class="c1"># constant joints)</span>
+      <span class="n">coordinate</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;coordinates&quot;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">coordinate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">coordinates</span><span class="p">[</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="p">])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]),</span> <span class="s2">&quot;limited&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+      <span class="n">params</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+      <span class="c1"># Set default reference position/angle to zero. If this value is not zero, then you need</span>
+      <span class="c1"># more care while calculating quartic functions for equality constraints. This is not the same as</span>
+      <span class="c1"># &quot;default_value&quot; for OpenSim Coordinate.</span>
+      <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+      <span class="c1"># Get axis of this transform</span>
+      <span class="n">axis</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;axis&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">params</span><span class="p">[</span><span class="s2">&quot;axis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimate_axis</span><span class="p">(</span><span class="n">socket_child_frame</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+
+      <span class="c1"># Figure out whether this is rotation or translation</span>
+      <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;rotation&#39;</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hinge&quot;</span>
+      <span class="k">elif</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;translation&#39;</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;slide&quot;</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+          <span class="sa">f</span><span class="s2">&quot;Unidentified transformation type </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;_transform_type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> for transformation </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+      <span class="c1"># Parse the outermost MultiplierFunction if there is one</span>
+      <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+      <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;MultiplierFunction&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;MultiplierFunction/scale&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;MultiplierFunction/function&quot;</span><span class="p">)</span>
+
+      <span class="c1"># See the comment before this loop. We have to designate one DoF per Coordinate as an independent variable,</span>
+      <span class="c1"># i.e. make its dependence linear</span>
+      <span class="k">if</span> <span class="n">coordinate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span> <span class="ow">in</span> <span class="n">dof_designated</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">designate_dof</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
+          <span class="n">dof_designated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+      <span class="c1"># Handle a &quot;Constant&quot; transformation. We&#39;re not gonna create this joint</span>
+      <span class="c1"># but we need the transformation information to properly align the joint</span>
+      <span class="n">flip_axis</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Constant&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># Get the value</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">scale</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Constant/value&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># If the value is near zero don&#39;t bother creating this joint</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
+          <span class="k">continue</span>
+
+        <span class="c1"># Otherwise define a locked joint</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limited&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_locked&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+      <span class="c1"># Handle a &quot;SimmSpline&quot; or &quot;NaturalCubicSpline&quot; transformation with a quartic approximation</span>
+      <span class="k">elif</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;NaturalCubicSpline&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># We can&#39;t model the relationship between two joints using a spline, but we can try to approximate it</span>
+        <span class="c1"># with a quartic function. So fit a quartic function and check that the error is small enough</span>
+
+        <span class="c1"># Get spline values</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">x_values</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline/x&quot;</span><span class="p">)</span>
+          <span class="n">y_values</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline/y&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;NaturalCubicSpline&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+          <span class="n">x_values</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;NaturalCubicSpline/x&quot;</span><span class="p">)</span>
+          <span class="n">y_values</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;NaturalCubicSpline/y&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Where&#39;s the spline defined?&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert into numpy arrays; apply scaling to y values</span>
+        <span class="n">x_values</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">x_values</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">y_values</span> <span class="o">=</span> <span class="n">scale</span><span class="o">*</span><span class="n">str2vec</span><span class="p">(</span><span class="n">y_values</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="n">fit</span><span class="p">,</span> <span class="n">polycoef</span><span class="p">,</span> <span class="n">joint_range</span> <span class="o">=</span> <span class="n">fit_spline</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">)</span>
+
+        <span class="c1"># Get the name of the independent coordinate</span>
+        <span class="n">independent_coordinate</span> <span class="o">=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1"># Create an output dir for plots (if it doesn&#39;t exist)</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">OUTPUT_PLOT_FOLDER</span><span class="p">,</span> <span class="s2">&quot;custom_joints&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+          <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+        <span class="n">plot_and_save_figure</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">independent_coordinate</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+
+        <span class="c1"># Set range</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">joint_range</span>
+
+        <span class="c1"># Perhaps better set this joint as limited, since the behaviour outside of range can be bad</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limited&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Update default value (if it is set; remember, it is set as &quot;user&quot;)</span>
+        <span class="k">if</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Update also _transform_value</span>
+        <span class="k">if</span> <span class="s2">&quot;_transform_value&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Let&#39;s check if the independent coordinate is dependent on another coordinate</span>
+        <span class="n">coordinate_mapping</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">OPENSIM</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ConstraintSet//dependent_coordinate_name[text()=&#39;</span><span class="si">{</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coordinate_mapping</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Coordinate </span><span class="si">{</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> depends on two other coordinates! This type&quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;of relation has not been implemented&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">coordinate_mapping</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+          <span class="c1"># This coordinate depends on another coordinate</span>
+          <span class="n">constraint</span> <span class="o">=</span> <span class="n">coordinate_mapping</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span>
+
+          <span class="c1"># Check if this dependency is enforced</span>
+          <span class="n">enforced</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;isEnforced&quot;</span><span class="p">)</span>
+          <span class="k">if</span> <span class="n">enforced</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">str2bool</span><span class="p">(</span><span class="n">enforced</span><span class="o">.</span><span class="n">text</span><span class="p">):</span>
+            <span class="c1"># This dependency is not enforced</span>
+            <span class="k">pass</span>
+
+          <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Make sure this coordinate (again) depends only on one coordinate. Not sure how to check this, since</span>
+            <span class="c1"># I&#39;ve never seen a coordinate being dependent on multiple coordinates. Are they separated by commas,</span>
+            <span class="c1"># or spaces?</span>
+            <span class="n">independent_coordinate</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;independent_coordinate_names&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">independent_coordinate</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">independent_coordinate</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+              <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Coordinate </span><span class="si">{</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> depends on two other coordinates! This type&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;of relation has not been implemented&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Make sure the relation between these two coordinates is an identity mapping</span>
+            <span class="n">function</span> <span class="o">=</span> <span class="n">constraint</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;coupled_coordinates_function/LinearFunction&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">str2vec</span><span class="p">(</span><span class="n">function</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;coefficients&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>
+              <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Only linear mappings between two coordinates have been implemented!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add a joint constraint between this joint and the independent joint, which we assume to be named</span>
+        <span class="c1"># t[&quot;coordinate&quot;]</span>
+        <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">M_EQUALITY</span><span class="p">,</span> <span class="s2">&quot;joint&quot;</span><span class="p">,</span> <span class="n">joint1</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">joint2</span><span class="o">=</span><span class="n">independent_coordinate</span><span class="p">,</span>
+                         <span class="n">polycoef</span><span class="o">=</span><span class="n">vec2str</span><span class="p">(</span><span class="n">polycoef</span><span class="p">),</span>
+                         <span class="n">solimp</span><span class="o">=</span><span class="s2">&quot;0.9999 0.9999 0.001 0.5 2&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Update motion type to dependent for posterity</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_motion_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dependent&quot;</span>
+
+      <span class="k">elif</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;LinearFunction&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># I&#39;m not sure how to handle a LinearFunction with coefficients != [1, 0] (the first one is slope,</span>
+        <span class="c1"># second intercept), except for [-1, 0] when we can just flip the axis</span>
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">scale</span><span class="o">*</span><span class="n">str2vec</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;LinearFunction/coefficients&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;How do we handle this linear function: </span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">?&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If first coefficient is negative, flip the joint axis</span>
+        <span class="k">if</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">flip_axis</span> <span class="o">=</span> <span class="kc">True</span>
+
+      <span class="c1"># Other functions are not defined yet</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping transformation </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> in joint </span><span class="si">{</span><span class="n">xml</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+      <span class="c1"># Calculate new axis</span>
+      <span class="k">if</span> <span class="n">flip_axis</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;axis&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c1"># Update default value too</span>
+        <span class="k">if</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c1"># And update _transform_value</span>
+        <span class="k">if</span> <span class="s2">&quot;_transform_value&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+      <span class="c1"># Add joint</span>
+      <span class="n">joint</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">pointer</span><span class="p">,</span> <span class="s2">&quot;joint&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="n">val2str</span><span class="p">(</span><span class="n">filter_keys</span><span class="p">(</span><span class="n">params</span><span class="p">)))</span>
+
+      <span class="c1"># Add joint to list of joints</span>
+      <span class="n">all_joints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint</span><span class="p">)</span>
+
+      <span class="c1"># Add params to list of params</span>
+      <span class="n">all_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="c1"># Check if all coordinates were designated as dofs. If there&#39;s a coordinate that wasn&#39;t designated, there&#39;s a good</span>
+    <span class="c1"># chance that there exists an unnecessary equality constraint that describes the dependency of that coordinate to</span>
+    <span class="c1"># another coordinate</span>
+    <span class="k">for</span> <span class="n">coordinate_name</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+      <span class="k">if</span> <span class="n">coordinate_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dof_designated</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_EQUALITY</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;joint[@joint1=&#39;</span><span class="si">{</span><span class="n">coordinate_name</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">)</span>
+        <span class="n">cfg</span><span class="o">.</span><span class="n">M_EQUALITY</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">all_joints</span><span class="p">,</span> <span class="n">all_params</span></div>
+
+<div class="viewcode-block" id="CustomJoint.designate_dof"><a class="viewcode-back" href="../../../../autoapi/myoconverter/xml/joints/CustomJoint/index.html#myoconverter.xml.joints.CustomJoint.CustomJoint.designate_dof">[docs]</a>  <span class="k">def</span> <span class="nf">designate_dof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
+
+    <span class="c1"># Designate a coordinate as a mujoco dof (if applicable). This means that one of the mujoco joints (dof) will</span>
+    <span class="c1"># correspond to an OpenSim coordinate, although in OpenSim one coordinate can parameterize multiple dofs. We only</span>
+    <span class="c1"># allow identity or linear mappings for designated dofs</span>
+
+    <span class="c1"># Find out the type of dependency</span>
+    <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+      <span class="c1"># Check if the designated dof is a linear mapping -- if so, we should use it</span>
+      <span class="n">x_values</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline/x&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">y_values</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline/y&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">fit</span><span class="p">,</span> <span class="n">polycoef</span><span class="p">,</span> <span class="n">joint_range</span> <span class="o">=</span> <span class="n">fit_spline</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">)):</span>
+        <span class="c1"># Designated dof cannot (?) have a non-linear mapping</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+      <span class="c1"># Update range as min/max of the approximated range</span>
+      <span class="k">if</span> <span class="s2">&quot;range&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">joint_range</span>
+
+      <span class="c1"># Update default value (if it is set; remember, it is set as &quot;user&quot;)</span>
+      <span class="k">if</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">])</span>
+
+      <span class="c1"># Update _transform_value too</span>
+      <span class="k">if</span> <span class="s2">&quot;_transform_value&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">])</span>
+
+      <span class="c1"># Make this into an identity mapping</span>
+      <span class="n">coefs</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;LinearFunction&quot;</span><span class="p">),</span> <span class="s2">&quot;coefficients&quot;</span><span class="p">)</span>
+      <span class="n">coefs</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;1 0&quot;</span>
+      <span class="n">t</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;SimmSpline&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;LinearFunction&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+      <span class="n">coefficients</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;LinearFunction/coefficients&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+      <span class="n">polycoef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">coefficients</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeWarning</span><span class="p">(</span><span class="s2">&quot;Not tested&quot;</span><span class="p">)</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span>
+        <span class="c1"># Update range as min/max of the approximated range</span>
+        <span class="k">if</span> <span class="s2">&quot;range&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">])</span>
+        <span class="c1"># Update default value and _transform_value</span>
+        <span class="k">if</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;_transform_value&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+          <span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;_transform_value&quot;</span><span class="p">])</span>
+        <span class="c1"># Should we convert this into an identity mapping as is done above?</span>
+
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="c1"># Range of designated dof may have been modified above, if the mapping between Coordinate and designated dof is</span>
+    <span class="c1"># not identity. In that case, we need to update the dependencies (polycoefs) of constraints that depend on this</span>
+    <span class="c1"># Coordinate/dof</span>
+    <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">M_EQUALITY</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;joint[@joint2=&#39;</span><span class="si">{</span><span class="n">coordinate</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;]&quot;</span><span class="p">):</span>
+      <span class="c1"># Currently works only on linear mappings</span>
+      <span class="n">constraint_polycoef</span> <span class="o">=</span> <span class="n">str2vec</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;polycoef&quot;</span><span class="p">])</span>
+      <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">polycoef</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])):</span>  <span class="c1"># Identity mapping, no need to update anything</span>
+        <span class="k">pass</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_linear</span><span class="p">(</span><span class="n">polycoef</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_linear</span><span class="p">(</span><span class="n">constraint_polycoef</span><span class="p">):</span>
+          <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Updating constraint polycoefs (currently) only works on linear mappings.&quot;</span><span class="p">)</span>
+        <span class="n">constraint_polycoef</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="n">polycoef</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">constraint</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s2">&quot;polycoef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec2str</span><span class="p">(</span><span class="n">constraint_polycoef</span><span class="p">)</span>
+
+    <span class="c1"># Designate this dof as &#39;coordinate.text&#39;</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">text</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+:py:mod:`utils.UtilsOpensim`
+============================
+
+.. py:module:: utils.UtilsOpensim
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   utils.UtilsOpensim.getJointsControlledByMuscle
+   utils.UtilsOpensim.getCouplingJoints
+   utils.UtilsOpensim.getJointRanges_dict
+   utils.UtilsOpensim.getJointRanges_array
+   utils.UtilsOpensim.getAllJointsRanges
+   utils.UtilsOpensim.getJointsSpannedByMuscle
+   utils.UtilsOpensim.getIndipCoordAndJoint
+   utils.UtilsOpensim.getModelJointDefinitions
+   utils.UtilsOpensim.getChildBodyJoint
+   utils.UtilsOpensim.getParentBodyJoint
+   utils.UtilsOpensim.getMuscleCoordinates
+   utils.UtilsOpensim.getWrappingSide
+   utils.UtilsOpensim.getAllIndependentCoordinates
+   utils.UtilsOpensim.extractMarkerSet
+   utils.UtilsOpensim.calculateEndPoints_osim
+   utils.UtilsOpensim.updOsimCoordEndPoints
+   utils.UtilsOpensim.getMomentArmAtJoints
+   utils.UtilsOpensim.computeMomentArm
+   utils.UtilsOpensim.updOsimCoordMomentArm
+   utils.UtilsOpensim.getMuscleLengthList
+   utils.UtilsOpensim.getMuscleForceMaps
+   utils.UtilsOpensim.getMuscleProperties
+
+
+
+.. py:function:: getJointsControlledByMuscle(osimModel, OSMuscle)
+
+   remove the locked coordinates and dependency coordinates of the spanned joints
+
+
+.. py:function:: getCouplingJoints(osimModel, osim_muscle_model, joints)
+
+   Check if coordinates are coupling when calculating moment arms
+
+
+.. py:function:: getJointRanges_dict(osimModel, joints)
+
+   Extract motion range of given joint coordinates from Osim model
+
+
+.. py:function:: getJointRanges_array(osimModel, joints)
+
+   Extract motion range of given joint coordinates from Osim model
+
+
+.. py:function:: getAllJointsRanges(osimModel)
+
+   Extract motion range of all joint coordinates of the Osim model
+
+
+.. py:function:: getJointsSpannedByMuscle(osimModel, OSMuscleName)
+
+   Given as INPUT a muscle OSMuscleName from an OpenSim model, this function
+   returns the OUTPUT structure jointNameSet containing the OpenSim jointNames
+   crossed by the OSMuscle.
+
+   It works through the following steps:
+   1) extracts the GeometryPath
+   2) loops through the sinccgle points, determining the body they belong to
+   3) stores the bodies to which the muscle points are attached to
+   4) determines the nr of joints based on body indexes
+   5) stores the crossed OpenSim joints in the output structure named jointNameSet
+
+   NB this function return the crossed joints independently on the
+   constraints applied to the coordinates. Eg patello-femoral is considered as a
+   joint, although in Arnold's model it does not have independent
+   coordinates, but it is moved in dependency of the knee flexion angle.
+
+
+.. py:function:: getIndipCoordAndJoint(osimModel, constraint_coord_name)
+
+   Function that given a dependent coordinate finds the independent
+   coordinate and the associated joint. The function assumes that the
+   constraint is a CoordinateCoupleConstraint as used by Arnold, Delp and LLLM.
+   The function can be useful to manage the patellar joint for instance.
+
+
+.. py:function:: getModelJointDefinitions(osimModel)
+
+   functon to retun a strcuture for a specifc model, returning a list of the
+   joints present in the model and their associated frames
+
+
+.. py:function:: getChildBodyJoint(jointStructure, bodyName)
+
+
+.. py:function:: getParentBodyJoint(jointStructure, bodyName)
+
+
+.. py:function:: getMuscleCoordinates(model, state, muscleName)
+
+
+.. py:function:: getWrappingSide(osimModel, OSMuscleName, currentState)
+
+   Calculate the position of the wrapping side
+
+   Parameters:
+       osimModel: Opensim model
+       OSMuscleName (str): muscle name
+       currentState : State of the Opensim model
+
+   returns:
+       wrapMuscleDic: Dictionary with the wrapping center, dimension, type and position of the side
+
+
+
+.. py:function:: getAllIndependentCoordinates(osimModel)
+
+   Get all indpendent coordinates in an Osim model
+
+
+.. py:function:: extractMarkerSet(osimModel_path)
+
+   Extract marker list from Osim model for forward kinematic check
+
+
+.. py:function:: calculateEndPoints_osim(osimModel_path, endPoints, N_EvalPoints)
+
+   Calculate the positions of endpoints when iterating all joint angle meshes.
+   This is to check the Geometry and Joint Definition matches between the Opensim
+   and the converted MuJoCo models.
+   Parameters
+   ----------
+   osimModel_path : string
+       Path and name of the Osim model that will be evaluated.
+   endPoints : list of string
+       The names of the endpoints whose positions will be evaluated.
+   Returns
+   -------
+   evaData: dict
+       The evaluation data, including the joint angle meshes and the corresponding
+       endpoint locations
+
+
+.. py:function:: updOsimCoordEndPoints(osimModel, DOF_Index, jointEval, endPoints)
+
+
+.. py:function:: getMomentArmAtJoints(muscleModel, state, joint_set)
+
+   Compute moment arm of a muscle at a joint that it wraps.
+
+
+.. py:function:: computeMomentArm(osimModel, osim_muscle_model, joints, ang_ranges, N_EvalPoints)
+
+
+.. py:function:: updOsimCoordMomentArm(osimModel, osim_muscle_model, joints_idx, DOF_index, jointEval)
+
+
+.. py:function:: getMuscleLengthList(osimModel, osim_muscle, joints, ang_ranges, speedy)
+
+
+.. py:function:: getMuscleForceMaps(osimModel, osim_muscle, joints, jit_list_set, act_list)
+
+
+.. py:function:: getMuscleProperties(osim_muscle)
+
+

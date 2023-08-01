@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>utils.UtilsOpensim &mdash; MyoConverter 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html">
+          
+
+          
+            
+            <img src="../../../_static/logo-color-fit.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pipeline.html">Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plans.html">Plans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../participate.html">Participate</a></li>
+</ul>
+<p class="caption"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MyoConverter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsOpensim</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/autoapi/utils/UtilsOpensim/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utils.UtilsOpensim">
+<span id="utils-utilsopensim"></span><h1><a class="reference internal" href="#module-utils.UtilsOpensim" title="utils.UtilsOpensim"><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils.UtilsOpensim</span></code></a><a class="headerlink" href="#module-utils.UtilsOpensim" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getJointsControlledByMuscle" title="utils.UtilsOpensim.getJointsControlledByMuscle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJointsControlledByMuscle</span></code></a>(osimModel, OSMuscle)</p></td>
+<td><p>remove the locked coordinates and dependency coordinates of the spanned joints</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getCouplingJoints" title="utils.UtilsOpensim.getCouplingJoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCouplingJoints</span></code></a>(osimModel, osim_muscle_model, joints)</p></td>
+<td><p>Check if coordinates are coupling when calculating moment arms</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getJointRanges_dict" title="utils.UtilsOpensim.getJointRanges_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJointRanges_dict</span></code></a>(osimModel, joints)</p></td>
+<td><p>Extract motion range of given joint coordinates from Osim model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getJointRanges_array" title="utils.UtilsOpensim.getJointRanges_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJointRanges_array</span></code></a>(osimModel, joints)</p></td>
+<td><p>Extract motion range of given joint coordinates from Osim model</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getAllJointsRanges" title="utils.UtilsOpensim.getAllJointsRanges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAllJointsRanges</span></code></a>(osimModel)</p></td>
+<td><p>Extract motion range of all joint coordinates of the Osim model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getJointsSpannedByMuscle" title="utils.UtilsOpensim.getJointsSpannedByMuscle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getJointsSpannedByMuscle</span></code></a>(osimModel, OSMuscleName)</p></td>
+<td><p>Given as INPUT a muscle OSMuscleName from an OpenSim model, this function</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getIndipCoordAndJoint" title="utils.UtilsOpensim.getIndipCoordAndJoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIndipCoordAndJoint</span></code></a>(osimModel, constraint_coord_name)</p></td>
+<td><p>Function that given a dependent coordinate finds the independent</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getModelJointDefinitions" title="utils.UtilsOpensim.getModelJointDefinitions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getModelJointDefinitions</span></code></a>(osimModel)</p></td>
+<td><p>functon to retun a strcuture for a specifc model, returning a list of the</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getChildBodyJoint" title="utils.UtilsOpensim.getChildBodyJoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChildBodyJoint</span></code></a>(jointStructure, bodyName)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getParentBodyJoint" title="utils.UtilsOpensim.getParentBodyJoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParentBodyJoint</span></code></a>(jointStructure, bodyName)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getMuscleCoordinates" title="utils.UtilsOpensim.getMuscleCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMuscleCoordinates</span></code></a>(model, state, muscleName)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getWrappingSide" title="utils.UtilsOpensim.getWrappingSide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getWrappingSide</span></code></a>(osimModel, OSMuscleName, currentState)</p></td>
+<td><p>Calculate the position of the wrapping side</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getAllIndependentCoordinates" title="utils.UtilsOpensim.getAllIndependentCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAllIndependentCoordinates</span></code></a>(osimModel)</p></td>
+<td><p>Get all indpendent coordinates in an Osim model</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.extractMarkerSet" title="utils.UtilsOpensim.extractMarkerSet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extractMarkerSet</span></code></a>(osimModel_path)</p></td>
+<td><p>Extract marker list from Osim model for forward kinematic check</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.calculateEndPoints_osim" title="utils.UtilsOpensim.calculateEndPoints_osim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculateEndPoints_osim</span></code></a>(osimModel_path, endPoints, …)</p></td>
+<td><p>Calculate the positions of endpoints when iterating all joint angle meshes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.updOsimCoordEndPoints" title="utils.UtilsOpensim.updOsimCoordEndPoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updOsimCoordEndPoints</span></code></a>(osimModel, DOF_Index, jointEval, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getMomentArmAtJoints" title="utils.UtilsOpensim.getMomentArmAtJoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMomentArmAtJoints</span></code></a>(muscleModel, state, joint_set)</p></td>
+<td><p>Compute moment arm of a muscle at a joint that it wraps.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.computeMomentArm" title="utils.UtilsOpensim.computeMomentArm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeMomentArm</span></code></a>(osimModel, osim_muscle_model, joints, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.updOsimCoordMomentArm" title="utils.UtilsOpensim.updOsimCoordMomentArm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updOsimCoordMomentArm</span></code></a>(osimModel, osim_muscle_model, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getMuscleLengthList" title="utils.UtilsOpensim.getMuscleLengthList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMuscleLengthList</span></code></a>(osimModel, osim_muscle, joints, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getMuscleForceMaps" title="utils.UtilsOpensim.getMuscleForceMaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMuscleForceMaps</span></code></a>(osimModel, osim_muscle, joints, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#utils.UtilsOpensim.getMuscleProperties" title="utils.UtilsOpensim.getMuscleProperties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMuscleProperties</span></code></a>(osim_muscle)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getJointsControlledByMuscle">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getJointsControlledByMuscle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OSMuscle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getJointsControlledByMuscle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getJointsControlledByMuscle" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove the locked coordinates and dependency coordinates of the spanned joints</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getCouplingJoints">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getCouplingJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_muscle_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getCouplingJoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getCouplingJoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if coordinates are coupling when calculating moment arms</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getJointRanges_dict">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getJointRanges_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getJointRanges_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getJointRanges_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract motion range of given joint coordinates from Osim model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getJointRanges_array">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getJointRanges_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getJointRanges_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getJointRanges_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract motion range of given joint coordinates from Osim model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getAllJointsRanges">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getAllJointsRanges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getAllJointsRanges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getAllJointsRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract motion range of all joint coordinates of the Osim model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getJointsSpannedByMuscle">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getJointsSpannedByMuscle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OSMuscleName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getJointsSpannedByMuscle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getJointsSpannedByMuscle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given as INPUT a muscle OSMuscleName from an OpenSim model, this function
+returns the OUTPUT structure jointNameSet containing the OpenSim jointNames
+crossed by the OSMuscle.</p>
+<p>It works through the following steps:
+1) extracts the GeometryPath
+2) loops through the sinccgle points, determining the body they belong to
+3) stores the bodies to which the muscle points are attached to
+4) determines the nr of joints based on body indexes
+5) stores the crossed OpenSim joints in the output structure named jointNameSet</p>
+<p>NB this function return the crossed joints independently on the
+constraints applied to the coordinates. Eg patello-femoral is considered as a
+joint, although in Arnold’s model it does not have independent
+coordinates, but it is moved in dependency of the knee flexion angle.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getIndipCoordAndJoint">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getIndipCoordAndJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint_coord_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getIndipCoordAndJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getIndipCoordAndJoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that given a dependent coordinate finds the independent
+coordinate and the associated joint. The function assumes that the
+constraint is a CoordinateCoupleConstraint as used by Arnold, Delp and LLLM.
+The function can be useful to manage the patellar joint for instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getModelJointDefinitions">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getModelJointDefinitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getModelJointDefinitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getModelJointDefinitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>functon to retun a strcuture for a specifc model, returning a list of the
+joints present in the model and their associated frames</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getChildBodyJoint">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getChildBodyJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jointStructure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bodyName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getChildBodyJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getChildBodyJoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getParentBodyJoint">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getParentBodyJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jointStructure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bodyName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getParentBodyJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getParentBodyJoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getMuscleCoordinates">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getMuscleCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">muscleName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getMuscleCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getMuscleCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getWrappingSide">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getWrappingSide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OSMuscleName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentState</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getWrappingSide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getWrappingSide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the position of the wrapping side</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>osimModel: Opensim model
+OSMuscleName (str): muscle name
+currentState : State of the Opensim model</p>
+</dd>
+<dt>returns:</dt><dd><p>wrapMuscleDic: Dictionary with the wrapping center, dimension, type and position of the side</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getAllIndependentCoordinates">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getAllIndependentCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getAllIndependentCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getAllIndependentCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all indpendent coordinates in an Osim model</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.extractMarkerSet">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">extractMarkerSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#extractMarkerSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.extractMarkerSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract marker list from Osim model for forward kinematic check</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.calculateEndPoints_osim">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">calculateEndPoints_osim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_EvalPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#calculateEndPoints_osim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.calculateEndPoints_osim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the positions of endpoints when iterating all joint angle meshes.
+This is to check the Geometry and Joint Definition matches between the Opensim
+and the converted MuJoCo models.
+Parameters
+———-
+osimModel_path : string</p>
+<blockquote>
+<div><p>Path and name of the Osim model that will be evaluated.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>endPoints<span class="classifier">list of string</span></dt><dd><p>The names of the endpoints whose positions will be evaluated.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>evaData: dict</dt><dd><p>The evaluation data, including the joint angle meshes and the corresponding
+endpoint locations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.updOsimCoordEndPoints">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">updOsimCoordEndPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOF_Index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jointEval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#updOsimCoordEndPoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.updOsimCoordEndPoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getMomentArmAtJoints">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getMomentArmAtJoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">muscleModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_set</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getMomentArmAtJoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getMomentArmAtJoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute moment arm of a muscle at a joint that it wraps.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.computeMomentArm">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">computeMomentArm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_muscle_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_EvalPoints</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#computeMomentArm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.computeMomentArm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.updOsimCoordMomentArm">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">updOsimCoordMomentArm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_muscle_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOF_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jointEval</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#updOsimCoordMomentArm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.updOsimCoordMomentArm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getMuscleLengthList">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getMuscleLengthList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ang_ranges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getMuscleLengthList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getMuscleLengthList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getMuscleForceMaps">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getMuscleForceMaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osimModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">osim_muscle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jit_list_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getMuscleForceMaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getMuscleForceMaps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.UtilsOpensim.getMuscleProperties">
+<span class="sig-prename descclassname"><span class="pre">utils.UtilsOpensim.</span></span><span class="sig-name descname"><span class="pre">getMuscleProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">osim_muscle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/utils/UtilsOpensim.html#getMuscleProperties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.UtilsOpensim.getMuscleProperties" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright Aleksi Ikkala, Huawei Wang.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+:py:mod:`myoconverter.xml.joints.Joint`
+=======================================
+
+.. py:module:: myoconverter.xml.joints.Joint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   myoconverter.xml.joints.Joint.Joint
+
+
+
+
+.. py:class:: Joint
+
+   Bases: :py:obj:`myoconverter.xml.parsers.IParser`
+
+   This class defines and interface and is used for the actual parsers, not the ones defined above 
+
+   .. py:method:: _parse(xml, socket_parent_frame, socket_child_frame, pointer)
+      :abstractmethod:
+
+      Child classes must implement this method. This is called from the 'parse' method below. Add any calculations /
+      conversions that weren't included in the default calculations / conversions below. 
+
+
+   .. py:method:: parse(xml, socket_parent_frame, socket_child_frame, pointer, root_body)
+
+
+
