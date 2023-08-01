@@ -31,15 +31,15 @@ Here we present a collection of models, as examples, that have been processed wi
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/gait23.png" width="200">| [3D Gait Model](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Gait2354Simbody/gait2354_simbody_cvt3.xml)  <br> - 23 DoFs <br> - 54 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Gait2354Simbody)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Gait2354Simbody/gait2354_simbody_conversion_report.pdf) | Regular: 34 min 21 sec <br> Speedy: 22 min 58 sec |
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/neck6d.png" width="200">| [Neck Model](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Neck6D/HYOID_1.2_ScaledStrenght_UpdatedInertia_adjusted_cvt3.xml) <br> - 6 DoFs <br> - 72 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Neck6D)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Neck6D/HYOID_1.2_ScaledStrenght_UpdatedInertia_adjusted_conversion_report.pdf) | Regular: 200 min 14 sec <br> Speedy: 57 min 43 sec |
 <!--|<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/fullbody3d.png" width="200">| [Full Body Model](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/FullBody3D/FullBodyModel_Hamner2010_v2_0_cvt3.xml)  <br> - 36 DoFs <br> - 86 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/FullBody3D)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/FullBody3D/FullBodyModel_Hamner2010_v2_0_conversion_report.pdf) | Regular: 75 min 17 sec <br> Speedy: 58 min 46 sec | -->
-
-
-
 <!--|<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/wristhand.png" width="200">| [Wrist-Hand Model](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/WristHandModel/wrist_cvt3.xml)  <br> - 10 DoFs <br> - 25 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/WristHandModel)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/WristHandModel/wrist_conversion_report.pdf) | Regular: 54 min 06 sec <br> Speedy: 18 min 26 sec | -->
 
 
-MyoConverter has been intensively used to build up the [MyoSim](https://github.com/MyoHub/myo_sim) MSK models that have been used in the [MyoSuite](https://sites.google.com/view/myosuite) framework. After conversion, additional manual adjustments were applied to clean up the small issues, which made the MyoSim models suitable for functional task simulations. 
 
-Besides, a list of third-party converted models using this tool can be found [here](). We encourage you to review these models before embarking on any redundant efforts. However, we must emphasize that we cannot guarantee the accuracy of these models, as there is no universal test for this. If you have specific concerns or questions regarding any of the models, we recommend reaching out directly to the respective model creators for further information and clarification.
+MyoConverter has been extensively used to build up the [MyoSim](https://github.com/MyoHub/myo_sim) MSK models that have been used in the [MyoSuite](https://sites.google.com/view/myosuite) framework. These converted models underwent additional manual adjustments to address minor issues, ensuring their suitability for functional task simulations. 
+
+Besides, a list of third-party converted models using this tool can be found [here]().
+
+We encourage you to review these models before embarking on any redundant efforts. However, we must emphasize that we cannot guarantee the accuracy of these models, as there is no universal test for this. If you have specific concerns or questions regarding any of the models, we recommend reaching out directly to the respective model creators for further information and clarification.
 
 
 ## Download & Setup
