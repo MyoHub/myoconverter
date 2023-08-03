@@ -65,8 +65,7 @@ python -c "import myoConverter"
 ```
 
 ### Windows/MacOS
-In Windows and MacOS, we provide a docker image that has the myoConverter ready to be used. Please follow the following usage instructions:
-.... 
+In Windows and MacOS, we provide a docker image that has the myoConverter ready to be used. Please follow the following usage [instructions](./docker/README.md).
 
 ## Quick example
 
