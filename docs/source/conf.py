@@ -25,11 +25,11 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.viewcode',
-    'autoapi.extension'
+    'sphinx.ext.viewcode'
+    # 'autoapi.extension'
 ]
-autoapi_type = 'python'
-autoapi_dirs = ["../../myoconverter"]
+# autoapi_type = 'python'
+# autoapi_dirs = ["../../myoconverter"]
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
