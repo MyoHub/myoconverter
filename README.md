@@ -2,7 +2,7 @@
 <img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/logo-color-fit_horizontal.png?raw=true" width=800>
 </p>
 
-[![Documentation Status](https://readthedocs.org/projects/myoconverter/badge/?version=latest)](https://myoconverter.readthedocs.io/en/latest/)
+[![Documentation Status](https://readthedocs.org/projects/myo-converter/badge/?version=latest)](https://myo-converter.readthedocs.io/en/latest/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/MyoHub/myoConverter/blob/main/docs/CONTRIBUTING.md)
 [![License Badge](https://img.shields.io/hexpm/l/apa)](https://github.com/opensim-org/opensim-core/blob/master/LICENSE.txt)
 <!-- [![Downloads](https://pepy.tech/badge/myosuite)](https://pepy.tech/project/myosuite)
