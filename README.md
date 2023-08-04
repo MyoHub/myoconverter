@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/myoconvertor_logo.png?raw=true" width=800>
+<img src="https://github.com/MyoHub/myo_converter/blob/main/docs/source/images/myoconvertor_logo.png?raw=true" width=800>
 </p>
 
 [![Documentation Status](https://readthedocs.org/projects/myoconverter/badge/?version=latest)](https://myoconverter.readthedocs.io/en/latest/)
