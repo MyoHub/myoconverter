@@ -25,11 +25,17 @@ Your prompt should look like this:
 
 ## Read and write files on host machine
 
-By default all data is stored in the container. To read and write files on the host machine it's recommended to mount a [volume](https://docs.docker.com/storage/volumes/).
+By default all data is stored in the container. To read and write files on the host machine it's recommended to use *bind mounts* or *volumes*. See [Storage](https://docs.docker.com/storage/).
 
 ```bash
-docker volume create myvol
-docker run --rm -it --name myodocker \
---mount source=myvol,target=/app/data \
+$ docker run --rm -it --name myodocker \
+--mount type=bind,src=/path/to/data,target=/app/data \
+myoconverter:latest bash
+```
+
+```bash
+$ docker volume create myvol
+$ docker run --rm -it --name myodocker \
+--mount type=volume,src=myvol,target=/app/data \
 myoconverter:latest bash
 ```
