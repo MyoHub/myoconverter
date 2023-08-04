@@ -55,14 +55,14 @@ git clone git@github.com:MyoHub/myo-converter.git; cd myo-converter
 
 - Create a conda environment with the `conda_env.yml` file
 ```bash
-conda env create -n myo-converter -f conda_env.yml
-conda activate myo-converter
+conda env create -n myoconverter -f conda_env.yml
+conda activate myoconverter
 ```
 
 **Note** conda is very slow in solving the dependencies and installing the environment (>15 minutes). We recommend installation via [mamba](https://mamba.readthedocs.io/en/latest/installation.html) instead, which installs the environment in a couple of minutes. With mamba, the environment is created by replacing `conda` with `mamba`:
 ```bash
-mamba env create -n myo-converter -f conda_env.yml
-mamba activate myo-converter
+mamba env create -n myoconverter -f conda_env.yml
+mamba activate myoconverter
 ```
 
 - Optional: Test installation by running a model unit test
