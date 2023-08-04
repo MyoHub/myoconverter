@@ -24,7 +24,7 @@ Here we present a collection of models, as examples, that have been processed wi
 
 |   | Model name| Source | Validation | Conversion Speed | 
 |--------------------|--------------|:-------:|:--------:|-------|
-|<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/tug-of-war.png" width="200">| [Turg of War](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/TugOfWar)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_conversion_report.pdf) | Regular: 30 sec <br> Speedy: 30 sec |
+|<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/tug-of-war.png" width="200">| [Tug of War](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/TugOfWar)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_conversion_report.pdf) | Regular: 30 sec <br> Speedy: 30 sec |
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Arm26)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Arm26/arm26_conversion_report.pdf) | Regular: 5 min 30 sec <br> Speedy: 4 min 37 sec |
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/leg6dof.png" width="200">| [Single Leg](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Leg6Dof9Musc/leg6dof9musc_cvt3.xml)   <br> - 6 DoFs <br> - 9 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Leg6Dof9Musc)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Leg6Dof9Musc/leg6dof9musc_conversion_report.pdf) | Regular: 4 min 3 sec <br> Speedy: 3 min 41 sec |
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/gait10.png" width="200">| [2D Gait Model](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Gait10dof18musc/gait10dof18musc_cvt3.xml) <br> - 10 DoFs <br> - 18 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Gait10dof18musc)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Gait10dof18musc/gait10dof18musc_conversion_report.pdf) | Regular: 8 min 21 sec <br> Speedy: 7 min 33 sec |
@@ -37,35 +37,43 @@ Here we present a collection of models, as examples, that have been processed wi
 
 MyoConverter has been extensively used to build up the [MyoSim](https://github.com/MyoHub/myo_sim) MSK models that have been used in the [MyoSuite](https://sites.google.com/view/myosuite) framework. These converted models underwent additional manual adjustments to address minor issues, ensuring their suitability for functional task simulations. 
 
-Besides, a list of third-party converted models using this tool can be found [here]().
+Additionally, a list of third-party converted models using this tool can be found [here]().
 
-We encourage you to review these models before embarking on any redundant efforts. However, we must emphasize that we cannot guarantee the accuracy of these models, as there is no universal test for this. If you have specific concerns or questions regarding any of the models, we recommend reaching out directly to the respective model creators for further information and clarification.
+We encourage you to review these models before embarking on new conversion efforts. However, we must emphasize that we cannot guarantee the accuracy of these models, as there is no universal test for this. If you have specific concerns or questions regarding any of the models, we recommend reaching out directly to the respective model creators for further information and clarification.
 
 
 ## Download & Setup
 
-### Linux
-If you would like to convert your own MSK model, you can use myoConverter by following the steps outlined below:
+### conda / mamba
+
+If you would like to convert your own MSK model, follow the steps outlined below:
 
 - Clone the repo
 ```bash
-git clone git@github.com:MyoHub/myoConverter.git; cd myoConverter
+git clone git@github.com:MyoHub/myo-converter.git; cd myo-converter
 ```
-
 
 - Create a conda environment with the `conda_env.yml` file
 ```bash
-conda env create -f conda_env.yml
-conda activate myoConverter
+conda env create -n myo-converter -f conda_env.yml
+conda activate myo-converter
 ```
 
-- Test installation
+**Note** conda is very slow in solving the dependencies and installing the environment (>15 minutes). We recommend installation via [mamba](https://mamba.readthedocs.io/en/latest/installation.html) instead, which installs the environment in a couple of minutes. With mamba, the environment is created by replacing `conda` with `mamba`:
 ```bash
-python -c "import myoConverter"
+mamba env create -n myo-converter -f conda_env.yml
+mamba activate myo-converter
 ```
 
-### Windows/MacOS
-In Windows and MacOS, we provide a docker image that has the myoConverter ready to be used. Please follow the following usage [instructions](./docker/README.md).
+- Optional: Test installation by running a model unit test
+```bash
+python myoconverter/tests/model_unit_test.py
+```
+
+### Docker
+
+We also provide a docker image that has myoConverter installed. Please follow [this link](./docker/README.md) for further instructions.
+
 
 ## Quick example
 
@@ -75,7 +83,7 @@ In Windows and MacOS, we provide a docker image that has the myoConverter ready 
 from myoconverter import O2MPipeline
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
-converts "/path/to/*.osim" to a MuJoCo XML file and outputs the model into folder "/path/to/output/folder". The `**kwargs` may contain the optional parameters as listed below:
+converts `osim_file` to a MuJoCo XML file and outputs the model into folder `output_folder`. The `**kwargs` may contain the optional parameters as listed below:
 - `convert_steps` : Selected conversion steps, could be any subset of `[1, 2, 3]` based on the needs, Default = `[1, 2, 3]`
 - `muscle_list` : Selected specific muscles for the conversion and validation steps, Default = None
 - `osim_data_overwrite` : If true, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]

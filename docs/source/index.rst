@@ -8,7 +8,7 @@ This software is intended for OpenSim 4.x models. If you have an OpenSim 3.x mod
 
 .. note::
 
-   We evaluate the accuracy of the converter with a `handful of models <models.html>`_. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case you can open an issue, or, preferably, `contribute <participate.html>`_ to the project and create a pull request. `See the GitHub repository <https://github.com/MyoHub/myoConverter>`_
+   We evaluate the accuracy of the converter with a `handful of models <models.html>`_. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case you can open an issue, or, preferably, `contribute <participate.html>`_ to the project and create a pull request. `See the GitHub repository <https://github.com/MyoHub/myo-converter>`_
 
 .. note::
   The example models may not be suitable for research purposes as such; you may need to further modify e.g. joint limits, or add contacts according to your use case. 
