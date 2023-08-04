@@ -83,7 +83,7 @@ We also provide a docker image that has myoConverter installed. Please follow [t
 from myoconverter import O2MPipeline
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
-converts `osim_file` to a MuJoCo XML file and outputs the model into folder `output_folder`. The `**kwargs` may contain the optional parameters as listed below:
+converts `osim_file` (a string pointing to an .osim file) to a MuJoCo XML file and outputs the model into folder `output_folder`. The `**kwargs` may contain the optional parameters as listed below:
 - `convert_steps` : Selected conversion steps, could be any subset of `[1, 2, 3]` based on the needs, Default = `[1, 2, 3]`
 - `muscle_list` : Selected specific muscles for the conversion and validation steps, Default = None
 - `osim_data_overwrite` : If true, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]
