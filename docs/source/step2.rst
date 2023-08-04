@@ -20,14 +20,14 @@ However, the *wrapping objects* and the corresponding *site side* in converted M
 
 Therefore, in this second step, we focus on refining how muscle wraps over the wrapping object (by adjusting the *site side*). There are several scenarios: 
 
-1. Cylinder wrapping object:
+1. **Cylinder wrapping object:**
   - Cylinder wrapping objects have the same surface definition inside MuJoCo and OpenSim mdoels. Optimization only need to decide how the muscle wraps over it, which defined by the location of site side.
 
-2. Sphere wrapping object:
+2. **Sphere wrapping object:**
   - Sphere wrapping objects have the same surface definition inside MuJoCo and OpenSim mdoels. Optimization only need to decide how the muscle wraps over it, which defined by the location of site side.
 
-3. Ellipsoid wrapping object:
+3. **Ellipsoid wrapping object:**
   - There is no ellipsoid wrapping object in MuJoCo, therefore, ellipsoid wrapping objects in OpenSim are converted to either cylinder or sphere, depends on the long-short axis ratio. Since the wrapping surfaces are not identifical anymore, in optimization both the wrapping object location and site side are optimized at the same time to achieve the best fit.
     
-4. Torus wrapping object:
+4. **Torus wrapping object:**
   - In MuJoCo, there is no torus wrapping object as well. A good approximation is to use a small sphere to simulate the hole of the torus. Then we define that the muscle path has to go through the sphere. No optimizaiton is needed in this case. 
