@@ -1,7 +1,7 @@
-Welcome to myoConverters's documentation!
+Welcome to MyoConverters's documentation!
 =========================================
 
-**myoConverter** is a software to convert and optimize biomechanical `OpenSim <https://simtk.org/projects/opensim/>`_ models to the `MuJoCo <http://www.mujoco.org/>`_ physics engine.
+**MyoConverter** is a software to convert and optimize biomechanical `OpenSim <https://simtk.org/projects/opensim/>`_ models to the `MuJoCo <http://www.mujoco.org/>`_ physics engine.
 
 This software is intended for OpenSim 4.x models. If you have an OpenSim 3.x model, or earlier, it is recommended to update the model to the 4.x format using OpenSim's software. If this is not possible, then we suggest you try out the `O2MConverter <https://github.com/aikkala/O2MConverter>`_ which converts OpenSim 3.x models, but does not include moment arm and force optimizations. 
 
