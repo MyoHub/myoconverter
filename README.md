@@ -27,7 +27,7 @@ Here we present a collection of models, as examples, that have been processed wi
 |   | Model name| Source | Validation | Conversion Speed |
 |--------------------|--------------|:-------:|:--------:|-------|
 |<img src="docs/source/images/tug-of-war.png" width="200">| [Tug of War](models/mjc/TugOfWar/tugofwar_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/TugOfWar)  |   [Report](models/mjc/TugOfWar/tugofwar.pdf) | Regular: 30 sec <br> Speedy: 30 sec |
-|<img src="docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Arm26)  |   [Report](models/mjc/Arm26/arm26.pdf) | Regular: 5 min 30 sec <br> Speedy: 4 min 37 sec |
+|<img src="docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles <br> *myo_sim model* | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Arm26)  |   [Report](models/mjc/Arm26/arm26.pdf) | Regular: 5 min 30 sec <br> Speedy: 4 min 37 sec |
 |<img src="docs/source/images/leg6dof.png" width="200">| [Single Leg](models/mjc/Leg6Dof9Musc/leg6dof9musc_cvt3.xml)   <br> - 6 DoFs <br> - 9 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Leg6Dof9Musc)  |   [Report](models/mjc/Leg6Dof9Musc/leg6dof9musc.pdf) | Regular: 4 min 3 sec <br> Speedy: 3 min 41 sec |
 |<img src="docs/source/images/gait10.png" width="200">| [2D Gait Model](models/mjc/Gait10dof18musc/gait10dof18musc_cvt3.xml) <br> - 10 DoFs <br> - 18 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Gait10dof18musc)  |   [Report](models/mjc/Gait10dof18musc/gait10dof18musc.pdf) | Regular: 8 min 21 sec <br> Speedy: 7 min 33 sec |
 |<img src="docs/source/images/gait23.png" width="200">| [3D Gait Model](models/mjc/Gait2354Simbody/gait2354_cvt3.xml)  <br> - 23 DoFs <br> - 54 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Gait2354Simbody)  |   [Report](models/mjc/Gait2354Simbody/gait2354.pdf) | Regular: 34 min 21 sec <br> Speedy: 22 min 58 sec |
@@ -123,7 +123,7 @@ The command line basically works the same way as when using the`O2MPipeline` fun
 -->
 
 ## Contribution
-We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation]([docs/source/index.rst](https://myo-converter.readthedocs.io/en/latest/index.html)).
+We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation](https://myo-converter.readthedocs.io/en/latest/index.html).
 
 
 ## Citation
