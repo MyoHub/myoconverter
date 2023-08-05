@@ -3,11 +3,11 @@
 # Created on Thu May  5 11:16:03 2022
 # @author: Huawei Wang
 
-# PyOpenGL/MuJoCo fails in Linux if running with something else than osmesa; needs to be set before mujoco is imported
-import platform
-if platform.system() == "Linux":
-    import os
-    os.environ["MUJOCO_GL"] = "osmesa"
+# # PyOpenGL/MuJoCo fails in Linux if running with something else than osmesa; needs to be set before mujoco is imported
+# import platform
+# if platform.system() == "Linux":
+#     import os
+#     os.environ["MUJOCO_GL"] = "osmesa"
 
 import argparse
 from loguru import logger
