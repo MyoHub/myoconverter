@@ -1,7 +1,7 @@
 <mujoco model="template">
   <!-- This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. -->
   <compiler angle="radian" autolimits="true"/>
-  <option timestep="0.001" collision="predefined"/>
+  <option timestep="0.005" collision="predefined"/>
   <size njmax="1000" nconmax="400" nkey="1" nuser_jnt="1"/>
   <visual>
     <scale framelength="0.5" framewidth="0.01"/>
@@ -59,10 +59,10 @@
   </asset>
   <worldbody>
     <light pos="0 0 0" dir="0 0 -1" directional="true"/>
-    <body name="ground" pos="0 0 0" quat="0.707035 0.707179 0 0" gravcomp="0">
+    <body name="ground" quat="0.707035 0.707179 0 0">
       <geom name="ground-plane" size="10 10 0.125" quat="0.707035 -0.707179 0 0" type="plane" rgba="1 0.7 0.4 1"/>
     </body>
-    <body name="base" pos="0 0 0.8" quat="0.707035 0.707179 0 0" gravcomp="0">
+    <body name="base" pos="0 0 0.8" quat="0.707035 0.707179 0 0">
       <inertial pos="0 0 0" mass="0.001" diaginertia="0.001 0.001 0.001"/>
       <geom name="base_geom_1" type="mesh" rgba="1 1 1 1" mesh="base_geom_1_ground_ribs"/>
       <geom name="base_geom_2" type="mesh" rgba="1 1 1 1" mesh="base_geom_2_ground_spine"/>
@@ -78,7 +78,7 @@
       <site name="BICshort_BICshort-P1" pos="0.004675 -0.01231 0.13475"/>
       <site name="BICshort_BICshort-P2" pos="-0.007075 -0.04004 0.14507"/>
       <site name="r_acromion_marker" pos="-0.01256 0.04 0.17" size="0.01" group="4" rgba="1 0.1 0.5 0.5"/>
-      <body name="r_humerus" pos="-0.01755 -0.007 0.17" gravcomp="0">
+      <body name="r_humerus" pos="-0.01755 -0.007 0.17">
         <inertial pos="0 -0.180496 0" quat="0.707107 0.707107 0 0" mass="1.86457" diaginertia="0.01481 0.013193 0.004551"/>
         <joint name="r_shoulder_elev" pos="0 0 0" axis="-0.0588977 0.00229991 0.998261" range="-1.571 3.142"/>
         <geom name="r_humerus_geom_1" type="mesh" rgba="1 1 1 1" mesh="r_humerus_geom_1_arm_r_humerus"/>
@@ -115,7 +115,7 @@
         <site name="BRA_BRA-P1" pos="0.0068 -0.1739 -0.0036"/>
         <site name="TRI_cylinder_BRA_1_sidesite" pos="0.0127894 -0.27256 0.0134522" size="0.0005"/>
         <site name="r_humerus_epicondyle_marker" pos="0.005 -0.2904 0.03" size="0.01" group="4" rgba="1 0.1 0.5 0.5"/>
-        <body name="r_ulna_radius_hand" pos="0.0061 -0.2904 -0.0123" gravcomp="0">
+        <body name="r_ulna_radius_hand" pos="0.0061 -0.2904 -0.0123">
           <inertial pos="0 -0.181479 0" quat="0.5 0.5 -0.5 0.5" mass="1.53432" diaginertia="0.020062 0.019281 0.001571"/>
           <joint name="r_elbow_flex" pos="0 0 0" axis="0.0494004 0.0366003 0.998108" range="0 2.269"/>
           <geom name="r_ulna_radius_hand_geom_1" type="mesh" rgba="1 1 1 1" mesh="r_ulna_radius_hand_geom_1_arm_r_ulna"/>
@@ -248,12 +248,12 @@
     </spatial>
   </tendon>
   <actuator>
-    <general name="TRIlong" class="muscle" tendon="TRIlong_tendon" lengthrange="0.249596 0.372289" actdim="1" gainprm="1 1.54544 877.855 1 0 2 10 3.56695 1.4 0" biasprm="1 1.54544 877.855 1 0 2 10 3.56695 1.4 0"/>
-    <general name="TRIlat" class="muscle" tendon="TRIlat_tendon" lengthrange="0.16661 0.215094" actdim="1" gainprm="0.962393 1.83205 840.889 1 0 2 10 0.935144 1.4 0" biasprm="0.962393 1.83205 840.889 1 0 2 10 0.935144 1.4 0"/>
-    <general name="TRImed" class="muscle" tendon="TRImed_tendon" lengthrange="0.154238 0.202722" actdim="1" gainprm="1 1.65261 492.108 1 0 2 10 2.24762 1.4 0" biasprm="1 1.65261 492.108 1 0 2 10 2.24762 1.4 0"/>
-    <general name="BIClong" class="muscle" tendon="BIClong_tendon" lengthrange="0.319354 0.443836" actdim="1" gainprm="1 1.66081 909.123 1 0 2 10 1.22442 1.4 0" biasprm="1 1.66081 909.123 1 0 2 10 1.22442 1.4 0"/>
-    <general name="BICshort" class="muscle" tendon="BICshort_tendon" lengthrange="0.258352 0.408053" actdim="1" gainprm="1 1.54496 537.588 1 0 2 10 2.25713 1.4 0" biasprm="1 1.54496 537.588 1 0 2 10 2.25713 1.4 0"/>
-    <general name="BRA" class="muscle" tendon="BRA_tendon" lengthrange="0.105976 0.147329" actdim="1" gainprm="0.924468 1.67027 660.248 1 0 2 10 2.64925 1.4 0" biasprm="0.924468 1.67027 660.248 1 0 2 10 2.64925 1.4 0"/>
+    <general name="TRIlong" class="muscle" tendon="TRIlong_tendon" lengthrange="0.249596 0.372289" gainprm="0.632785 1.48873 773.086 1 0 2 10 3.5371 1.4 0" biasprm="0.632785 1.48873 773.086 1 0 2 10 3.5371 1.4 0"/>
+    <general name="TRIlat" class="muscle" tendon="TRIlat_tendon" lengthrange="0.16661 0.215094" gainprm="0.613796 1.11655 598.754 1 0 2 10 1.89013 1.4 0" biasprm="0.613796 1.11655 598.754 1 0 2 10 1.89013 1.4 0"/>
+    <general name="TRImed" class="muscle" tendon="TRImed_tendon" lengthrange="0.154238 0.202722" gainprm="0.594233 1.11285 580.497 1 0 2 10 4.07217 1.4 0" biasprm="0.594233 1.11285 580.497 1 0 2 10 4.07217 1.4 0"/>
+    <general name="BIClong" class="muscle" tendon="BIClong_tendon" lengthrange="0.319354 0.443836" gainprm="0.43669 1.53791 596.147 1 0 2 10 1.08068 1.4 0" biasprm="0.43669 1.53791 596.147 1 0 2 10 1.08068 1.4 0"/>
+    <general name="BICshort" class="muscle" tendon="BICshort_tendon" lengthrange="0.258352 0.408053" gainprm="0.544448 1.32501 427.025 1 0 2 10 2.29723 1.4 0" biasprm="0.544448 1.32501 427.025 1 0 2 10 2.29723 1.4 0"/>
+    <general name="BRA" class="muscle" tendon="BRA_tendon" lengthrange="0.105976 0.147329" gainprm="0.621954 1.09361 978.633 1 0 2 10 1.62514 1.4 0" biasprm="0.621954 1.09361 978.633 1 0 2 10 1.62514 1.4 0"/>
   </actuator>
   <keyframe>
     <key name="default-pose"/>

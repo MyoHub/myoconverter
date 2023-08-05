@@ -91,9 +91,9 @@
       <body name="cerv7" pos="-0.05434 0.367 0" euler="0 0 0">
         <inertial mass="0.58408467400069497" pos="-0.00020000000000000001 0.0071000000000000004 0" fullinertia="0.02 0.080000000000000002 0.02 0 0 0"/>
         <geom name="cerv7_geom_1" type="mesh" mesh="cerv7_geom_1_rotatedcerv7" rgba="1 1 1 1" group="0"/>
-        <joint name="pitch2" range="-0.05702 0.08294" limited="true" user="1.1800349670739186e-07" ref="0" axis="0 0 1" type="hinge"/>
-        <joint name="roll2" range="-0.04492 0.04492" limited="true" user="-5.785602559888251e-35" ref="0" axis="1 0 0" type="hinge"/>
-        <joint name="yaw2" range="-0.02969 0.02969" limited="true" user="9.813077866773593e-18" ref="0" axis="0 1 0" type="hinge"/>
+        <joint name="pitch2" range="-0.05702 0.08294" limited="true" user="1.1800349671610618e-07" ref="0" axis="0 0 1" type="hinge"/>
+        <joint name="roll2" range="-0.04492 0.04492" limited="true" user="5.28570985844188e-18" ref="0" axis="1 0 0" type="hinge"/>
+        <joint name="yaw2" range="-0.02969 0.02969" limited="true" user="1.3160007532593355e-17" ref="0" axis="0 1 0" type="hinge"/>
         <body name="cerv6" pos="0.003837 0.01645 0" euler="0 0 0">
           <inertial mass="0.50774885522040603" pos="0.00020000000000000001 0.0064000000000000003 0" fullinertia="0.02 0.080000000000000002 0.02 0 0 0"/>
           <geom name="cerv6_geom_1" type="mesh" mesh="cerv6_geom_1_cerv6" rgba="1 1 1 1" group="0"/>
@@ -127,9 +127,9 @@
                   <body name="cerv1" pos="-0.03556 0.01776 0" euler="0 0 0">
                     <inertial mass="0.46726773900000002" pos="0.031199999999999999 0.0019 0" fullinertia="0.02 0.080000000000000002 0.02 0 0 0"/>
                     <geom name="cerv1_geom_1" type="mesh" mesh="cerv1_geom_1_cerv1" rgba="1 1 1 1" group="0"/>
-                    <joint name="pitch1" range="-0.124 0.186" limited="true" user="6.989271815788859e-07" ref="0" axis="0 0 1" type="hinge"/>
-                    <joint name="roll1" range="-0.05236 0.05236" limited="true" user="-9.447023347510854e-34" ref="0" axis="1 0 0" type="hinge"/>
-                    <joint name="yaw1" range="-0.5896 0.5896" limited="true" user="1.1333358541386058e-34" ref="0" axis="0 1 0" type="hinge"/>
+                    <joint name="pitch1" range="-0.124 0.186" limited="true" user="6.98927181571122e-07" ref="0" axis="0 0 1" type="hinge"/>
+                    <joint name="roll1" range="-0.05236 0.05236" limited="true" user="3.121760331510614e-17" ref="0" axis="1 0 0" type="hinge"/>
+                    <joint name="yaw1" range="-0.5896 0.5896" limited="true" user="-3.6371023416760163e-17" ref="0" axis="0 1 0" type="hinge"/>
                     <body name="skull" pos="0.04335 0.01492 0" euler="0 0 0">
                       <inertial mass="4.2999999999999998" pos="0.017299999999999999 0.063 0" fullinertia="0.020729999999999998 0.014999999999999999 0.022605 0 0 0"/>
                       <geom name="skull_geom_1" type="mesh" mesh="skull_geom_1_skull" rgba="1 1 1 1" group="0"/>
@@ -744,24 +744,24 @@
   </actuator>
   <equality>
     <!-- Leave this comment here to make 'equality' element pretty printed !-->
-    <joint name="aux7jnt_r1_con" joint1="aux7jnt_r1" joint2="roll2" active="true" polycoef="0 1.756 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux7jnt_r2_con" joint1="aux7jnt_r2" joint2="yaw2" active="true" polycoef="0 2.984 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux7jnt_r3_con" joint1="aux7jnt_r3" joint2="pitch2" active="true" polycoef="0 1.889 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux6jnt_r1_con" joint1="aux6jnt_r1" joint2="roll2" active="true" polycoef="3.925e-17 2.013 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux6jnt_r2_con" joint1="aux6jnt_r2" joint2="yaw2" active="true" polycoef="0 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux6jnt_r3_con" joint1="aux6jnt_r3" joint2="pitch2" active="true" polycoef="0 2.222 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux5jnt_r1_con" joint1="aux5jnt_r1" joint2="roll2" active="true" polycoef="0 2.769 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux5jnt_r2_con" joint1="aux5jnt_r2" joint2="yaw2" active="true" polycoef="0 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux5jnt_r3_con" joint1="aux5jnt_r3" joint2="pitch2" active="true" polycoef="0 2.222 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux4jnt_r1_con" joint1="aux4jnt_r1" joint2="roll2" active="true" polycoef="0 2.769 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux4jnt_r2_con" joint1="aux4jnt_r2" joint2="yaw2" active="true" polycoef="0 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux4jnt_r3_con" joint1="aux4jnt_r3" joint2="pitch2" active="true" polycoef="-3.925e-17 1.667 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux3jnt_r1_con" joint1="aux3jnt_r1" joint2="roll2" active="true" polycoef="0 2.513 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux3jnt_r2_con" joint1="aux3jnt_r2" joint2="yaw2" active="true" polycoef="0 1.492 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux3jnt_r3_con" joint1="aux3jnt_r3" joint2="pitch2" active="true" polycoef="0 1.111 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux1jnt_r1_con" joint1="aux1jnt_r1" joint2="roll1" active="true" polycoef="0 1 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux1jnt_r2_con" joint1="aux1jnt_r2" joint2="yaw1" active="true" polycoef="0 0.1249 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint name="aux1jnt_r3_con" joint1="aux1jnt_r3" joint2="pitch1" active="true" polycoef="-7.85e-17 1.252 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux7jnt_r1_con" joint1="aux7jnt_r1" joint2="roll2" active="true" polycoef="-2.972e-18 1.756 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux7jnt_r2_con" joint1="aux7jnt_r2" joint2="yaw2" active="true" polycoef="-1.242e-17 2.984 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux7jnt_r3_con" joint1="aux7jnt_r3" joint2="pitch2" active="true" polycoef="2.206e-18 1.889 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux6jnt_r1_con" joint1="aux6jnt_r1" joint2="roll2" active="true" polycoef="2.37e-17 2.013 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux6jnt_r2_con" joint1="aux6jnt_r2" joint2="yaw2" active="true" polycoef="1.272e-17 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux6jnt_r3_con" joint1="aux6jnt_r3" joint2="pitch2" active="true" polycoef="-7.652e-18 2.222 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux5jnt_r1_con" joint1="aux5jnt_r1" joint2="roll2" active="true" polycoef="1.567e-18 2.769 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux5jnt_r2_con" joint1="aux5jnt_r2" joint2="yaw2" active="true" polycoef="1.272e-17 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux5jnt_r3_con" joint1="aux5jnt_r3" joint2="pitch2" active="true" polycoef="-7.652e-18 2.222 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux4jnt_r1_con" joint1="aux4jnt_r1" joint2="roll2" active="true" polycoef="1.567e-18 2.769 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux4jnt_r2_con" joint1="aux4jnt_r2" joint2="yaw2" active="true" polycoef="1.272e-17 3.476 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux4jnt_r3_con" joint1="aux4jnt_r3" joint2="pitch2" active="true" polycoef="-2.249e-17 1.667 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux3jnt_r1_con" joint1="aux3jnt_r1" joint2="roll2" active="true" polycoef="1.366e-17 2.513 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux3jnt_r2_con" joint1="aux3jnt_r2" joint2="yaw2" active="true" polycoef="-6.209e-18 1.492 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux3jnt_r3_con" joint1="aux3jnt_r3" joint2="pitch2" active="true" polycoef="-3.826e-18 1.111 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux1jnt_r1_con" joint1="aux1jnt_r1" joint2="roll1" active="true" polycoef="3.122e-17 1 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux1jnt_r2_con" joint1="aux1jnt_r2" joint2="yaw1" active="true" polycoef="6.904e-19 0.1249 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint name="aux1jnt_r3_con" joint1="aux1jnt_r3" joint2="pitch1" active="true" polycoef="-7.483e-17 1.252 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint name="spine_tx_locked" active="true" joint1="spine_tx" polycoef="-3.97872216927308e-17 0 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint name="spine_ty_locked" active="true" joint1="spine_ty" polycoef="8.44526185968539e-17 0 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint name="spine_tz_locked" active="true" joint1="spine_tz" polycoef="-7.30666612219483e-19 0 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
@@ -788,6 +788,6 @@
     <pair geom1="ground-plane" geom2="jaw_geom_1"/>
   </contact>
   <keyframe>
-    <key name="default-pose" qpos="-3.979e-17 8.445e-17 -7.307e-19 7.353e-11 1.397e-11 7.75e-12 1.18e-07 -5.786e-35 9.813e-18 2.229e-07 -1.016e-34 2.928e-17 2.622e-07 3.925e-17 3.411e-17 2.622e-07 -1.602e-34 3.411e-17 1.967e-07 -1.602e-34 3.411e-17 1.311e-07 -1.454e-34 1.464e-17 6.989e-07 -9.447e-34 1.133e-34 8.751e-07 -9.447e-34 1.416e-35"/>
+    <key name="default-pose" qpos="-3.979e-17 8.445e-17 -7.307e-19 7.353e-11 1.397e-11 7.75e-12 1.18e-07 5.286e-18 1.316e-17 2.229e-07 6.31e-18 2.685e-17 2.622e-07 3.434e-17 5.846e-17 2.622e-07 1.62e-17 5.846e-17 1.967e-07 1.62e-17 5.846e-17 1.311e-07 2.694e-17 1.343e-17 6.989e-07 3.122e-17 -3.637e-17 8.751e-07 6.244e-17 -3.852e-18"/>
   </keyframe>
 </mujoco>
