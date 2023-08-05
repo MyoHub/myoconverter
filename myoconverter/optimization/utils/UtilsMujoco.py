@@ -142,8 +142,11 @@ def dependencyJointAng(mjc_model, free_jnt_id_array, jnt_ang_array):
                 
                 dependencyJntAng = 0
                 for idp, poly_gain in enumerate(poly_gains):
-                    dependencyJntAng = dependencyJntAng + poly_gain*freeJntAng**idp
-                    
+                    if idp < 5:  # 'mjc_model.eq_data' provides 11 coefficients, while only first 5 are useful! 
+                        dependencyJntAng = dependencyJntAng + poly_gain*freeJntAng**idp
+                    else:
+                        break
+    
                 dependencyJntAngs.append(dependencyJntAng)
             
     return dependencyJnts, dependencyJntAngs, freeJnts
@@ -548,35 +551,36 @@ def getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr):
     
     muscle_id = mujoco.mj_name2id(mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, muscle)
 
-    mjc_model.actuator_dyntype[muscle_id] = 0 # no activation dynamics
+    # mjc_model.actuator_dyntype[muscle_id] = 0 # no activation dynamics
     
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.001 ## same time step as opensim
-        
-    for ij, setAngleDofs in enumerate(jnt_arr):
-        
-        mjc_data.qpos[:] = np.zeros(len(mjc_data.qpos),)
-        mjc_data.qvel[:] = np.zeros(len(mjc_data.qvel),)
-        mjc_data.qpos[joints_idx] = setAngleDofs
-        
-        dependencyJnts, dependencyJntAngs, freeJnts =\
-            dependencyJointAng(mjc_model, joints_idx, setAngleDofs)
-        mjc_data.qpos[dependencyJnts] = dependencyJntAngs
+    mjc_model.opt.timestep = 0.005 ## same time step as opensim
 
-        # find the self-locked joints and assign the contraint values
-        lockedJnts, lockedJntAngs = lockedJointAng(mjc_model)
-        mjc_data.qpos[lockedJnts] = lockedJntAngs
+    for ia, act in enumerate(act_arr):
+        mjc_data.ctrl[muscle_id] = act    # set control signal to 1
+        mujoco.mj_step(mjc_model, mjc_data)
         
-        for ia, act in enumerate(act_arr):
-            mjc_data.ctrl[muscle_id] = act    # set control signal to 1
+        for ij, setAngleDofs in enumerate(jnt_arr):
+            
+            mjc_data.qpos[:] = np.zeros(len(mjc_data.qpos),)
+            mjc_data.qvel[:] = np.zeros(len(mjc_data.qvel),)
+            mjc_data.qpos[joints_idx] = setAngleDofs
+            
+            dependencyJnts, dependencyJntAngs, freeJnts =\
+                dependencyJointAng(mjc_model, joints_idx, setAngleDofs)
+            mjc_data.qpos[dependencyJnts] = dependencyJntAngs
+
+            # find the self-locked joints and assign the contraint values
+            lockedJnts, lockedJntAngs = lockedJointAng(mjc_model)
+            mjc_data.qpos[lockedJnts] = lockedJntAngs
+
             # sim.data.act[actuator_id] = act  # directly assign activation to 1
-        
             mujoco.mj_step(mjc_model, mjc_data)
             
             force_mtu[ia, ij] = mjc_data.actuator_force[muscle_id].copy()
             length_mtu[ia, ij] = mjc_data.actuator_length[muscle_id].copy()
     
-    mjc_model.actuator_dyntype[muscle_id] = 3 # change back to activation dynamics 3
+    # mjc_model.actuator_dyntype[muscle_id] = 3 # change back to activation dynamics 3
         
     return force_mtu, length_mtu
     
