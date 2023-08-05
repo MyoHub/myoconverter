@@ -1,7 +1,7 @@
+.. _Limitations:
+
 Limitations
 ===========
-
-.. _limitations:
 
 There are some limitations involved in the current conversion and optimisation process, that are good to keep in mind when using the converted and optimised models. Below we list these limitations, in no particular order.
 
@@ -9,7 +9,7 @@ There are some limitations involved in the current conversion and optimisation p
 
 2. **Contact definitions are not converted.**
 
-   - With the exception that if a model is converted with the `add-ground-geom` keyword, contacts between the model and ground are included. However, it is fairly easy to add contacts to the converted MuJoCo model afterwards, e.g., using MuJoCo's *contact/pair* definitions. One could also enable all contacts by setting `collision="all"` in the converted XML model file (by default we set `collision="predefined"`), but this could lead to unwanted collisions as most of the OpenSim models haven't been developed for this purpose and their collision geometries may not be suitable.
+   - With the exception that if a model is converted with the `add_ground_geom` keyword, contacts between the model and ground are included. However, it is fairly easy to add contacts to the converted MuJoCo model afterwards, e.g., using MuJoCo's *contact/pair* definitions. One could also enable all contacts by setting `collision="all"` in the converted XML model file (by default we set `collision="predefined"`), but this could lead to unwanted collisions as most of the OpenSim models haven't been developed for this purpose and their collision geometries may not be suitable.
 
 3. **Default values for parameters set in the *defaults* element of an OpenSim model are not parsed or used during the conversion.**
 
@@ -42,7 +42,7 @@ There are some limitations involved in the current conversion and optimisation p
 
    - In contrast to OpenSim, MuJoCo uses `operational range <https://mujoco.readthedocs.io/en/stable/modeling.html#muscle-actuators>`_ rather than optimal fiber length to define muscle force properties. The operational range represents the valid range of muscle activation values within which the muscle behaves in a reasonable manner.
 
-   - In our optimization setup, we assume that the maximum operational range of the muscles falls within the interval [0, 1.8]. This range is considered reasonable as it ensures that the muscle behavior remains within acceptable biological constraints. It is important to note that this setup may not account for extreme conditions, such as the `Tag of War <https://github.com/MyoHub/myoConverter/tree/main/models/osim/TugOfWar>`_ model. However, it serves as a suitable constraint for typical biological musculoskeletal models.
+   - In our optimization setup, we assume that the maximum operational range of the muscles falls within the interval [0, 1.8]. This range is considered reasonable as it ensures that the muscle behavior remains within acceptable biological constraints. It is important to note that this setup may not account for extreme conditions, such as the `Tug of War <https://github.com/MyoHub/myo_converter/tree/main/models/osim/TugOfWar>`_ model. However, it serves as a suitable constraint for typical biological musculoskeletal models.
 
 10. **Current MuJoCo model uses non-elastic tendon.**
 

@@ -16,11 +16,11 @@ docker build -f docker/Dockerfile -t myoconverter:latest .
 docker run --rm -it --name myodocker myoconverter:latest bash
 ```
 
-When the container is started the mamba environment "myoConverter" is activated.\
+When the container is started the mamba environment "myoconverter" is activated.\
 Your prompt should look like this:
 
 ```bash
-(myoConverter) appuser@...:/app$
+(myoconverter) appuser@...:/app$
 ```
 
 ## Read and write files on host machine
