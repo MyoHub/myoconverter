@@ -6,8 +6,7 @@ channels:
   - defaults
 dependencies:
   - python=3.9.16
-  - mujoco
-  # - mujoco-python=2.3.3
+  - mujoco-python=2.3.3
   - loguru=0.5.3
   - lxml=4.9.1
   - numpy=1.21.5
