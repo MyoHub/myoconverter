@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/myoconvertor_logo.png?raw=true" width=800>
+<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/logo-color-fit_horizontal.png?raw=true" width=800>
 </p>
 
 [![Documentation Status](https://readthedocs.org/projects/myoconverter/badge/?version=latest)](https://myoconverter.readthedocs.io/en/latest/)
@@ -9,7 +9,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1U6vo6Q_rPhDaq6oUMV7EAZRm6s0fD1wn?usp=sharing) -->
 
 # myoConverter
-**myoConverter** is a tool for converting OpenSim musculoskeletal (MSK) models to the MuJoCo model format with optimized muscle kinematics and kinetics.
+**myoConverter** is a tool for converting OpenSim musculoskeletal (MSK) models to the MuJoCo model format with optimized muscle kinematics and kinetics. 
 
 Building upon the foundation of the previous [O2MConverter](https://github.com/aikkala/O2MConverter) project, we extensively rewrote the functions, incorporated new features, and ensured compatibility with the latest OpenSim 4.0+ models. Additionally, two optimization steps were introduced to enhance the accuracy of muscle properties in both kinematics and kinetics.
 
@@ -22,7 +22,7 @@ We evaluate the accuracy of the converter with a handful of models. However, the
 ## Example models
 Here we present a collection of models, as examples, that have been processed with the myoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
 
-|   | Model name| Source | Validation | Conversion Speed |
+|   | Model name| Source | Validation | Conversion Speed | 
 |--------------------|--------------|:-------:|:--------:|-------|
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/tug-of-war.png" width="200">| [Turg of War](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/TugOfWar)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/TugOfWar/Tug_of_War_conversion_report.pdf) | Regular: 30 sec <br> Speedy: 30 sec |
 |<img src="https://github.com/MyoHub/myoConverter/blob/main/docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles | [Osim](https://github.com/MyoHub/myoConverter/tree/main/models/osim/Arm26)  |   [Report](https://github.com/MyoHub/myoConverter/blob/main/models/mjc/Arm26/arm26_conversion_report.pdf) | Regular: 5 min 30 sec <br> Speedy: 4 min 37 sec |
@@ -35,7 +35,7 @@ Here we present a collection of models, as examples, that have been processed wi
 
 
 
-MyoConverter has been extensively used to build up the [MyoSim](https://github.com/MyoHub/myo_sim) MSK models that have been used in the [MyoSuite](https://sites.google.com/view/myosuite) framework. These converted models underwent additional manual adjustments to address minor issues, ensuring their suitability for functional task simulations.
+MyoConverter has been extensively used to build up the [MyoSim](https://github.com/MyoHub/myo_sim) MSK models that have been used in the [MyoSuite](https://sites.google.com/view/myosuite) framework. These converted models underwent additional manual adjustments to address minor issues, ensuring their suitability for functional task simulations. 
 
 Besides, a list of third-party converted models using this tool can be found [here]().
 
@@ -66,7 +66,7 @@ python -c "import myoConverter"
 
 ### Windows/MacOS
 In Windows and MacOS, we provide a docker image that has the myoConverter ready to be used. Please follow the following usage instructions:
-....
+.... 
 
 ## Quick example
 
@@ -117,7 +117,7 @@ An example of calling the converter script:
 ```bash
 python myoconverter/O2MPipeline.py /path/to/osim.xml /path/to/geometry/folder /path/to/output/folder --speedy True --add_ground_geom True
 ```
-The command line basically works the same way as when using the`O2MPipeline` function.
+The command line basically works the same way as when using the`O2MPipeline` function. 
 -->
 
 ## Contribution
