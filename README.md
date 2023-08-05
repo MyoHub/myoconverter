@@ -34,7 +34,7 @@ Here we present a collection of models, as examples, that have been processed wi
 |<img src="docs/source/images/neck6d.png" width="200">| [Neck Model](models/mjc/Neck6D/neck6d_cvt3.xml) <br> - 6 DoFs <br> - 72 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Neck6D)  |   [Report](models/mjc/Neck6D/neck6d.pdf) | Regular: 200 min 14 sec <br> Speedy: 57 min 43 sec |
 
 
-Please also see [this list of third-party converted models]([docs/source/models.rst](https://myo-converter.readthedocs.io/en/latest/models.html)) using MyoConverter.
+Please also see [this list of third-party converted models](https://myo-converter.readthedocs.io/en/latest/models.html) using MyoConverter.
 
 
 ## Download & Setup
