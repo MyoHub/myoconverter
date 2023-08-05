@@ -507,8 +507,8 @@ class MuscleForceOpt:
 
         ax = fig.add_subplot(111)
         X = np.arange(len(muscle_list))
-        ax.bar(X + 0.15, np.array(rms_org), 0.25, label='Default')
-        ax.bar(X - 0.15, np.array(rms_opt), 0.25, label='Optimized')
+        ax.bar(X - 0.15, np.array(rms_org), 0.25, label='Default')
+        ax.bar(X + 0.15, np.array(rms_opt), 0.25, label='Optimized')
         plt.ylabel('RMS 1/Fmax')
         plt.xticks(X, muscle_list)
         plt.xticks(rotation=90)
