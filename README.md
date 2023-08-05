@@ -18,7 +18,7 @@ The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faith
 We evaluate the accuracy of the converter with a handful of models. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case, you can open an issue, or, preferably, [contribute](docs/source/participate.rst) to the project and create a pull request.
 
 
- [Example Model List](https://github.com/MyoHub/myo_converter/edit/release/v1.0.0/README.md#example-models) | [External Model List](https://myo-converter.readthedocs.io/en/latest/models.html) | [Documentation](https://myo-converter.readthedocs.io/en/latest/index.html)
+ [External Model List](https://myo-converter.readthedocs.io/en/latest/models.html) | [Documentation](https://myo-converter.readthedocs.io/en/latest/index.html)
 | [myoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](https://myo-converter.readthedocs.io/en/latest/limitations.html)
 
 ## Example models
