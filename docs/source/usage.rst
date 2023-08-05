@@ -10,10 +10,10 @@ If you want to convert and optimize a model that has not been uploaded to the Gi
 
 .. code-block:: bash
 
-   git clone git@github.com:MyoHub/myo-converter.git
-   cd myo-converter
-   conda env create -n myo-converter -f conda_env.yml
-   conda activate myo-converter
+   git clone git@github.com:MyoHub/myo_converter.git
+   cd myo_converter
+   conda env create -n myoconverter -f conda_env.yml
+   conda activate myoconverter
    
 Then you can run the pipeline by calling the python function.
 

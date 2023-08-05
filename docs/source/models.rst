@@ -3,9 +3,9 @@
 Models
 ======
 
-We present a set of example models together with the conversion software. More details can be found in the repo `ReadMe <https://github.com/MyoHub/myo-converter/blob/main/README.md#example-models>`_. These models were used to evaluate the functionality of the converter.
+We present a set of example models that have been used to evaluate the functionality of the converter. You can find these models in the repo `ReadMe <https://github.com/MyoHub/myo_converter/blob/main/README.md#example-models>`_.
 
-In addition to these models, we maintain here a list of models that have been converted and used by other users. This aims to minimize redundant efforts in converting the same models. However, it's important to note that we cannot guarantee the quality or accuracy of these listed models, since there is no universal test on them. Therefore, we strongly recommend thoroughly checking/testing these models before using in your own projects.
+In addition to these example models, we maintain here a list of models that have been converted and used by other users. This aims to minimize redundant efforts in converting the same models. However, it's important to note that we cannot guarantee the quality or accuracy of these listed models, since there is no universal quality/accuracy test. Therefore, we strongly recommend thoroughly checking/testing these models before using in your own projects.
 
 If you encounter any issues with the listed models, we kindly request that you report them to the original creator or maintainer of the model. This ensures that any problems can be addressed by the appropriate individuals.
 

@@ -42,7 +42,7 @@ There are some limitations involved in the current conversion and optimisation p
 
    - In contrast to OpenSim, MuJoCo uses `operational range <https://mujoco.readthedocs.io/en/stable/modeling.html#muscle-actuators>`_ rather than optimal fiber length to define muscle force properties. The operational range represents the valid range of muscle activation values within which the muscle behaves in a reasonable manner.
 
-   - In our optimization setup, we assume that the maximum operational range of the muscles falls within the interval [0, 1.8]. This range is considered reasonable as it ensures that the muscle behavior remains within acceptable biological constraints. It is important to note that this setup may not account for extreme conditions, such as the `Tug of War <https://github.com/MyoHub/myo-converter/tree/main/models/osim/TugOfWar>`_ model. However, it serves as a suitable constraint for typical biological musculoskeletal models.
+   - In our optimization setup, we assume that the maximum operational range of the muscles falls within the interval [0, 1.8]. This range is considered reasonable as it ensures that the muscle behavior remains within acceptable biological constraints. It is important to note that this setup may not account for extreme conditions, such as the `Tug of War <https://github.com/MyoHub/myo_converter/tree/main/models/osim/TugOfWar>`_ model. However, it serves as a suitable constraint for typical biological musculoskeletal models.
 
 10. **Current MuJoCo model uses non-elastic tendon.**
 
