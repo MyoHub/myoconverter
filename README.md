@@ -18,8 +18,8 @@ The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faith
 We evaluate the accuracy of the converter with a handful of models. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case, you can open an issue, or, preferably, [contribute](docs/source/participate.rst) to the project and create a pull request.
 
 
- [Example Model List]() | [External Model List](https://github.com/facebookresearch/myosuite/blob/main/docs/source/suite.rst#tasks) | [Documentation](https://myosuite.readthedocs.io/en/latest/)
-| [myoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](docs/source/limitations.rst)
+ [Example Model List](https://github.com/MyoHub/myo_converter/edit/release/v1.0.0/README.md#example-models) | [External Model List](https://myo-converter.readthedocs.io/en/latest/models.html) | [Documentation](https://myo-converter.readthedocs.io/en/latest/index.html)
+| [myoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](https://myo-converter.readthedocs.io/en/latest/limitations.html)
 
 ## Example models
 Here we present a collection of models, as examples, that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
@@ -34,7 +34,7 @@ Here we present a collection of models, as examples, that have been processed wi
 |<img src="docs/source/images/neck6d.png" width="200">| [Neck Model](models/mjc/Neck6D/neck6d_cvt3.xml) <br> - 6 DoFs <br> - 72 Muscles | [Osim](https://github.com/MyoHub/myo_converter/tree/main/models/osim/Neck6D)  |   [Report](models/mjc/Neck6D/neck6d.pdf) | Regular: 200 min 14 sec <br> Speedy: 57 min 43 sec |
 
 
-Please also see [this list of third-party converted models](docs/source/models.rst) using MyoConverter.
+Please also see [this list of third-party converted models]([docs/source/models.rst](https://myo-converter.readthedocs.io/en/latest/models.html)) using MyoConverter.
 
 
 ## Download & Setup
@@ -123,7 +123,7 @@ The command line basically works the same way as when using the`O2MPipeline` fun
 -->
 
 ## Contribution
-We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation](docs/source/index.rst).
+We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation]([docs/source/index.rst](https://myo-converter.readthedocs.io/en/latest/index.html)).
 
 
 ## Citation
