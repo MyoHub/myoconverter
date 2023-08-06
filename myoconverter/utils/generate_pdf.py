@@ -247,7 +247,7 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
         for vlt2_name in vlt2_plot_list:
             if not "overall_comp" in vlt2_name:
                 pdf.add_page()
-                pdf['plot_title'] = "Muscle specific moment arm comparison before/after optimization"
+                pdf['plot_title'] = "Muscle specific moment arm comparison with Osim model after optimization"
                 pdf['ma_image'] = mjc_vlt2_path + '/moment_arms/' + vlt2_name + '.svg'
 
         return pdf

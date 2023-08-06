@@ -7,7 +7,7 @@
 ## Optionally, set the following env to select a mamba env to run in
 ##   ENV MAMBA_DEFAULT_ENV=foo
 ## You may also want to add something like
-##   RUN mamba init bash && echo 'mamba activate "${MAMBA_DEFAULT_ENV:-myoConverter}"' >>  ~/.bashrc
+##   RUN mamba init bash && echo 'mamba activate "${MAMBA_DEFAULT_ENV:-myoconverter}"' >>  ~/.bashrc
 ## to drop into a default env when `docker exec -it $IMAGE bash`
 ## Docker shells by default run as nonlogin, noninteractive
 ## More references:
@@ -24,7 +24,7 @@
 ## env to "base" on shell-ing into the container. If you want to start in a custom end,
 
 ## cache the value because the shell hook step will remove it
-_MAMBA_DEFAULT_ENV="${MAMBA_DEFAULT_ENV:-myoConverter}"
+_MAMBA_DEFAULT_ENV="${MAMBA_DEFAULT_ENV:-myoconverter}"
 
 __mamba_setup="$('/etc/mambaforge/condabin/mamba' 'shell.bash' 'hook' 2> /dev/null)"
 eval "$__mamba_setup"

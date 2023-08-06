@@ -68,7 +68,7 @@ Outcomes of the pipeline are saved in the output folder. Four folders and a few 
       This folder contains the outcomes of the first conversion and validation step. 
       Specifically, the original OpenSim and converted MuJoCo model's joint list and their ranges are stored as .pkl files.
       The endpoints kinematics check comparison plots are plotted and saved as .svg files.
-      The plots of approximation of custom joints, moving and conditional path points are generated to indicate how good the approximation are.
+      The plots of approximation of custom joints, moving, and conditional path points are generated to indicate how good the approximation are.
 
    - `Step2_MuscleKinematics` folder:
       This folder contains the outcomes of the second optimization and validation step.
