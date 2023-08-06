@@ -3,7 +3,7 @@
 Models
 ======
 
-We present a set of example models that have been used to evaluate the functionality of the converter. You can find these models in the repo `ReadMe <https://github.com/MyoHub/myo_converter/blob/main/README.md#example-models>`_.
+We present a set of example models that have been used to evaluate the functionality of the converter. You can find these models in the repo `ReadMe <https://github.com/MyoHub/myoconverter/blob/main/README.md#example-models>`_.
 
 In addition to these example models, we maintain here a list of models that have been converted and used by other users. This aims to minimize redundant efforts in converting the same models. However, it's important to note that we cannot guarantee the quality or accuracy of these listed models, since there is no universal quality/accuracy test. Therefore, we strongly recommend thoroughly checking/testing these models before using in your own projects.
 

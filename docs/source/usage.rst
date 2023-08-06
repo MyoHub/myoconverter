@@ -10,8 +10,8 @@ If you want to convert and optimize a model that has not been uploaded to the Gi
 
 .. code-block:: bash
 
-   git clone git@github.com:MyoHub/myo_converter.git
-   cd myo_converter
+   git clone git@github.com:MyoHub/myoconverter.git
+   cd myoconverter
    conda env create -n myoconverter -f conda_env.yml
    conda activate myoconverter
    
