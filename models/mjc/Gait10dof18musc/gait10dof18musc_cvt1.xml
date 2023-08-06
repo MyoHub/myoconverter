@@ -48,8 +48,8 @@
           <inertial mass="3.7075" pos="0 -0.1867 0" fullinertia="0.0504 0.0051000000000000004 0.0511 0 0 0"/>
           <geom name="tibia_r_geom_1" type="mesh" mesh="tibia_r_geom_1_tibia_r" rgba="1 1 1 1" group="0"/>
           <geom name="tibia_r_geom_2" type="mesh" mesh="tibia_r_geom_2_fibula" rgba="1 1 1 1" group="0"/>
-          <joint name="knee_r_translation1" range="-0.005574 0.00411" limited="true" user="-0.0036392466304026047" ref="0" axis="1 0 0" type="slide"/>
-          <joint name="knee_r_translation2" range="-0.4226 -0.3953" limited="true" user="-0.39571344513759127" ref="0" axis="0 1 0" type="slide"/>
+          <joint name="knee_r_translation1" range="-0.005574 0.00411" limited="true" user="-0.0036392466304026026" ref="0" axis="1 0 0" type="slide"/>
+          <joint name="knee_r_translation2" range="-0.4226 -0.3953" limited="true" user="-0.39571344513759116" ref="0" axis="0 1 0" type="slide"/>
           <joint name="knee_angle_r" range="-2.094 0.1745" limited="true" user="0.0" ref="0" axis="0 0 1" type="hinge"/>
           <body name="talus_r" pos="0 -0.43 0" euler="0 0 0">
             <inertial mass="0.10000000000000001" pos="0 0 0" fullinertia="0.001 0.001 0.001 0 0 0"/>
@@ -118,8 +118,8 @@
           <inertial mass="3.7075" pos="0 -0.1867 0" fullinertia="0.0504 0.0051000000000000004 0.0511 0 0 0"/>
           <geom name="tibia_l_geom_1" type="mesh" mesh="tibia_l_geom_1_tibia_l" rgba="1 1 1 1" group="0"/>
           <geom name="tibia_l_geom_2" type="mesh" mesh="tibia_l_geom_2_l_fibula" rgba="1 1 1 1" group="0"/>
-          <joint name="knee_l_translation1" range="-0.005574 0.00411" limited="true" user="-0.0036392466304026047" ref="0" axis="1 0 0" type="slide"/>
-          <joint name="knee_l_translation2" range="-0.4226 -0.3953" limited="true" user="-0.39571344513759127" ref="0" axis="0 1 0" type="slide"/>
+          <joint name="knee_l_translation1" range="-0.005574 0.00411" limited="true" user="-0.0036392466304026026" ref="0" axis="1 0 0" type="slide"/>
+          <joint name="knee_l_translation2" range="-0.4226 -0.3953" limited="true" user="-0.39571344513759116" ref="0" axis="0 1 0" type="slide"/>
           <joint name="knee_angle_l" range="-2.094 0.1745" limited="true" user="0.0" ref="0" axis="0 0 1" type="hinge"/>
           <body name="talus_l" pos="0 -0.43 0" euler="0 0 0">
             <inertial mass="0.10000000000000001" pos="0 0 0" fullinertia="0.001 0.001 0.001 0 0 0"/>
@@ -364,9 +364,9 @@
     <joint joint1="knee_r_translation2" joint2="knee_angle_r" polycoef="-0.3957 0.003413 -0.005587 0.0006697 0.0005674" solimp="0.9999 0.9999 0.001 0.5 2" active="true"/>
     <joint joint1="knee_l_translation1" joint2="knee_angle_l" polycoef="-0.003639 -0.006267 0.002807 0.00134 -0.0006776" solimp="0.9999 0.9999 0.001 0.5 2" active="true"/>
     <joint joint1="knee_l_translation2" joint2="knee_angle_l" polycoef="-0.3957 0.003413 -0.005587 0.0006697 0.0005674" solimp="0.9999 0.9999 0.001 0.5 2" active="true"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_x" joint2="hip_flexion_r" polycoef="-0.0288 3.808e-18 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_y" joint2="hip_flexion_r" polycoef="-0.0805 4.686e-18 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_z" joint2="hip_flexion_r" polycoef="0.0816 -1.406e-17 -0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_x" joint2="hip_flexion_r" polycoef="-0.0288 3.166e-18 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_y" joint2="hip_flexion_r" polycoef="-0.0805 4.835e-18 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_z" joint2="hip_flexion_r" polycoef="0.0816 -4.705e-18 -0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="rect_fem_r_rect_fem_r-P3_x" joint2="knee_angle_r" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="rect_fem_r_rect_fem_r-P3_y" joint2="knee_angle_r" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="vasti_r_vas_int_r-P3_y" joint2="knee_angle_r" polycoef="-0.2234 0.08578 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
@@ -376,9 +376,9 @@
     <joint joint1="gastroc_r_med_gas_r-P2_x" joint2="knee_angle_r" polycoef="-0.02915 -0.004849 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="gastroc_r_med_gas_r-P2_y" joint2="knee_angle_r" polycoef="-0.4015 -0.0041 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="gastroc_r_med_gas_r-P2_z" joint2="knee_angle_r" polycoef="-0.02562 -0.001014 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_x" joint2="hip_flexion_l" polycoef="-0.0288 3.808e-18 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_y" joint2="hip_flexion_l" polycoef="-0.0805 4.686e-18 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_z" joint2="hip_flexion_l" polycoef="-0.0816 1.406e-17 0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_x" joint2="hip_flexion_l" polycoef="-0.0288 3.166e-18 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_y" joint2="hip_flexion_l" polycoef="-0.0805 4.835e-18 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_z" joint2="hip_flexion_l" polycoef="-0.0816 4.705e-18 0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="rect_fem_l_rect_fem_l-P3_x" joint2="knee_angle_l" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="rect_fem_l_rect_fem_l-P3_y" joint2="knee_angle_l" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="vasti_l_vas_int_l-P3_y" joint2="knee_angle_l" polycoef="-0.2234 0.08578 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>

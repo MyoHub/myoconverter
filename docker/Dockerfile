@@ -89,7 +89,7 @@ RUN mamba env create \
     && mamba clean -yaf
 
 ## Configure .bashrc to drop into a conda env and immediately activate our TARGET env
-RUN mamba init && echo 'mamba activate myoConverter' >> ~/.bashrc
+RUN mamba init && echo 'mamba activate myoconverter' >> ~/.bashrc
 
 ENV PYTHONPATH=/app
 ENTRYPOINT ["/app/entrypoint.sh"]
