@@ -19,6 +19,6 @@ We the main developers AI and HW maintain and contribute to this project in our 
 
 3. **Elastic muscle model**
 
-   - *Plan*: Use the [new MuJoCo update](https://github.com/deepmind/mujoco/issues/305) to create an elastic tendon muscle model.
+   - *Plan*: Use the `new MuJoCo update <https://github.com/deepmind/mujoco/issues/305>`_ to create an elastic tendon muscle model.
    - *Starting date*: undetermined
    - *Finishing date*: undetermined
