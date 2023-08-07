@@ -12,8 +12,8 @@ If you encounter any issues with the listed models, we kindly request that you r
 In general, rather than recreating identical models, we encourage users to focus their efforts on refining and improving existing models. Collaboration and refinement of existing resources can lead to greater efficiency and quality within the community.
 
 
-- `myoSim <https://github.com/MyoHub/myo_sim>`_:
- myoSim is the musculoskeletal model library that extensively used in the `myoSuite <https://github.com/facebookresearch/myosuite>`_ (a deep learning framework for MSK movement task trainings). MyoSim currently contains several converted and (manually) well tuned *finger*, *hand*, *arm*, and *leg* models.
+- `MyoSim <https://github.com/MyoHub/myo_sim>`_:
+ MyoSim is the musculoskeletal model library that extensively used in the `MyoSuite <https://github.com/facebookresearch/myosuite>`_ (a deep learning framework for MSK movement task trainings). MyoSim currently contains several converted and (manually) well tuned *finger*, *hand*, *arm*, and *leg* models.
 
 - TO BE ADDED
 
