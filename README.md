@@ -89,7 +89,6 @@ kwargs['generate_pdf'] = True          # Do not generate validation pdf report
 kwargs['add_ground_geom'] = True       # Add ground to the model
 kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
 
-
 ############### Simple Arm 2 DoFs 6 Muscles ################ 
 osim_file = './models/osim/Arm26/arm26.osim'
 geometry_folder = './models/osim/Arm26/Geometry'
@@ -97,7 +96,7 @@ output_folder = './models/mjc/Arm26'
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
 
-More examples can be found in the example folder in converting other example models. Detail explaination of the conversion setup/process is location in the doc. 
+More examples can be found in the [example folder](https://github.com/MyoHub/myoconverter/tree/main/examples) in converting other example models. Detail explaination of the conversion setup/process is location in the [documentation](https://myoconverter.readthedocs.io/en/latest/pipeline.html). 
 
 
 ## Contribution
