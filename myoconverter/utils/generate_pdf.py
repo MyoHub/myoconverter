@@ -75,7 +75,7 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
         {'name': 'mf_image', 'type': 'I', 'x1': 10.0, 'y1': 20.0, 'x2': 300.0, 'y2': 200.0,},]
     # if generate pdf report, then initilize the pdf file, Landscape A4 (297 by 210 mm) with element template
     pdf = Template(format = 'A4', elements = elements, orientation = 'L', unit = 'mm',\
-                    title = 'O2M myoConverter Model Validation Report',\
+                    title = 'MyoConverter Model Validation Report',\
                     author=' Huawei Wang & Aleksi Ikkala',\
                     keywords='Musculoskeletal Model, MuJoCo, OpenSim, Muscle Kinematics & Kinetics, Conversion pipeline') # Landscape A4 (210 by 297 mm)
     
@@ -310,4 +310,4 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
     # # generate pdf
     # pdf.render(save_path + '/' + model_name + '.pdf')
     
-    return pdf 
+    return pdf
