@@ -36,6 +36,13 @@ Here we present a collection of models, as examples, that have been processed wi
 
 Please also see [this list of models](https://myoconverter.readthedocs.io/en/latest/models.html) converted using MyoConverter.
 
+**_NOTE:_** We provide a keyframe inside the converted model, so that all the joint/muscle path constraints are met. However, MuJoCo does not load it by default. When using the GUI, please hit the keyframe button. When loading the model using MuJoCo bindings, you can use following functions to load the keyframe:
+```python
+import mujoco
+model = mujoco.MjModel.form_xml_string(path/to/XML)
+data = mujoco.MjData(model)
+mujoco.mj_resetDataKeyframe(model, data, 0)
+```
 
 ## Download & Setup
 
