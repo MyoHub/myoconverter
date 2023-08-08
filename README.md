@@ -75,52 +75,30 @@ We also provide a docker image that has MyoConverter installed. Please follow [t
 #### Call a Python function
 
 ```python
-from myoconverter import O2MPipeline
+from myoconverter.O2MPipeline import O2MPipeline
+
+# define pipline configurations
+kwargs = {}  # define kwargs inputs
+kwargs['convert_steps'] = [1, 2, 3]    # All three steps selected
+kwargs['muscle_list'] = None           # No specific muscle selected, optimize all of them
+kwargs['osim_data_overwrite'] = True   # Overwrite the Osim model state files
+kwargs['conversion'] = True            # Yes, perform 'Cvt#' process
+kwargs['validation'] = True            # Yes, perform 'Vlt#' process
+kwargs['speedy'] = False                # Do not reduce the checking notes to increase speed
+kwargs['generate_pdf'] = True          # Do not generate validation pdf report
+kwargs['add_ground_geom'] = True       # Add ground to the model
+kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
+
+
+############### Simple Arm 2 DoFs 6 Muscles ################ 
+osim_file = './models/osim/Arm26/arm26.osim'
+geometry_folder = './models/osim/Arm26/Geometry'
+output_folder = './models/mjc/Arm26'
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
-converts `osim_file` (a string pointing to an .osim file) to a MuJoCo XML file and outputs the model into folder `output_folder`. The `**kwargs` may contain the optional parameters as listed below:
-- `convert_steps` : Selected conversion steps, could be any subset of `[1, 2, 3]` based on the needs, Default = `[1, 2, 3]`
-- `muscle_list` : Selected specific muscles for the conversion and validation steps, Default = None
-- `osim_data_overwrite` : If true, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]
-- `conversion` : If true, perform the conversion functions of selected steps, Default = True
-- `validation` : If true, perform the validation functions of selected steps, Default = True
-- `speedy` : If true, reduce the number of checking notes in optimization steps to increase speed, Default = False
-- `generate_pdf` : If true, generate a pdf report of the validation results, Default = False
-- `add_ground_geom` : If true, a geom (of type plane) is added to the MuJoCo model as ground, Default = False
-- `treat_as_normal_path_point` : If true, MovingPathPoints and ConditionalPathPoints will be treated as normal PathPoints, Default = False
 
-The following example can be used to setup the `**kwargs`
+More examples can be found in the example folder in converting other example models. Detail explaination of the conversion setup/process is location in the doc. 
 
-```python
-# define pipeline configurations
-kwargs = {}  # define kwargs inputs
-kwargs['convert_steps'] = [1, 2, 3]             # All three steps selected
-kwargs['muscle_list'] = None                    # No specific muscle selected, optimize all of them
-kwargs['osim_data_overwrite'] = True            # Overwrite the Osim model state files
-kwargs['conversion'] = True                     # Yes, perform 'Cvt#' process
-kwargs['validation'] = True                     # Yes, perform 'Vlt#' process
-kwargs['speedy'] = False                        # Do not reduce the checking notes to increase speed
-kwargs['generate_pdf'] = True                   # Do not generate validation pdf report
-kwargs['add_ground_geom'] = True                # Add ground to the model
-kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
-```
-
-<!--
-### Call from command line
-
-To print usage information, input in a command line:
-
-```bash
-python myoconverter/O2MPipeline.py
-```
-
-An example of calling the converter script:
-
-```bash
-python myoconverter/O2MPipeline.py /path/to/osim.xml /path/to/geometry/folder /path/to/output/folder --speedy True --add_ground_geom True
-```
-The command line basically works the same way as when using the`O2MPipeline` function.
--->
 
 ## Contribution
 We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html).
