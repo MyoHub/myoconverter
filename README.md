@@ -39,7 +39,9 @@ Please also see [this list of models](https://myoconverter.readthedocs.io/en/lat
 
 ## Download & Setup
 
-### conda / mamba
+
+
+### For Linux: conda / mamba
 
 If you would like to convert your own MSK model, follow the steps outlined below:
 
@@ -65,7 +67,7 @@ mamba activate myoconverter
 python myoconverter/tests/model_unit_test.py
 ```
 
-### Docker
+### For Windows/MacOS: Docker
 
 We also provide a docker image that has MyoConverter installed. Please follow [this link](./docker/README.md) for further instructions.
 
