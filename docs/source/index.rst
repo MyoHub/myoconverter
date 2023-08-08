@@ -5,13 +5,13 @@ Welcome to MyoConverters's documentation!
 
 This software is intended for OpenSim 4.x models. If you have an OpenSim 3.x model, or earlier, it is recommended to update the model to the 4.x format using OpenSim's software. If this is not possible, then we suggest you try out the `O2MConverter <https://github.com/aikkala/O2MConverter>`_ which converts OpenSim 3.x models, but does not include moment arm and force optimizations. 
 
+.. note::
+  The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faithfully as possible. This means that any possible errors in the original OpenSim models are likely to remain in the MuJoCo model. Hence, the converted models may not be suitable for research purposes as such, but may require further adjustments. Models with further manual adjustments, ensuring their suitability for functional task simulations, can be found in the `MyoSim <https://github.com/MyoHub/myo_sim>`_ project, which builds on models converted by MyoConverter.
 
 .. note::
 
    We evaluate the accuracy of the converter with a `handful of models <models.html>`_. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case you can open an issue, or, preferably, `contribute <participate.html>`_ to the project and create a pull request. `See the GitHub repository <https://github.com/MyoHub/myoconverter>`_
 
-.. note::
-  The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faithfully as possible. This means that any possible errors in the original OpenSim models are likely to remain in the MuJoCo model. Hence, the converted models may not be suitable for research purposes as such, but may require further adjustments. Models with further manual adjustments, ensuring their suitability for functional task simulations, can be found in the `MyoSim <https://github.com/MyoHub/myo_sim>`_ project, which builds on models converted by MyoConverter.
 
 .. toctree::
    :maxdepth: 2

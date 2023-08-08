@@ -13,16 +13,13 @@
 
 Building upon the foundation of the previous [O2MConverter](https://github.com/aikkala/O2MConverter) project, we extensively rewrote the functions, incorporated new features, and ensured compatibility with the latest OpenSim 4.0+ models. Additionally, two optimization steps were introduced to enhance the accuracy of muscle properties in both kinematics and kinetics.
 
-The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faithfully as possible. This means that any possible errors in the original OpenSim models are likely to remain in the MuJoCo model. Hence, the converted models may not be suitable for research purposes as such, but may require further adjustments. Models with further manual adjustments, ensuring their suitability for functional task simulations, can be found in the [MyoSim](https://github.com/MyoHub/myo_sim) project, which builds on models converted by MyoConverter.
-
-We evaluate the accuracy of the converter with a handful of models. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case, you can open an issue, or, preferably, [contribute](https://myoconverter.readthedocs.io/en/latest/participate.html) to the project and create a pull request.
-
+See the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html) for more information about the converter and the conversion process.
 
  [External Model List](https://myoconverter.readthedocs.io/en/latest/models.html) | [Documentation](https://myoconverter.readthedocs.io/en/latest/index.html)
 | [MyoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](https://myoconverter.readthedocs.io/en/latest/limitations.html)
 
 ## Example models
-Here we present a collection of models, as examples, that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
+Here we present a few example models that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
 
 |   | Model name| Source | Validation | Conversion Speed |
 |--------------------|--------------|:-------:|:--------:|-------|
@@ -36,6 +33,13 @@ Here we present a collection of models, as examples, that have been processed wi
 
 Please also see [this list of models](https://myoconverter.readthedocs.io/en/latest/models.html) converted using MyoConverter.
 
+**_NOTE:_** The converted XML model contains a keyframe which should be used when initialising the model. This keyframe sets the joint values such that all the joint/muscle path constraints are met. However, MuJoCo does not load the keyframe by default. When using the MuJoCo `simulate` GUI, please hit the `Load key` button to load the keyframe. When loading the model using MuJoCo P  ython bindings, you can use following functions to load the keyframe:
+```python
+import mujoco
+model = mujoco.MjModel.from_xml_path("path/to/model.xml")
+data = mujoco.MjData(model)
+mujoco.mj_resetDataKeyframe(model, data, 0)
+```
 
 ## Download & Setup
 
