@@ -191,7 +191,7 @@ def _copy_credits():
     cfg.MUJOCO.insert(0, comment)
 
   # Add our credits as a comment too
-  comment = etree.Comment(" This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. ")
+  comment = etree.Comment(" This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoconverter. This model is licensed under Apache 2.0. ")
   cfg.MUJOCO.insert(0, comment)
 
 if __name__ == "__main__":
