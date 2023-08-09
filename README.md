@@ -43,9 +43,9 @@ mujoco.mj_resetDataKeyframe(model, data, 0)
 
 ## Download & Setup
 
-### conda / mamba
+We recommend installing MyoConverter via conda / mamba if you're running Linux (tested on Ubuntu 20.04 & 22.04). In earlier development phases we encountered issues in Windows. Hence, for Windows / MacOS users, we provide a docker image (follow [this link](./docker/README.md) for more instructions), which contains the tested Linux setup. If you try the conda / mamba approach on Windows / MacOS, please let us know how it goes!
 
-If you would like to convert your own MSK model, follow the steps outlined below:
+### conda / mamba
 
 - Clone the repo
 ```bash
@@ -68,10 +68,6 @@ mamba activate myoconverter
 ```bash
 python myoconverter/tests/model_unit_test.py
 ```
-
-### Docker
-
-We also provide a docker image that has MyoConverter installed. Please follow [this link](./docker/README.md) for further instructions.
 
 
 ## Quick example
