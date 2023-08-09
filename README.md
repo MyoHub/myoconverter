@@ -39,9 +39,9 @@ Please also see [this list of models](https://myoconverter.readthedocs.io/en/lat
 
 ## Download & Setup
 
+This MyoConverter software was only tested on Linux (Ubuntu 20.04 & 22.04). For Windows/MacOS users, a docker was prepared that contains the tested Linux setup. However, you can also try conda/mamba setup on Windows/MacOS, and report issues once encountered. 
 
-
-### For Linux: conda / mamba
+### conda / mamba
 
 If you would like to convert your own MSK model, follow the steps outlined below:
 
@@ -67,7 +67,7 @@ mamba activate myoconverter
 python myoconverter/tests/model_unit_test.py
 ```
 
-### For Windows/MacOS: Docker
+### Docker
 
 We also provide a docker image that has MyoConverter installed. Please follow [this link](./docker/README.md) for further instructions.
 
