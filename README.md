@@ -15,7 +15,7 @@ Building upon the foundation of the previous [O2MConverter](https://github.com/a
 
 See the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html) for more information about the converter and the conversion process.
 
- [External Model List](https://myoconverter.readthedocs.io/en/latest/models.html) | [Documentation](https://myoconverter.readthedocs.io/en/latest/index.html)
+ [Model List](https://myoconverter.readthedocs.io/en/latest/models.html) | [Documentation](https://myoconverter.readthedocs.io/en/latest/index.html)
 | [MyoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](https://myoconverter.readthedocs.io/en/latest/limitations.html)
 
 ## Example models
