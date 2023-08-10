@@ -64,7 +64,13 @@ mamba env create -n myoconverter -f conda_env.yml
 mamba activate myoconverter
 ```
 
+- Set PYTHONPATH to the myoconverter project folder
+```bash
+export PYTHONPATH=/to/the/folder/of/myoconverter
+```
+
 - Optional: Test installation by running a model unit test
+  
 ```bash
 python myoconverter/tests/model_unit_test.py
 ```
