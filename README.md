@@ -96,7 +96,7 @@ output_folder = './models/mjc/Arm26'
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
 
-More conversion examples can be found in the [example folder](https://github.com/MyoHub/myoconverter/tree/main/examples). Detailed description of the conversion setup/process is found in the [documentation](https://myoconverter.readthedocs.io/en/latest/pipeline.html).
+More conversion examples can be found in the [example folder](https://github.com/MyoHub/myoconverter/tree/main/examples). Detailed description of the conversion setup/process is in the [documentation](https://myoconverter.readthedocs.io/en/latest/pipeline.html).
 
 
 ## Contribution
