@@ -13,16 +13,13 @@
 
 Building upon the foundation of the previous [O2MConverter](https://github.com/aikkala/O2MConverter) project, we extensively rewrote the functions, incorporated new features, and ensured compatibility with the latest OpenSim 4.0+ models. Additionally, two optimization steps were introduced to enhance the accuracy of muscle properties in both kinematics and kinetics.
 
-The aim of MyoConverter is to replicate OpenSim models in MuJoCo format as faithfully as possible. This means that any possible errors in the original OpenSim models are likely to remain in the MuJoCo model. Hence, the converted models may not be suitable for research purposes as such, but may require further adjustments. Models with further manual adjustments, ensuring their suitability for functional task simulations, can be found in the [MyoSim](https://github.com/MyoHub/myo_sim) project, which builds on models converted by MyoConverter.
+See the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html) for more information about the converter and the conversion process.
 
-We evaluate the accuracy of the converter with a handful of models. However, these models do not cover all possible features of OpenSim models. Hence, when converting a new model, there is a chance the conversion fails due to a missing implementation. In this case, you can open an issue, or, preferably, [contribute](https://myoconverter.readthedocs.io/en/latest/participate.html) to the project and create a pull request.
-
-
- [External Model List](https://myoconverter.readthedocs.io/en/latest/models.html) | [Documentation](https://myoconverter.readthedocs.io/en/latest/index.html)
+ [Model List](https://myoconverter.readthedocs.io/en/latest/models.html) | [Documentation](https://myoconverter.readthedocs.io/en/latest/index.html)
 | [MyoSuite](https://sites.google.com/view/myosuite/myosim?authuser=0) | [Current Limitations](https://myoconverter.readthedocs.io/en/latest/limitations.html)
 
 ## Example models
-Here we present a collection of models, as examples, that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
+Here we present a few example models that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
 
 |   | Model name| Source | Validation | Conversion Speed |
 |--------------------|--------------|:-------:|:--------:|-------|
@@ -36,12 +33,19 @@ Here we present a collection of models, as examples, that have been processed wi
 
 Please also see [this list of models](https://myoconverter.readthedocs.io/en/latest/models.html) converted using MyoConverter.
 
+**_NOTE:_** The converted XML model contains a keyframe which should be used when initialising the model. This keyframe sets the joint values such that all the joint/muscle path constraints are met. However, MuJoCo does not load the keyframe by default. When using the MuJoCo `simulate` GUI, please hit the `Load key` button to load the keyframe. When loading the model using MuJoCo P  ython bindings, you can use following functions to load the keyframe:
+```python
+import mujoco
+model = mujoco.MjModel.from_xml_path("path/to/model.xml")
+data = mujoco.MjData(model)
+mujoco.mj_resetDataKeyframe(model, data, 0)
+```
 
 ## Download & Setup
 
-### conda / mamba
+We recommend installing MyoConverter via conda / mamba if you're running Linux (tested on Ubuntu 20.04 & 22.04). In earlier development phases we encountered issues in Windows. Hence, for Windows / MacOS users, we provide a docker image (follow [this link](./docker/README.md) for more instructions), which contains the tested Linux setup. If you try the conda / mamba approach on Windows / MacOS, please let us know how it goes!
 
-If you would like to convert your own MSK model, follow the steps outlined below:
+### conda / mamba
 
 - Clone the repo
 ```bash
@@ -60,14 +64,16 @@ mamba env create -n myoconverter -f conda_env.yml
 mamba activate myoconverter
 ```
 
+- Add MyoConverter project folder to PYTHONPATH
+```bash
+export PYTHONPATH=${PYTHONPATH}:/path/to/myoconverter
+```
+
 - Optional: Test installation by running a model unit test
+  
 ```bash
 python myoconverter/tests/model_unit_test.py
 ```
-
-### Docker
-
-We also provide a docker image that has MyoConverter installed. Please follow [this link](./docker/README.md) for further instructions.
 
 
 ## Quick example
@@ -75,52 +81,29 @@ We also provide a docker image that has MyoConverter installed. Please follow [t
 #### Call a Python function
 
 ```python
-from myoconverter import O2MPipeline
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
-```
-converts `osim_file` (a string pointing to an .osim file) to a MuJoCo XML file and outputs the model into folder `output_folder`. The `**kwargs` may contain the optional parameters as listed below:
-- `convert_steps` : Selected conversion steps, could be any subset of `[1, 2, 3]` based on the needs, Default = `[1, 2, 3]`
-- `muscle_list` : Selected specific muscles for the conversion and validation steps, Default = None
-- `osim_data_overwrite` : If true, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]
-- `conversion` : If true, perform the conversion functions of selected steps, Default = True
-- `validation` : If true, perform the validation functions of selected steps, Default = True
-- `speedy` : If true, reduce the number of checking notes in optimization steps to increase speed, Default = False
-- `generate_pdf` : If true, generate a pdf report of the validation results, Default = False
-- `add_ground_geom` : If true, a geom (of type plane) is added to the MuJoCo model as ground, Default = False
-- `treat_as_normal_path_point` : If true, MovingPathPoints and ConditionalPathPoints will be treated as normal PathPoints, Default = False
+from myoconverter.O2MPipeline import O2MPipeline
 
-The following example can be used to setup the `**kwargs`
-
-```python
 # define pipeline configurations
 kwargs = {}  # define kwargs inputs
-kwargs['convert_steps'] = [1, 2, 3]             # All three steps selected
-kwargs['muscle_list'] = None                    # No specific muscle selected, optimize all of them
-kwargs['osim_data_overwrite'] = True            # Overwrite the Osim model state files
-kwargs['conversion'] = True                     # Yes, perform 'Cvt#' process
-kwargs['validation'] = True                     # Yes, perform 'Vlt#' process
-kwargs['speedy'] = False                        # Do not reduce the checking notes to increase speed
-kwargs['generate_pdf'] = True                   # Do not generate validation pdf report
-kwargs['add_ground_geom'] = True                # Add ground to the model
+kwargs['convert_steps'] = [1, 2, 3]    # All three steps selected
+kwargs['muscle_list'] = None           # No specific muscle selected, optimize all of them
+kwargs['osim_data_overwrite'] = True   # Overwrite the Osim model state files
+kwargs['conversion'] = True            # Yes, perform 'Cvt#' process
+kwargs['validation'] = True            # Yes, perform 'Vlt#' process
+kwargs['speedy'] = False               # Do not reduce the checking notes to increase speed
+kwargs['generate_pdf'] = True          # Do not generate validation pdf report
+kwargs['add_ground_geom'] = True       # Add ground to the model
 kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
+
+############### Simple Arm 2 DoFs 6 Muscles ################ 
+osim_file = './models/osim/Arm26/arm26.osim'
+geometry_folder = './models/osim/Arm26/Geometry'
+output_folder = './models/mjc/Arm26'
+O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
 ```
 
-<!--
-### Call from command line
+More conversion examples can be found in the [example folder](https://github.com/MyoHub/myoconverter/tree/main/examples). Detailed description of the conversion setup/process is in the [documentation](https://myoconverter.readthedocs.io/en/latest/pipeline.html).
 
-To print usage information, input in a command line:
-
-```bash
-python myoconverter/O2MPipeline.py
-```
-
-An example of calling the converter script:
-
-```bash
-python myoconverter/O2MPipeline.py /path/to/osim.xml /path/to/geometry/folder /path/to/output/folder --speedy True --add_ground_geom True
-```
-The command line basically works the same way as when using the`O2MPipeline` function.
--->
 
 ## Contribution
 We highly encourage both users and experts to actively contribute to this open-source software. By sharing your insights and expertise, you can help enhance the functionality and maintenance of MyoConverter for the benefit of all users. For more detailed information about the tool, please refer to the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html).

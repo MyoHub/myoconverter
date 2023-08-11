@@ -58,6 +58,21 @@ Below you can find an example of how to use the O2MPipeline.
    
    # Run pipeline
    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+
+Description of the required arguments and optional kwargs:
+
+- `osim_file` (str) : OpenSim model file (.osim file)
+- `geometry_folder` (str) : A folder containing the geometry files
+- `output_folder` (str) : A folder where the converted model will be saved into
+- `convert_steps` (list of int) : Selected conversion steps, could be any subset of `[1, 2, 3]` based on the needs, Default = `[1, 2, 3]`
+- `muscle_list` (list of str) : Selected specific muscles for the conversion and validation steps, Default = None
+- `osim_data_overwrite` (bool) : If true, overwrite extracted Osim model state files, Default = False [overwrite is needed, if Osim model has changed]
+- `conversion` (bool) : If true, perform the conversion functions of selected steps, Default = True
+- `validation` (bool) : If true, perform the validation functions of selected steps, Default = True
+- `speedy` (bool) : If true, reduce the number of checking notes in optimization steps to increase speed, Default = False
+- `generate_pdf` (bool) : If true, generate a pdf report of the validation results, Default = False
+- `add_ground_geom` (bool) : If true, a geom (of type plane) is added to the MuJoCo model as ground, Default = False
+- `treat_as_normal_path_point` (bool) : If true, MovingPathPoints and ConditionalPathPoints will be treated as normal PathPoints, Default = False
    
 Outcomes of the pipeline are saved in the output folder. Four folders and a few files will be generated depending on the choice of argument options. All possible outcomes are listed below:
 
