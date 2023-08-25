@@ -247,7 +247,7 @@ class BasicModelConvert:
         end_point_error['mean'] = np.mean(mr_rms)
         end_point_error['std'] = np.std(mr_rms)
 
-        with open(self.saving_path + '/end_points/end_point_error.json', 'w') as end_point_error_file:
+        with open(self.saving_path + '/end_points/end_point_error.pkl', 'wb') as end_point_error_file:
             pickle.dump(end_point_error, end_point_error_file)
 
         ## plot error bar of the end points at different testing points
