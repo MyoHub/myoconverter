@@ -111,9 +111,8 @@ def coordinate_kwargs(osim_file, output_folder, convert_steps,\
 
         # save the update kwargs to config.pkl in step 2 folder
         os.makedirs(output_folder + '/Step2_muscleKinematics', exist_ok = True)
-        config_save = open(output_folder + '/Step2_muscleKinematics/config.pkl', 'wb')
-        pickle.dump(kwargs, config_save)
-        config_save.close()
+        with open(output_folder + '/Step2_muscleKinematics/config.pkl', 'wb') as config_save:
+            pickle.dump(kwargs, config_save)
 
     if 3 in convert_steps:
 
@@ -145,9 +144,8 @@ def coordinate_kwargs(osim_file, output_folder, convert_steps,\
 
         # save the update kwargs to config.pkl in step 3 folder
         os.makedirs(output_folder + '/Step3_muscleKinetics', exist_ok = True)
-        config_save = open(output_folder + '/Step3_muscleKinetics/config.pkl', 'bw')
-        pickle.dump(kwargs, config_save)
-        config_save.close()
+        with open(output_folder + '/Step3_muscleKinetics/config.pkl', 'bw') as config_save:
+            pickle.dump(kwargs, config_save)
     
     return osim_data_overwrite
 

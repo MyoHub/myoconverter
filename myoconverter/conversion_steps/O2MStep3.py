@@ -326,9 +326,8 @@ class MuscleForceOpt:
 
 
             # save the data based to the muscle parameter file
-            muscle_file_saving = open(self.save_path + '/' + muscle + '.pkl', 'wb')
-            pickle.dump(muscle_para, muscle_file_saving)
-            muscle_file_saving.close()
+            with open(self.save_path + '/' + muscle + '.pkl', 'wb') as muscle_file_saving:
+                pickle.dump(muscle_para, muscle_file_saving)
 
             # extract muscle instance again.
             muscle_inst = self.mjc_model.actuator(muscle)
@@ -381,41 +380,40 @@ class MuscleForceOpt:
 
         for i_mus, muscle in enumerate(muscle_list):
             # load the mus_para data from the saved files
-            muscle_file = open(self.save_path + '/' + muscle + '.pkl', "rb+")
-            muscle_para_opt = pickle.load(muscle_file)
+            with open(self.save_path + '/' + muscle + '.pkl', "rb+") as muscle_file:
+                muscle_para_opt = pickle.load(muscle_file)
 
-            # generate force-length comparison plot for each muscle
-            mtu_force_osim = muscle_para_opt['mtu_force_osim']
-            mtu_force_osim_passive = muscle_para_opt['pas_force_osim']
-            mtu_length_osim = muscle_para_opt['mtu_length_osim']
-            joints = muscle_para_opt['jit_uniq']
-            # osim_jnt_arr = muscle_para_opt['jit_list_set']
-            mjc_jnt_arr = muscle_para_opt['mjc_jit_list_set']
-            act_arr = muscle_para_opt['act_list']
+                # generate force-length comparison plot for each muscle
+                mtu_force_osim = muscle_para_opt['mtu_force_osim']
+                mtu_force_osim_passive = muscle_para_opt['pas_force_osim']
+                mtu_length_osim = muscle_para_opt['mtu_length_osim']
+                joints = muscle_para_opt['jit_uniq']
+                # osim_jnt_arr = muscle_para_opt['jit_list_set']
+                mjc_jnt_arr = muscle_para_opt['mjc_jit_list_set']
+                act_arr = muscle_para_opt['act_list']
 
-            # generate muscle force length curves in mujoco
-            mtu_force_mjc, mtu_length_mjc =\
-            getMuscleForceLengthCurvesSim(mjc_model, muscle,\
-                                          joints, mjc_jnt_arr, act_arr)
-                                          
-            # get the passive muscle force length curves in mujoco
-            mtu_force_mjc_passive, mtu_length_mjc_passive =\
-            getMuscleForceLengthCurvesSim(mjc_model, muscle,\
-                                          joints, mjc_jnt_arr, [0])                             
-                                       
-            # plot the force comparison curves
-            self.curveplotForceLength(muscle, mtu_length_osim, mtu_force_osim,\
-                                       mtu_force_osim_passive, mtu_length_mjc, mtu_length_mjc_passive,\
-                                       mtu_force_mjc, mtu_force_mjc_passive, act_arr)
-            
-            # save mjc forve lenth curve as well
-            muscle_para_opt['mtu_force_mjc'] = mtu_force_mjc
-            muscle_para_opt['mtu_force_mjc_passive'] = mtu_force_mjc_passive
-            muscle_para_opt['mtu_length_mjc'] = mtu_length_mjc
-            muscle_para_opt['mtu_length_mjc_passive'] = mtu_length_mjc_passive
+                # generate muscle force length curves in mujoco
+                mtu_force_mjc, mtu_length_mjc =\
+                getMuscleForceLengthCurvesSim(mjc_model, muscle,\
+                                            joints, mjc_jnt_arr, act_arr)
+                                            
+                # get the passive muscle force length curves in mujoco
+                mtu_force_mjc_passive, mtu_length_mjc_passive =\
+                getMuscleForceLengthCurvesSim(mjc_model, muscle,\
+                                            joints, mjc_jnt_arr, [0])                             
+                                        
+                # plot the force comparison curves
+                self.curveplotForceLength(muscle, mtu_length_osim, mtu_force_osim,\
+                                        mtu_force_osim_passive, mtu_length_mjc, mtu_length_mjc_passive,\
+                                        mtu_force_mjc, mtu_force_mjc_passive, act_arr)
+                
+                # save mjc forve lenth curve as well
+                muscle_para_opt['mtu_force_mjc'] = mtu_force_mjc
+                muscle_para_opt['mtu_force_mjc_passive'] = mtu_force_mjc_passive
+                muscle_para_opt['mtu_length_mjc'] = mtu_length_mjc
+                muscle_para_opt['mtu_length_mjc_passive'] = mtu_length_mjc_passive
 
-            pickle.dump(muscle_para_opt, muscle_file)
-            muscle_file.close()
+                pickle.dump(muscle_para_opt, muscle_file)
 
             # plot the overall comparison results when 'opt_results' exists.
             if 'opt_results' in muscle_para_opt.keys():
@@ -430,11 +428,9 @@ class MuscleForceOpt:
                 rms_saving['rms_opt_mean'] = np.mean(rms_opt)
                 rms_saving['rms_opt_std'] = np.std(rms_opt)
 
-
                 # save the data based to the muscle parameter file
-                rms_saving_file = open(self.save_path + '/overall_comp_muscleforces.pkl', 'wb')
-                pickle.dump(rms_saving, rms_saving_file)
-                rms_saving_file.close()
+                with open(self.save_path + '/overall_comp_muscleforces.pkl', 'wb') as rms_saving_file:
+                    pickle.dump(rms_saving, rms_saving_file)
 
         # plot the overall comparison results when 'opt_results' exists.
         if len(rms_org) > 0:

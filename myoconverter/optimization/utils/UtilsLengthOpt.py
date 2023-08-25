@@ -224,76 +224,74 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
     
     similar_particles = 0  # number of similar particles, this will be used as an cretiria to stop the optimization
 
-    pool = mp.Pool()
-    
-    while itera < iteration_max:   # define the maximum iteration value
+    with mp.Pool() as pool:
         
-        # Apply parallel computing using multiprocessing
-        # Right now, the mujoco sim cannot be pickled and transfer to objective function
-        # To solve this, mujoco file name need to transfer to objective function and load over there.
+        while itera < iteration_max:   # define the maximum iteration value
+            
+            # Apply parallel computing using multiprocessing
+            # Right now, the mujoco sim cannot be pickled and transfer to objective function
+            # To solve this, mujoco file name need to transfer to objective function and load over there.
 
-        # prepare function inputs
-        x_input = []
-        for ix in x:
-            x_input.append((ix, side_id, wrap_type, \
-                                wrap_id, pos_wrap, size_wrap,\
-                                rotation_wrap, osim_ma, mjc_model_path,\
-                                muscle, joints, joint_ranges, evalN))
+            # prepare function inputs
+            x_input = []
+            for ix in x:
+                x_input.append((ix, side_id, wrap_type, \
+                                    wrap_id, pos_wrap, size_wrap,\
+                                    rotation_wrap, osim_ma, mjc_model_path,\
+                                    muscle, joints, joint_ranges, evalN))
 
-        obj_list = pool.starmap(objMAMuscle, x_input)
-        
-        # update the local and global optimal
-        if itera == 0:
-            obj_b = obj_list
-            obj_g = min(obj_list)
-            obj_g_old = obj_g
-            g = x[obj_list.index(obj_g)]
-        else:
-            for iobj, obj in enumerate(obj_list):
-                if obj < obj_b[iobj]:
-                    obj_b[iobj] = obj
-                    p[iobj] = x[iobj]
+            obj_list = pool.starmap(objMAMuscle, x_input)
+            
+            # update the local and global optimal
+            if itera == 0:
+                obj_b = obj_list
+                obj_g = min(obj_list)
+                obj_g_old = obj_g
+                g = x[obj_list.index(obj_g)]
+            else:
+                for iobj, obj in enumerate(obj_list):
+                    if obj < obj_b[iobj]:
+                        obj_b[iobj] = obj
+                        p[iobj] = x[iobj]
 
-                if obj < obj_g:
-                    obj_g = obj
-                    g = x[iobj]
+                    if obj < obj_g:
+                        obj_g = obj
+                        g = x[iobj]
 
-        logger.info(f"        PSO iteration: {itera} ; {round(similar_particles*100/n_particles)} percentage similarities; Best obj: {np.round(obj_g, 5)}")
+            logger.info(f"        PSO iteration: {itera} ; {round(similar_particles*100/n_particles)} percentage similarities; Best obj: {np.round(obj_g, 5)}")
+                    
+            # two random values to increase intersection between particles
+            r1 = np.random.rand(1)
+            r2 = np.random.rand(1)
+            
+            v = w*v + c1*r1*(p - x) + c2*r2*(g - x)  # calculate velocities
+            
+            x = x + v  # change to next iteration positions
+            
+            # make sure they are within boundaries
+            for i, ix in enumerate(x):
+                x[i] = np.minimum(np.maximum(ix, optParam_lb), optParam_ub)
                 
-        # two random values to increase intersection between particles
-        r1 = np.random.rand(1)
-        r2 = np.random.rand(1)
-        
-        v = w*v + c1*r1*(p - x) + c2*r2*(g - x)  # calculate velocities
-        
-        x = x + v  # change to next iteration positions
-        
-        # make sure they are within boundaries
-        for i, ix in enumerate(x):
-            x[i] = np.minimum(np.maximum(ix, optParam_lb), optParam_ub)
+            itera = itera + 1 # increase the iteration number
             
-        itera = itera + 1 # increase the iteration number
-        
-        similar_particles = len(np.where((obj_b - min(obj_b))/min(obj_b) < 0.01)[0])
-        
-        # break if certain percentage of particles have similar objective values
-        if similar_particles > break_threshold*n_particles:  
-            logger.info("        Break the optimization, since certain number of similar particles reached")
-            break
+            similar_particles = len(np.where((obj_b - min(obj_b))/min(obj_b) < 0.01)[0])
+            
+            # break if certain percentage of particles have similar objective values
+            if similar_particles > break_threshold*n_particles:  
+                logger.info("        Break the optimization, since certain number of similar particles reached")
+                break
 
-        # break if the obj_g is the same value for more than 10 iterations
-        if obj_g == obj_g_old:
-            obj_g_iter = obj_g_iter + 1
-        else:
-            obj_g_iter = 0
-            
-        obj_g_old = obj_g
+            # break if the obj_g is the same value for more than 10 iterations
+            if obj_g == obj_g_old:
+                obj_g_iter = obj_g_iter + 1
+            else:
+                obj_g_iter = 0
+                
+            obj_g_old = obj_g
 
-        if obj_g_iter > 10:
-            logger.info("        Break the optimization, since global obj maintained the same value for certain iterations")
-            break
-            
-    pool.close()
+            if obj_g_iter > 10:
+                logger.info("        Break the optimization, since global obj maintained the same value for certain iterations")
+                break
 
     mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)
     # update mjc model with new attaching_list and wrapping_list
