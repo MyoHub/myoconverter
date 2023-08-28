@@ -14,9 +14,21 @@ from numpy import pi, sqrt
 
 from loguru import logger
 import multiprocessing as mp
+from typing import List
+
+def initializeWorker(shared_model) -> None:
+    """
+    Initialize the worker process.
+    
+    INPUTS:
+        shared_model
+            the mujoco model
+    """
+    global mjc_model
+    mjc_model = shared_model
 
 @logger.catch
-def objFMMuscle(x, osim_fm, mjc_model_path, muscle, joints, jnt_arr, act_arr):
+def objFMMuscle(x, osim_fm, muscle: str, joints: List[str], jnt_arr, act_arr):
     """
     Calculate the muscle force differences between osim and mjc models.
     
@@ -25,8 +37,6 @@ def objFMMuscle(x, osim_fm, mjc_model_path, muscle, joints, jnt_arr, act_arr):
             optimizing parameters
         osim_fm: vector/mat
             muscle force vector/matrix of a given muscle
-        mjcModel: mujoco model
-            mujoco model
         muscle: string
             muscle name
         joints: list of string
@@ -41,8 +51,7 @@ def objFMMuscle(x, osim_fm, mjc_model_path, muscle, joints, jnt_arr, act_arr):
             the RMS value of muscle force map differences
     """
 
-    mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)
-
+    global mjc_model
     mjc_model = updateMuscleForceProperties(mjc_model, muscle, x)
     
     mjc_fm, length_mtu = getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr)
@@ -132,7 +141,9 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
     
     similar_particles = 0  # number of similar particles, this will be used as an cretiria to stop the optimization
 
-    with mp.Pool() as pool:
+    shared_model = mujoco.MjModel.from_xml_path(mjc_model_path)
+
+    with mp.Pool(initializer=initializeWorker, initargs=(shared_model,)) as pool:
         
         while itera < iteration_max:
 
@@ -144,7 +155,7 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
             # prepare function inputs
             x_input = []
             for ix in x:
-                x_input.append((ix, osim_fm, mjc_model_path, muscle, joints, jnt_arr, act_arr))
+                x_input.append((ix, osim_fm, muscle, joints, jnt_arr, act_arr))
 
             obj_list = pool.starmap(objFMMuscle, x_input)
             
@@ -198,14 +209,13 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
                 logger.info("        Break the optimization, since global obj maintained the same value for certain iterations")
                 break
         
-    mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)
     # update mjc model with new muscle parameters
-    mjc_model = updateMuscleForceProperties(mjc_model, muscle, g)
+    shared_model = updateMuscleForceProperties(shared_model, muscle, g)
     
     # save optimized results    
     opt_results = {"cost_org": cost_org, "cost_opt": obj_g, "res_opt": g}
         
-    return opt_results, mjc_model
+    return opt_results, shared_model
     
 
 
