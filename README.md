@@ -21,17 +21,19 @@ See the [documentation](https://myoconverter.readthedocs.io/en/latest/index.html
 ## Example models
 Here we present a few example models that have been processed with the MyoConverter tool. We try to keep these converted models up-to-date (in case of bug fixes etc.), but it is recommended to run the conversions yourself to ensure up-to-date models.
 
-|   | Model name| Source | Validation | Conversion Speed |
+|   | Model name| Source | Validation | Conversion Speed* |
 |--------------------|--------------|:-------:|:--------:|-------|
-|<img src="docs/source/images/tug-of-war.png" width="200">| [Tug of War](models/mjc/TugOfWar/tugofwar_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/TugOfWar)  |   [Report](models/mjc/TugOfWar/tugofwar.pdf) | Regular: 30 sec <br> Speedy: 30 sec |
-|<img src="docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles <br> * *In MyoSim* | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Arm26)  |   [Report](models/mjc/Arm26/arm26.pdf) | Regular: 5 min 30 sec <br> Speedy: 4 min 37 sec |
-|<img src="docs/source/images/leg6dof.png" width="200">| [Single Leg](models/mjc/Leg6Dof9Musc/leg6dof9musc_cvt3.xml)   <br> - 6 DoFs <br> - 9 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Leg6Dof9Musc)  |   [Report](models/mjc/Leg6Dof9Musc/leg6dof9musc.pdf) | Regular: 4 min 3 sec <br> Speedy: 3 min 41 sec |
-|<img src="docs/source/images/gait10.png" width="200">| [2D Gait Model](models/mjc/Gait10dof18musc/gait10dof18musc_cvt3.xml) <br> - 10 DoFs <br> - 18 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Gait10dof18musc)  |   [Report](models/mjc/Gait10dof18musc/gait10dof18musc.pdf) | Regular: 8 min 21 sec <br> Speedy: 7 min 33 sec |
-|<img src="docs/source/images/gait23.png" width="200">| [3D Gait Model](models/mjc/Gait2354Simbody/gait2354_cvt3.xml)  <br> - 23 DoFs <br> - 54 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Gait2354Simbody)  |   [Report](models/mjc/Gait2354Simbody/gait2354.pdf) | Regular: 34 min 21 sec <br> Speedy: 22 min 58 sec |
-|<img src="docs/source/images/neck6d.png" width="200">| [Neck Model](models/mjc/Neck6D/neck6d_cvt3.xml) <br> - 6 DoFs <br> - 72 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Neck6D)  |   [Report](models/mjc/Neck6D/neck6d.pdf) | Regular: 200 min 14 sec <br> Speedy: 57 min 43 sec |
+|<img src="docs/source/images/tug-of-war.png" width="200">| [Tug of War](models/mjc/TugOfWar/tugofwar_cvt3.xml) <br> - 1 DoF <br> - 2 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/TugOfWar)  |   [Report](models/mjc/TugOfWar/tugofwar.pdf) | Regular: 2 seconds |
+|<img src="docs/source/images/arm26.png" width="200">| [Simple Arm](https://github.com/MyoHub/myo_sim/blob/main/elbow/myoelbow_2dof6muscles.xml)  <br> - 2 DoFs <br> - 6 Muscles <br> * *In MyoSim* | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Arm26)  |   [Report](models/mjc/Arm26/arm26.pdf) | Regular: 11 sec |
+|<img src="docs/source/images/leg6dof.png" width="200">| [Single Leg](models/mjc/Leg6Dof9Musc/leg6dof9musc_cvt3.xml)   <br> - 6 DoFs <br> - 9 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Leg6Dof9Musc)  |   [Report](models/mjc/Leg6Dof9Musc/leg6dof9musc.pdf) | Regular: 37 sec |
+|<img src="docs/source/images/gait10.png" width="200">| [2D Gait Model](models/mjc/Gait10dof18musc/gait10dof18musc_cvt3.xml) <br> - 10 DoFs <br> - 18 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Gait10dof18musc)  |   [Report](models/mjc/Gait10dof18musc/gait10dof18musc.pdf) | Regular: 60 sec |
+|<img src="docs/source/images/gait23.png" width="200">| [3D Gait Model](models/mjc/Gait2354Simbody/gait2354_cvt3.xml)  <br> - 23 DoFs <br> - 54 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Gait2354Simbody)  |   [Report](models/mjc/Gait2354Simbody/gait2354.pdf) | Regular: 5 min 35 sec |
+|<img src="docs/source/images/neck6d.png" width="200">| [Neck Model](models/mjc/Neck6D/neck6d_cvt3.xml) <br> - 6 DoFs <br> - 72 Muscles | [Osim](https://github.com/MyoHub/myoconverter/tree/main/models/osim/Neck6D)  |   [Report](models/mjc/Neck6D/neck6d.pdf) | Regular: 54 min 02 sec |
 
 
 Please also see [this list of models](https://myoconverter.readthedocs.io/en/latest/models.html) converted using MyoConverter.
+
+**_NOTE:__** Speed test was done on a *12th Gen Intel® Core™ i5-12500H × 16* CPU. Parallel computing is implemented, so more Threads in CPU will lead faster conversion.    
 
 **_NOTE:_** The converted XML model contains a keyframe which should be used when initialising the model. This keyframe sets the joint values such that all the joint/muscle path constraints are met. However, MuJoCo does not load the keyframe by default. When using the MuJoCo `simulate` GUI, please hit the `Load key` button to load the keyframe. When loading the model using MuJoCo P  ython bindings, you can use following functions to load the keyframe:
 ```python
