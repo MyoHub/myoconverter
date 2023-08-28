@@ -33,7 +33,7 @@ Here we present a few example models that have been processed with the MyoConver
 
 Please also see [this list of models](https://myoconverter.readthedocs.io/en/latest/models.html) converted using MyoConverter.
 
-**_NOTE:__** Speed test was done on a *12th Gen Intel® Core™ i5-12500H × 16* CPU. Parallel computing is implemented, so more Threads in CPU will lead faster conversion.    
+**_NOTE:_** Speed test was done on a *12th Gen Intel® Core™ i5-12500H × 16*. Parallel computing is implemented, so more Threads in CPU will lead to faster conversion.    
 
 **_NOTE:_** The converted XML model contains a keyframe which should be used when initialising the model. This keyframe sets the joint values such that all the joint/muscle path constraints are met. However, MuJoCo does not load the keyframe by default. When using the MuJoCo `simulate` GUI, please hit the `Load key` button to load the keyframe. When loading the model using MuJoCo P  ython bindings, you can use following functions to load the keyframe:
 ```python
