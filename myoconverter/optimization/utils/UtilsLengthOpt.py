@@ -16,9 +16,20 @@ from numpy import pi, sqrt
 from loguru import logger
 import multiprocessing as mp
 
+def initializeWorker(shared_model) -> None:
+    """
+    Initialize the worker process.
+    
+    INPUTS:
+        shared_model
+            the mujoco model
+    """
+    global mjc_model
+    mjc_model = shared_model
+
 # @logger.catch
 def objMAMuscle(x, side_id, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wrap,\
-                osim_ma, mjc_model_path, muscle, joints, joint_ranges, evalN):
+                osim_ma, muscle, joints, joint_ranges, evalN):
     """ this objective function calculate the difference of moment arms between opensim model and mujoco model.
 	
 	Inputs:
@@ -39,8 +50,6 @@ def objMAMuscle(x, side_id, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wr
             the rotation vector of the wrapping object
         osim_ma: vector
             the moment arm vector of the osim model
-        mjc_model: mujoco model
-            the targeting mujoco model
         muscle: string
             muscle name
         joints: list of string
@@ -55,7 +64,7 @@ def objMAMuscle(x, side_id, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wr
         rms_x: root mean square of the optimizing parameters. 
 	"""
 
-    mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)
+    global mjc_model
 
     if type(joints) != list:  # check if the joints are in a list or not
         joints = [joints]
@@ -224,7 +233,9 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
     
     similar_particles = 0  # number of similar particles, this will be used as an cretiria to stop the optimization
 
-    with mp.Pool() as pool:
+    shared_model = mujoco.MjModel.from_xml_path(mjc_model_path)
+
+    with mp.Pool(initializer=initializeWorker, initargs=(shared_model,)) as pool:
         
         while itera < iteration_max:   # define the maximum iteration value
             
@@ -237,7 +248,7 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
             for ix in x:
                 x_input.append((ix, side_id, wrap_type, \
                                     wrap_id, pos_wrap, size_wrap,\
-                                    rotation_wrap, osim_ma, mjc_model_path,\
+                                    rotation_wrap, osim_ma, \
                                     muscle, joints, joint_ranges, evalN))
 
             obj_list = pool.starmap(objMAMuscle, x_input)
@@ -293,12 +304,11 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
                 logger.info("        Break the optimization, since global obj maintained the same value for certain iterations")
                 break
 
-    mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)
     # update mjc model with new attaching_list and wrapping_list
-    mjc_model = updateWrapSites(mjc_model, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wrap, side_id, g)
+    shared_model = updateWrapSites(shared_model, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wrap, side_id, g)
     
     # save optimized results    
     res_site = {"wrap_type": wrap_type, "cost_org": cost_org, "cost_opt": obj_g, "res_opt": g}
         
-    return res_site, mjc_model
+    return res_site, shared_model
     
