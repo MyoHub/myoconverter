@@ -248,12 +248,12 @@
     </spatial>
   </tendon>
   <actuator>
-    <general name="TRIlong" class="muscle" tendon="TRIlong_tendon" lengthrange="0.249596 0.372289" gainprm="0.632785 1.48873 773.086 1 0 2 10 3.5371 1.4 0" biasprm="0.632785 1.48873 773.086 1 0 2 10 3.5371 1.4 0"/>
-    <general name="TRIlat" class="muscle" tendon="TRIlat_tendon" lengthrange="0.16661 0.215094" gainprm="0.613796 1.11655 598.754 1 0 2 10 1.89013 1.4 0" biasprm="0.613796 1.11655 598.754 1 0 2 10 1.89013 1.4 0"/>
-    <general name="TRImed" class="muscle" tendon="TRImed_tendon" lengthrange="0.154238 0.202722" gainprm="0.594233 1.11285 580.497 1 0 2 10 4.07217 1.4 0" biasprm="0.594233 1.11285 580.497 1 0 2 10 4.07217 1.4 0"/>
-    <general name="BIClong" class="muscle" tendon="BIClong_tendon" lengthrange="0.319354 0.443836" gainprm="0.43669 1.53791 596.147 1 0 2 10 1.08068 1.4 0" biasprm="0.43669 1.53791 596.147 1 0 2 10 1.08068 1.4 0"/>
-    <general name="BICshort" class="muscle" tendon="BICshort_tendon" lengthrange="0.258352 0.408053" gainprm="0.544448 1.32501 427.025 1 0 2 10 2.29723 1.4 0" biasprm="0.544448 1.32501 427.025 1 0 2 10 2.29723 1.4 0"/>
-    <general name="BRA" class="muscle" tendon="BRA_tendon" lengthrange="0.105976 0.147329" gainprm="0.621954 1.09361 978.633 1 0 2 10 1.62514 1.4 0" biasprm="0.621954 1.09361 978.633 1 0 2 10 1.62514 1.4 0"/>
+    <general name="TRIlong" class="muscle" tendon="TRIlong_tendon" lengthrange="0.249596 0.372289" gainprm="0.618801 1.46211 762.765 1 0 2 10 4.03426 1.4 0" biasprm="0.618801 1.46211 762.765 1 0 2 10 4.03426 1.4 0"/>
+    <general name="TRIlat" class="muscle" tendon="TRIlat_tendon" lengthrange="0.16661 0.215094" gainprm="0.633364 1.35494 569.657 1 0 2 10 1.47245 1.4 0" biasprm="0.633364 1.35494 569.657 1 0 2 10 1.47245 1.4 0"/>
+    <general name="TRImed" class="muscle" tendon="TRImed_tendon" lengthrange="0.154238 0.202722" gainprm="0.589678 1.09806 585.709 1 0 2 10 3.83881 1.4 0" biasprm="0.589678 1.09806 585.709 1 0 2 10 3.83881 1.4 0"/>
+    <general name="BIClong" class="muscle" tendon="BIClong_tendon" lengthrange="0.319354 0.443836" gainprm="0.475068 1.13865 622.222 1 0 2 10 2.6953 1.4 0" biasprm="0.475068 1.13865 622.222 1 0 2 10 2.6953 1.4 0"/>
+    <general name="BICshort" class="muscle" tendon="BICshort_tendon" lengthrange="0.258352 0.408053" gainprm="0.549899 1.3836 420.668 1 0 2 10 1.96588 1.4 0" biasprm="0.549899 1.3836 420.668 1 0 2 10 1.96588 1.4 0"/>
+    <general name="BRA" class="muscle" tendon="BRA_tendon" lengthrange="0.105976 0.147329" gainprm="0.623471 1.23322 953.537 1 0 2 10 1.44398 1.4 0" biasprm="0.623471 1.23322 953.537 1 0 2 10 1.44398 1.4 0"/>
   </actuator>
   <keyframe>
     <key name="default-pose"/>

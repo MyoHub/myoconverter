@@ -163,13 +163,11 @@ class BasicModelConvert:
                     logger.warning(f"Joint range at {jnt} are not matching")
 
             # save the geo results
-            jnt_ranges_osim_file = open(self.saving_path + '/jnt_ranges_osim.pkl', 'wb')
-            pickle.dump(jnt_ranges_osim, jnt_ranges_osim_file)
-            jnt_ranges_osim_file.close()
+            with open(self.saving_path + '/jnt_ranges_osim.pkl', 'wb') as jnt_ranges_osim_file:
+                pickle.dump(jnt_ranges_osim, jnt_ranges_osim_file)
             
-            jnt_ranges_mjc_file = open(self.saving_path + '/jnt_ranges_mjc.pkl', 'wb')
-            pickle.dump(jnt_ranges_mjc, jnt_ranges_mjc_file)
-            jnt_ranges_mjc_file.close()
+            with open(self.saving_path + '/jnt_ranges_mjc.pkl', 'wb') as jnt_ranges_mjc_file:
+               pickle.dump(jnt_ranges_mjc, jnt_ranges_mjc_file)
 
             logger.info("Finished with joint operation range check. Saved Results")
             
@@ -249,10 +247,8 @@ class BasicModelConvert:
         end_point_error['mean'] = np.mean(mr_rms)
         end_point_error['std'] = np.std(mr_rms)
 
-        end_point_error_file = open(self.saving_path + '/end_points/end_point_error.pkl', 'wb')
-        pickle.dump(end_point_error, end_point_error_file)
-        end_point_error_file.close()
-
+        with open(self.saving_path + '/end_points/end_point_error.pkl', 'wb') as end_point_error_file:
+            pickle.dump(end_point_error, end_point_error_file)
 
         ## plot error bar of the end points at different testing points
         subPlotMarkerNum = 10

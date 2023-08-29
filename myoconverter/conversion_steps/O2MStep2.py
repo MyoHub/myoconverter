@@ -412,9 +412,8 @@ class MomentArmOpt:
             muscle_para['opt_results'] = opt_res_list
 
             # save the data based to the muscle parameter file
-            muscle_file_saving = open(self.save_path + '/' + muscle + '.pkl', 'wb')
-            pickle.dump(muscle_para, muscle_file_saving)
-            muscle_file_saving.close()
+            with open(self.save_path + '/' + muscle + '.pkl', 'wb') as muscle_file_saving:
+                pickle.dump(muscle_para, muscle_file_saving)
 
         # save the updated model
         cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
@@ -464,52 +463,51 @@ class MomentArmOpt:
         
         for i_mus, muscle in enumerate(muscle_list):
             # load the mus_para data from the saved files
-            muscle_file = open(self.save_path + '/' + muscle + '.pkl', "rb+")
-            muscle_para_opt = pickle.load(muscle_file)
+            with open(self.save_path + '/' + muscle + '.pkl', "rb+") as muscle_file:
+                muscle_para_opt = pickle.load(muscle_file)
 
-            # Generate the moment arm curves for comparison plots. Moment arm of Osim model
-            # will just use the reference data that pre-generated for optimization. Moment arm
-            # of Mjc model will be regenerated to increase the mesh density. This is to check
-            # if there are any random jumpping paths (that were not covered by the optimization)
+                # Generate the moment arm curves for comparison plots. Moment arm of Osim model
+                # will just use the reference data that pre-generated for optimization. Moment arm
+                # of Mjc model will be regenerated to increase the mesh density. This is to check
+                # if there are any random jumpping paths (that were not covered by the optimization)
 
-            mjc_ma_data= []
+                mjc_ma_data= []
 
-            for ij, joints in enumerate(muscle_para_opt['wrapping_coordinates']):
+                for ij, joints in enumerate(muscle_para_opt['wrapping_coordinates']):
 
-                nEval = muscle_para_opt['evalN'][ij]
-                nJnt = len(joints)
-                jntRanges_mjc = muscle_para_opt['mjc_coordinate_ranges'][ij]
-                jntRanges_osim = muscle_para_opt['osim_coordinate_ranges'][ij]
+                    nEval = muscle_para_opt['evalN'][ij]
+                    nJnt = len(joints)
+                    jntRanges_mjc = muscle_para_opt['mjc_coordinate_ranges'][ij]
+                    jntRanges_osim = muscle_para_opt['osim_coordinate_ranges'][ij]
 
-                # sort the osim moment arms into matrices
-                ma_mat_osim = self.maVectorSort(muscle_para_opt['osim_ma_data'][ij], nJnt, nEval)
+                    # sort the osim moment arms into matrices
+                    ma_mat_osim = self.maVectorSort(muscle_para_opt['osim_ma_data'][ij], nJnt, nEval)
 
-                # calculate mujoco moment arms and sort it into matrices
-                ma_vec_mjc = computeMomentArmMuscleJoints(mjc_model, muscle, joints,\
-                                                    jntRanges_mjc, nEval)
-                
-                ma_mat_mjc = self.maVectorSort(ma_vec_mjc, nJnt, nEval)
+                    # calculate mujoco moment arms and sort it into matrices
+                    ma_vec_mjc = computeMomentArmMuscleJoints(mjc_model, muscle, joints,\
+                                                        jntRanges_mjc, nEval)
+                    
+                    ma_mat_mjc = self.maVectorSort(ma_vec_mjc, nJnt, nEval)
 
-                # plot the moment arm plots
-                self.individualMuscleMAPlot(muscle, joints, nJnt, jntRanges_osim, jntRanges_mjc, \
-                                            ma_mat_osim, ma_mat_mjc, nEval, nEval)
-                
-                mjc_ma_data.append(ma_vec_mjc)
-                        
-                for joint in joints:
-                    if not joint in joint_list:
-                        joint_list.append(joint)
+                    # plot the moment arm plots
+                    self.individualMuscleMAPlot(muscle, joints, nJnt, jntRanges_osim, jntRanges_mjc, \
+                                                ma_mat_osim, ma_mat_mjc, nEval, nEval)
+                    
+                    mjc_ma_data.append(ma_vec_mjc)
+                            
+                    for joint in joints:
+                        if not joint in joint_list:
+                            joint_list.append(joint)
 
-                    jnt_index = joint_list.index(joint)
+                        jnt_index = joint_list.index(joint)
 
-                    if muscle_para_opt['opt_results'][ij]:  # if results exist
-                        cost_org_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_org']
-                        cost_opt_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_opt']
+                        if muscle_para_opt['opt_results'][ij]:  # if results exist
+                            cost_org_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_org']
+                            cost_opt_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_opt']
 
-            muscle_para_opt['mjc_ma_data'] = mjc_ma_data
+                muscle_para_opt['mjc_ma_data'] = mjc_ma_data
 
-            pickle.dump(muscle_para_opt, muscle_file)
-            muscle_file.close()
+                pickle.dump(muscle_para_opt, muscle_file)
 
         # save the overall rms differences between moment arms
         rms_saving = {}
@@ -520,9 +518,8 @@ class MomentArmOpt:
         rms_saving['cost_opt_mat_std'] = np.std(nonzero_error_array)
 
         # save the data based to the muscle parameter file
-        rms_saving_file = open(self.save_path + '/overall_comp_momentarms.pkl', 'wb')
-        pickle.dump(rms_saving, rms_saving_file)
-        rms_saving_file.close()
+        with open(self.save_path + '/overall_comp_momentarms.pkl', 'wb') as rms_saving_file:
+            pickle.dump(rms_saving, rms_saving_file)
 
         # generate the overall heat map                 
         self.heatMap(muscle_list, joint_list, cost_org_mat, cost_opt_mat)

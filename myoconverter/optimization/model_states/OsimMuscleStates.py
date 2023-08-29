@@ -233,9 +233,8 @@ class OsimMuscleStates:
 
             # save moment arm data if a saving path is provided
             if save_path:
-                muscle_file = open(save_path + '/' + muscle + '.pkl', 'wb')
-                pickle.dump(mus_para, muscle_file)
-                muscle_file.close()
+                with open(save_path + '/' + muscle + '.pkl', 'wb') as muscle_file:
+                    pickle.dump(mus_para, muscle_file)
 
             # save the moment arms of the muscle into a dictionary, NO LONGER NEEDED
             # self.moment_arms[muscle]= muscle_moment_arms
@@ -313,9 +312,8 @@ class OsimMuscleStates:
             force_map['pas_force_osim'] = pas_force_length
                 
             if save_path:
-                muscle_mf_file = open(save_path + '/' + muscle + '.pkl', 'wb')
-                pickle.dump(force_map, muscle_mf_file)
-                muscle_mf_file.close()
+                with open(save_path + '/' + muscle + '.pkl', 'wb') as muscle_mf_file:
+                    pickle.dump(force_map, muscle_mf_file)
         
         # return force_maps
     
