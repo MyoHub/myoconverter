@@ -6,7 +6,7 @@ on:
       - "**/README.md"
 
   pull_request:
-    branches: ["main", "feature/**"]
+    branches: ["main", "dev/*"]
     paths-ignore:
       - "doc/**"
       - "**/README.md"
@@ -27,7 +27,7 @@ jobs:
       matrix:
         os: ["ubuntu-22.04"]
 #        os: ["ubuntu-22.04", "ubuntu-latest", "windows-latest"]
-        python-version: ["3.9"]
+        python-version: ["3.10"]
         include:
           - os: ubuntu-22.04
             use-mamba: false
