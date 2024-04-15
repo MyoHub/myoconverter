@@ -48,7 +48,7 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
 
     # Convert into trimesh (see https://github.com/pyvista/pyvista/discussions/2268)
     pymesh = pymesh.extract_surface().triangulate()
-    faces_as_array = pymesh.faces.reshape((pymesh.n_faces, 4))[:, 1:]
+    faces_as_array = pymesh.faces.reshape((pymesh.n_faces_strict, 4))[:, 1:]
     tmesh = trimesh.Trimesh(pymesh.points, faces_as_array)
 
     # Repair the mesh

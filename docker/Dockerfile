@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG PYTHON_VERSION="3.9"
+ARG PYTHON_VERSION="3.11"
 ARG VARIANT="-slim-bullseye"
 
 FROM python:${PYTHON_VERSION}${VARIANT} as build
@@ -63,7 +63,7 @@ RUN set -ex \
     && pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
     # Install Mambaforge
-    && curl --location --silent --output ~/mamba-install.sh https://github.com/conda-forge/miniforge/releases/download/23.1.0-3/Mambaforge-23.1.0-3-$(uname)-$(uname -m).sh \
+    && curl --location --silent --output ~/mamba-install.sh https://github.com/conda-forge/miniforge/releases/download/24.1.2-0/Mambaforge-24.1.2-0-$(uname)-$(uname -m).sh \
     && chmod +x ~/mamba-install.sh \
     && ~/mamba-install.sh -b -p ${MAMBAFORGE_HOME} \
     # Set permissions on cache folder
