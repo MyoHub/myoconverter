@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG PYTHON_VERSION="3.11"
+ARG PYTHON_VERSION="3.12"
 ARG VARIANT="-slim-bullseye"
 
 FROM python:${PYTHON_VERSION}${VARIANT} as build
