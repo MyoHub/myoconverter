@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
-ARG PYTHON_VERSION="3.12"
+ARG PYTHON_VERSION="3.11"
 ARG VARIANT="-slim-bullseye"
 
-FROM python:${PYTHON_VERSION}${VARIANT} as build
+FROM python:${PYTHON_VERSION}${VARIANT} AS build
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     # Allow statements and log messages to immediately appear
@@ -28,7 +28,7 @@ RUN apt-get update -y \
 
 
 ### Final stage
-FROM python:${PYTHON_VERSION}${VARIANT} as final
+FROM python:${PYTHON_VERSION}${VARIANT} AS final
 
 ENV MAMBAFORGE_HOME=/etc/mambaforge
 WORKDIR /app
