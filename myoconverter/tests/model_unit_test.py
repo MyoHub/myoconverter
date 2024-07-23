@@ -24,8 +24,8 @@ kwargs['treat_as_normal_path_point'] = False      # Using constraints to represe
 
 
 ############### Simple Arm 2 DoFs 6 Muscles ################ 
-osim_file = './data/models/osim/Gait10dof18musc/gait10dof18musc.osim'
-geometry_folder = './ata/models/osim/Gait10dof18musc/Geometry'
-output_folder = './myoconverter/tests/resource/model_unit_test/mjc/gait10dof18musc'
+osim_file = './myoconverter/tests/resource/model_unit_test/osim/Arm26/arm26.osim'
+geometry_folder = './myoconverter/tests/resource/model_unit_test/osim/Arm26/Geometry'
+output_folder = './myoconverter/tests/resource/model_unit_test/mjc/Arm26'
 
 O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
