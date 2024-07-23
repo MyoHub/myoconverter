@@ -5,7 +5,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.11
+  - python=3.10
   - absl-py==2.1.0
   - certifi==2024.7.4
   - charset-normalizer==3.3.2
@@ -15,7 +15,7 @@ dependencies:
   - defusedxml==0.7.1
   - fonttools==4.53.1
   - fpdf2==2.7.9
-  - glfw==2.7.0
+  - glfw
   - idna==3.7
   - importlib-resources==6.4.0
   - joblib==1.4.2
@@ -31,7 +31,7 @@ dependencies:
   - pillow==10.4.0
   - platformdirs==4.2.2
   - pooch==1.8.2
-  - pyopengl==3.1.7
+  - pyopengl
   - pyparsing==3.1.2
   - python-dateutil==2.9.0.post0
   - pytz==2024.1
@@ -44,8 +44,7 @@ dependencies:
   - six==1.16.0
   - threadpoolctl==3.5.0
   - trimesh==3.23.5
-  - tzdata==2024.1
+  - tzdata
   - urllib3==2.2.2
   - vtk==9.3.1
-  - win32-setctime==1.1.0
   - zipp==3.19.2
