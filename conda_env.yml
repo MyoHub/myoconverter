@@ -1,21 +1,15 @@
 name: myoconverter
 channels:
-  - opensim-org
   - anaconda
-  - conda-forge
   - defaults
+  - conda-forge
 dependencies:
-  - python=3.11
+  - fpdf2=2.7.9
+  - matplotlib=3.9.1
+  - matplotlib-base=3.9.1
   - mujoco=2.3.7
-  - loguru=0.7.2
-  - lxml=4.9.4
   - numpy=1.23.5
-  - scipy=1.13.0
-  - scikit-learn=1.4.2
-  - opensim=4.4.1
-  - matplotlib=3.8.4
-  - trimesh=3.23.5
-  - pyvista=0.43.5
-  - networkx=3.2.1
-  - fpdf2=2.7.8
-  - seaborn=0.12.2
+  - pandas=2.2.2
+  - pyqt=5.15.10
+  - python=3.10.14
+  - qt-main=5.15
