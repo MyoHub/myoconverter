@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-ARG PYTHON_VERSION="3.10"
-ARG VARIANT="-slim-bullseye"
+ARG PYTHON_VERSION="3.11"
+ARG VARIANT="-bookworm"
 
 FROM python:${PYTHON_VERSION}${VARIANT} AS build
 
@@ -26,11 +26,16 @@ RUN apt-get update -y \
     && /etc/poetry/bin/poetry install \
     && /etc/poetry/bin/poetry export -f requirements.txt -o requirements.txt
 
-
 ### Final stage
 FROM python:${PYTHON_VERSION}${VARIANT} AS final
 
-ENV MAMBAFORGE_HOME=/etc/mambaforge
+ARG MINIFORGE_NAME=Miniforge3
+ARG MINIFORGE_VERSION=24.7.1-2
+ENV CONDA_DIR=/opt/conda
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH=${CONDA_DIR}/bin:${PATH}
+ENV PYTHONPATH=/app
+
 WORKDIR /app
 
 COPY --from=build /app/requirements.txt .
@@ -39,16 +44,12 @@ COPY examples examples
 COPY models models
 COPY myoconverter myoconverter
 COPY conda_env.yml .
-COPY docker/entrypoint.sh .
 
-RUN set -ex \
-    # Create a non-root user
-    && addgroup --system --gid 1001 appgroup \
-    && adduser --system --uid 1001 --gid 1001 appuser \
+RUN set -ex && \
     # Upgrade the package index and install security upgrades
-    && apt-get update -y \
-    && apt-get upgrade -y \
-    && apt-get install -y \
+    apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get install -y \
       libgl1-mesa-dev \
       libgl1-mesa-glx \
       libglew-dev \
@@ -57,39 +58,29 @@ RUN set -ex \
       libosmesa6 \
       software-properties-common \
       curl \
-    && apt-get install -y patchelf \
-    && apt install -y build-essential \
+      tini && \
+    apt-get install -y patchelf && \
+    apt install -y build-essential && \
     # Install dependencies
-    && pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt \
-    # Install Mambaforge
-    && curl --location --silent --output ~/mamba-install.sh https://github.com/conda-forge/miniforge/releases/download/24.1.2-0/Mambaforge-24.1.2-0-$(uname)-$(uname -m).sh \
-    && chmod +x ~/mamba-install.sh \
-    && ~/mamba-install.sh -b -p ${MAMBAFORGE_HOME} \
-    # Set permissions on cache folder
-    && chmod go+w ${MAMBAFORGE_HOME}/pkgs/cache \
-    # Set permissions on app folder
-    && chgrp appgroup -R /app \
-    && chmod g+w -R /app \
-    && chmod +x /app/entrypoint.sh \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    # Install Miniforge
+    curl --location --silent --output ~/miniforge.sh https://github.com/conda-forge/miniforge/releases/download/${MINIFORGE_VERSION}/${MINIFORGE_NAME}-${MINIFORGE_VERSION}-$(uname)-$(uname -m).sh && \
+    chmod +x ~/miniforge.sh && \
+    ~/miniforge.sh -b -p ${CONDA_DIR} && \
+    chmod g+w ~/.conda && \
+    conda update -n base -c conda-forge conda && \
+    conda env create --name myoconverter --file=conda_env.yml && \
+    conda clean --tarballs --index-cache --packages --yes && \
+    find ${CONDA_DIR} -follow -type f -name '*.a' -delete && \
+    find ${CONDA_DIR} -follow -type f -name '*.pyc' -delete && \
+    conda clean --force-pkgs-dirs --all --yes && \
+    echo ". ${CONDA_DIR}/etc/profile.d/conda.sh && conda activate myoconverter" >> /etc/skel/.bashrc && \
+    echo ". ${CONDA_DIR}/etc/profile.d/conda.sh && conda activate myoconverter" >> ~/.bashrc && \
     # Clean up
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    apt-get autoremove -y && \
+    apt-get clean -y && \
+    rm -rf /var/lib/apt/lists/*
 
-ENV PATH=${MAMBAFORGE_HOME}/condabin:$PATH
-
-# Set the user to run the application
-USER appuser
-
-# Create an environment
-RUN mamba env create \
-      --file conda_env.yml \
-    # clean up downloaded files and indexes
-    && mamba clean -yaf
-
-## Configure .bashrc to drop into a conda env and immediately activate our TARGET env
-RUN mamba init && echo 'mamba activate myoconverter' >> ~/.bashrc
-
-ENV PYTHONPATH=/app
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["tini", "--"]
+CMD [ "/bin/bash" ]
