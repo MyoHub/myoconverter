@@ -24,7 +24,8 @@ kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent
 
 
 ############### Tug of War with Two Muscles ################
-osim_file = './models/osim/TugOfWar/tugofwar.osim'
-geometry_folder = './models/osim/TugOfWar/Geometry'
-output_folder = './models/mjc/TugOfWar'
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+if __name__ == '__main__':
+    osim_file = './models/osim/TugOfWar/tugofwar.osim'
+    geometry_folder = './models/osim/TugOfWar/Geometry'
+    output_folder = './models/mjc/TugOfWar'
+    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)

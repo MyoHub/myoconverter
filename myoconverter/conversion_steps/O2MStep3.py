@@ -10,7 +10,7 @@ from myoconverter.optimization.model_states.OsimMuscleStates import OsimMuscleSt
 from myoconverter.optimization.utils.UtilsForceOpt import getMuscleForceDiff, fmOptPSO_cust
 from myoconverter.optimization.utils.UtilsMujoco import getMuscleForceLengthCurvesSim, getCoordinateRange_mjc
 import mujoco
-import opensim
+import pyopensim as opensim
 import os
 import pickle
 import glob

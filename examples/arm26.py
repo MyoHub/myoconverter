@@ -24,7 +24,8 @@ kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent
 
 
 ############### Simple Arm 2 DoFs 6 Muscles ################ 
-osim_file = './models/osim/Arm26/arm26.osim'
-geometry_folder = './models/osim/Arm26/Geometry'
-output_folder = './models/mjc/Arm26'
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+if __name__ == '__main__':
+    osim_file = './models/osim/Arm26/arm26.osim'
+    geometry_folder = './models/osim/Arm26/Geometry'
+    output_folder = './models/mjc/Arm26'
+    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)

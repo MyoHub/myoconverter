@@ -21,7 +21,8 @@ kwargs['add_ground_geom'] = True       # Add ground to the model
 kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
 
 ############### 6D Neck model ################
-osim_file = './models/osim/Neck6D/neck6d.osim'
-geometry_folder = './models/osim/Neck6D/Geometry'
-output_folder = './models/mjc/Neck6D'
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+if __name__ == '__main__':
+    osim_file = './models/osim/Neck6D/neck6d.osim'
+    geometry_folder = './models/osim/Neck6D/Geometry'
+    output_folder = './models/mjc/Neck6D'
+    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)

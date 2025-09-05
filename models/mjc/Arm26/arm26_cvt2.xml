@@ -6,6 +6,7 @@
   <visual>
     <scale framelength="0.5" framewidth="0.01"/>
   </visual>
+  <statistic meansize="0.225814" extent="2.1458" center="0 0 0.0728981"/>
   <default class="main">
     <joint limited="true" armature="1e-05" damping="0.05"/>
     <geom margin="0.001" rgba="0.8 0.6 0.4 1"/>
@@ -108,7 +109,7 @@
         <site name="BIClong_BIClong-P6" pos="0.01068 -0.07736 -0.00165"/>
         <site name="BIClong_BIClong-P7" pos="0.01703 -0.12125 0.00024"/>
         <site name="BIClong_BIClong-P8" pos="0.0228 -0.1754 -0.0063"/>
-        <site name="BIClonghh_ellipsoid_BIClong_2_sidesite" pos="0.0136749 0.0127427 -0.00135292" size="0.0005"/>
+        <site name="BIClonghh_ellipsoid_BIClong_2_sidesite" pos="0.157157 0.167275 0.157369" size="0.0005"/>
         <site name="BICshort_BICshort-P3" pos="0.01117 -0.07576 -0.01101"/>
         <site name="BICshort_BICshort-P4" pos="0.01703 -0.12125 -0.01079"/>
         <site name="BICshort_BICshort-P5" pos="0.0228 -0.1754 -0.0063"/>

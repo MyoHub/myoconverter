@@ -1,4 +1,4 @@
-import opensim
+import pyopensim as opensim
 import numpy as np
 import itertools
       

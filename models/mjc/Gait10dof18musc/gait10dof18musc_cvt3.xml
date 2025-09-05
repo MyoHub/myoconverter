@@ -6,6 +6,7 @@
   <visual>
     <scale framelength="0.5" framewidth="0.01"/>
   </visual>
+  <statistic meansize="0.0990749" extent="2" center="0 0 0"/>
   <default class="main">
     <joint limited="true" armature="1e-05" damping="0.05"/>
     <geom margin="0.001" rgba="0.8 0.6 0.4 1"/>

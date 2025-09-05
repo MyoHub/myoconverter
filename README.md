@@ -47,6 +47,8 @@ mujoco.mj_resetDataKeyframe(model, data, 0)
 
 We recommend installing MyoConverter via conda / mamba if you're running Linux (tested on Ubuntu 20.04 & 22.04). In earlier development phases we encountered issues in Windows. Hence, for Windows / MacOS users, we provide a docker image (follow [this link](./docker/README.md) for more instructions), which contains the tested Linux setup. If you try the conda / mamba approach on Windows / MacOS, please let us know how it goes!
 
+**Note:** This package is also available on PyPI for Linux and macOS as a self-contained wheel via [pyopensim](https://pypi.org/project/pyopensim/), which includes all necessary OpenSim dependencies.
+
 ### conda / mamba
 
 - Clone the repo

@@ -14,5 +14,7 @@ parser.add_argument('--speedy', type=bool, default=False, help='Do not reduce th
 parser.add_argument('--generate_pdf', type=bool, default=True, help='Generate validation pdf report')
 parser.add_argument('--add_ground_geom', type=bool, default=True, help='Add ground to the model')
 parser.add_argument('--treat_as_normal_path_point', type=bool, default=False, help='Using constraints to represent moving and conditional path points')
-args = parser.parse_args()
-O2MPipeline(**vars(args))
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    O2MPipeline(**vars(args))

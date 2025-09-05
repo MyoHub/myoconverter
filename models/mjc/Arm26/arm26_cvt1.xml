@@ -42,7 +42,7 @@
       <geom name="base_geom_6" type="mesh" mesh="base_geom_6_ground_r_scapula" rgba="1 1 1 1" group="0"/>
       <geom name="TRIlongglen_cylinder" type="cylinder" euler="1.375 -0.2946 2.436" pos="-0.0439 -0.0039 0.1478" size="0.003 0.015" rgba="0.19 0.83 0.78 0.2" group="2"/>
       <site name="TRIlongglen_sidesite" pos="-0.04682 -0.002529 0.1502" size="0.0005"/>
-      <body name="r_humerus" pos="-0.01755 -0.007 0.17" euler="0 0 0">
+      <body name="r_humerus" pos="-0.01755 -0.007 0.17" euler="-0 0 0">
         <inertial mass="1.8645719999999999" pos="0 -0.18049599999999999 0" fullinertia="0.01481 0.0045510000000000004 0.013193 0 0 0"/>
         <geom name="r_humerus_geom_1" type="mesh" mesh="r_humerus_geom_1_arm_r_humerus" rgba="1 1 1 1" group="0"/>
         <geom name="TRIlonghh_ellipsoid" type="sphere" euler="3.002 -0.8535 2.574" pos="-0.0078 -0.0041 -0.0014" size="0.02" rgba="0.19 0.83 0.78 0.2" group="2"/>
@@ -51,7 +51,7 @@
         <site name="BIClonghh_sidesite" pos="0.01267 0.02554 0.004834" size="0.0005"/>
         <geom name="TRI_cylinder" type="cylinder" euler="-0.1401 -0.006283 0.155" pos="0.0028 -0.2919 -0.0069" size="0.016 0.025" rgba="0.19 0.83 0.78 0.2" group="2"/>
         <joint name="r_shoulder_elev" range="-1.571 3.142" limited="true" user="0.0" ref="0" axis="-0.0589 0.0023 0.9983" type="hinge"/>
-        <body name="r_ulna_radius_hand" pos="0.0061 -0.2904 -0.0123" euler="0 0 0">
+        <body name="r_ulna_radius_hand" pos="0.0061 -0.2904 -0.0123" euler="-0 0 0">
           <inertial mass="1.5343150000000001" pos="0 -0.181479 0" fullinertia="0.019281 0.0015709999999999999 0.020062 0 0 0"/>
           <geom name="r_ulna_radius_hand_geom_1" type="mesh" mesh="r_ulna_radius_hand_geom_1_arm_r_ulna" rgba="1 1 1 1" group="0"/>
           <geom name="r_ulna_radius_hand_geom_2" type="mesh" mesh="r_ulna_radius_hand_geom_2_arm_r_radius" rgba="1 1 1 1" group="0"/>

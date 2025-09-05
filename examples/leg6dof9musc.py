@@ -23,7 +23,8 @@ kwargs['add_ground_geom'] = True       # Add ground to the model
 kwargs['treat_as_normal_path_point'] = False    # Using constraints to represent moving and conditional path points
 
 ############### Single Leg 6 DoFs 9 Muscles ################
-osim_file = './models/osim/Leg6Dof9Musc/leg6dof9musc.osim'
-geometry_folder = './models/osim/Leg6Dof9Musc/Geometry'
-output_folder = './models/mjc/Leg6Dof9Musc'
-O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
+if __name__ == '__main__':
+    osim_file = './models/osim/Leg6Dof9Musc/leg6dof9musc.osim'
+    geometry_folder = './models/osim/Leg6Dof9Musc/Geometry'
+    output_folder = './models/mjc/Leg6Dof9Musc'
+    O2MPipeline(osim_file, geometry_folder, output_folder, **kwargs)
