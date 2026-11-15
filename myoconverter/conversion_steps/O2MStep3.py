@@ -222,25 +222,23 @@ class MuscleForceOpt:
             
             fiber_len_range = np.zeros(2)
             
-            # use the osim mtu lengths to calcualte the mujoco muscle parameters
+            # use the osim mtu lengths to calculate the mujoco muscle parameters
             osim_mtu_len_arr = np.array(muscle_para['mtu_length_osim'], copy=True)
 
-            # if the muscle length is constant, then separate them a bit, since mjc cannot handle equal bounds
-            if osim_mtu_len_arr[0] == osim_mtu_len_arr[-1]:
-                osim_mtu_len_arr[0] = osim_mtu_len_arr[0] - 0.005
-                osim_mtu_len_arr[-1] = osim_mtu_len_arr[-1] + 0.005
+            # extract true min/max across all sampled postures (handles extensor & multi-DOF muscles)
+            min_osim_mtu_len = float(np.min(osim_mtu_len_arr))
+            max_osim_mtu_len = float(np.max(osim_mtu_len_arr))
+            if min_osim_mtu_len == max_osim_mtu_len:
+                min_osim_mtu_len -= 0.005
+                max_osim_mtu_len += 0.005
             
             # calculate relative fiber lengths
-            fiber_len_range[0] = (osim_mtu_len_arr[0] - tendon_slack)/fiber_opt
-            fiber_len_range[1] = (osim_mtu_len_arr[-1] - tendon_slack)/fiber_opt
+            fiber_len_range[0] = (min_osim_mtu_len - tendon_slack)/fiber_opt
+            fiber_len_range[1] = (max_osim_mtu_len - tendon_slack)/fiber_opt
             
-            # make sure that the fiber length range is between [0.01, 1.99], which
-            # is reasonable
-            if fiber_len_range[0] < 0.01:
-                fiber_len_range[0] = 0.01
-            
-            if fiber_len_range[1] > 1.99:
-                fiber_len_range[1] = 1.99
+            # make sure that the fiber length range is ordered and within [0.01, 1.99]
+            fiber_len_range[0] = np.clip(fiber_len_range[0], 0.01, 1.95)
+            fiber_len_range[1] = np.clip(fiber_len_range[1], max(fiber_len_range[0] + 0.02, 0.05), 1.99)
             
             muscle_inst = self.mjc_model.actuator(muscle) #mujoco.mj_name2id(self.mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, muscle)
             
@@ -249,18 +247,18 @@ class MuscleForceOpt:
             osimFP = muscle_para['mtu_force_osim']/fmax
             
             # actual muscle length
-            muscle_inst.lengthrange[0] = osim_mtu_len_arr[0]
-            muscle_inst.lengthrange[1] = osim_mtu_len_arr[-1]
+            muscle_inst.lengthrange[0] = min_osim_mtu_len
+            muscle_inst.lengthrange[1] = max_osim_mtu_len
             
             # operation range (nomalized by L0)
             muscle_inst.gainprm[0:2] = fiber_len_range
 
-            # set lmin and lmax equal 0.0 and 2.0
-            muscle_inst.gainprm[4] = 0.0
-            muscle_inst.gainprm[5] = 2.0
+            # initialize physiological Hill active force-length curve bounds [0.5, 1.6]
+            muscle_inst.gainprm[4] = 0.5
+            muscle_inst.gainprm[5] = 1.6
       
             # biasprm also NEEDS to be updated
-            muscle_inst.biasprm = muscle_inst.gainprm
+            muscle_inst.biasprm[:] = muscle_inst.gainprm
                     
             err_ind, mjc_mtu_length, cost_org = getMuscleForceDiff(self.mjc_model, muscle,\
                                                               joints_uniq, mjc_jnt_arr,\
@@ -283,31 +281,18 @@ class MuscleForceOpt:
                 muscle_inst.lengthrange[0] = min_mjc_mtu_length
                 muscle_inst.lengthrange[1] = max_mjc_mtu_length
                 
-                # set lmin and lmax as 0 and 1.8
-                muscle_inst.gainprm[4:6] = [0, 2]
-                muscle_inst.biasprm[4:6] = [0, 2]
+                # initialize lmin and lmax at physiological Hill defaults [0.5, 1.6]
+                muscle_inst.gainprm[4:6] = [0.5, 1.6]
+                muscle_inst.biasprm[4:6] = [0.5, 1.6]
 
                 # save current mujoco model into cvt3...
                 cvt3_model_path = self.mjc_model_path[0:-8] + 'cvt3.xml'
                 mujoco.mj_saveLastXML(cvt3_model_path, self.mjc_model)
 
-                # TODO: 
-                # set the muscle activation shift from 0 to 1
-                # act_list = np.linspace(0, 1, 5)
-                
-                
-                # only optimize when activation = 1
-
-                # generate parameter bounds
-                # If the range value equals the muscle extrem operation length, may cause
-                # negative muscle forces, therefore the force-length curve range must be
-                # larger the operation range. Adding/Substracting a small number (0.1) to 
-                # ensure this.
-
-                optParam_lb = [0.01, 1,\
-                               0.01, 0.5]  # lower bounds of range[0], range[1], fpmax, fmax (scale)
-                optParam_ub = [1, 1.99,\
-                               5, 2]  # upper bounds of range[0], range[1], fpmax, fmax (scale)
+                # Jointly optimize [range_min, range_max, lmin, lmax, fpmax, fmax_scale]
+                # so compliant-tendon muscles are not pinned at range[1] >= 1.0 or lmin=0, lmax=2 (#45)
+                optParam_lb = [0.01, 0.05, 0.2, 1.05, 0.01, 0.5]
+                optParam_ub = [1.90, 1.99, 0.95, 1.99, 5.0, 2.0]
                 
                 opt_results, self.mjc_model = fmOptPSO_cust(cvt3_model_path, muscle, joints_uniq,\
                                                        mjc_jnt_arr, act_arr, osimFP,\
@@ -330,10 +315,10 @@ class MuscleForceOpt:
             # extract muscle instance again.
             muscle_inst = self.mjc_model.actuator(muscle)
             
-            # change fmax back to normalized value
+            # change fmax back to unnormalized force
             res_opt = muscle_para['opt_results']['res_opt']
             if res_opt is not None and len(res_opt) > 0:
-                muscle_inst.gainprm[2] = res_opt[3]*fmax
+                muscle_inst.gainprm[2] = res_opt[-1]*fmax
             else:
                 muscle_inst.gainprm[2] = fmax
                 
@@ -342,7 +327,7 @@ class MuscleForceOpt:
             muscle_inst.gainprm[8] = 1.4
             
             # copy the parameter from gainprm to biasprm
-            muscle_inst.biasprm = muscle_inst.gainprm
+            muscle_inst.biasprm[:] = muscle_inst.gainprm
 
         # save the updated model
         cvt3_model_path = self.mjc_model_path[0:-8] + 'cvt3.xml'

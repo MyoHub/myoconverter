@@ -1,14 +1,14 @@
 <mujoco model="template">
   <!-- This model has been converted from an OpenSim model. Model conversion by MyoConverter https://github.com/MyoHub/myoConverter. This model is licensed under Apache 2.0. -->
   <compiler angle="radian" autolimits="true"/>
-  <option timestep="0.001" collision="predefined"/>
-  <size njmax="1000" nconmax="400" nkey="1" nuser_jnt="1"/>
+  <option timestep="0.002"/>
+  <size nkey="1" nuser_jnt="1"/>
   <visual>
     <scale framelength="0.5" framewidth="0.01"/>
   </visual>
   <default class="main">
     <joint limited="true" armature="1e-05" damping="0.05"/>
-    <geom margin="0.001" rgba="0.8 0.6 0.4 1"/>
+    <geom contype="0" conaffinity="0" margin="0.001" rgba="0.8 0.6 0.4 1"/>
     <site size="0.001 0.005 0.005"/>
     <tendon width="0.005" rgba="0.95 0.3 0.3 1"/>
     <default class="muscle">
@@ -109,29 +109,33 @@
             </body>
           </body>
           <body name="rect_fem_r_rect_fem_r-P3" pos="0 0 0.001399">
+            <inertial pos="0 0 0" mass="0.003708" diaginertia="1e-05 1e-05 1e-05"/>
             <joint name="rect_fem_r_rect_fem_r-P3_x" pos="0 0 0" axis="1 0 0" type="slide" range="0.01558 0.0733"/>
             <joint name="rect_fem_r_rect_fem_r-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.06738 0.02531"/>
-            <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+            <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
             <site name="rect_fem_r_rect_fem_r-P3" pos="0 0 0"/>
           </body>
           <body name="vasti_r_vas_int_r-P4" pos="0 0 0.001799">
+            <inertial pos="0 0 0" mass="0.003708" diaginertia="1e-05 1e-05 1e-05"/>
             <joint name="vasti_r_vas_int_r-P4_x" pos="0 0 0" axis="1 0 0" type="slide" range="0.008273 0.06844"/>
             <joint name="vasti_r_vas_int_r-P4_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.06857 0.02752"/>
-            <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+            <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
             <site name="vasti_r_vas_int_r-P4" pos="0 0 0"/>
           </body>
         </body>
         <body name="vasti_r_vas_int_r-P3" pos="0.0335 0 0">
+          <inertial pos="0 0 0" mass="0.009301" diaginertia="1e-05 1e-05 1e-05"/>
           <joint name="vasti_r_vas_int_r-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.403 -0.2084"/>
           <joint name="vasti_r_vas_int_r-P3_z" pos="0 0 0" axis="0 0 1" type="slide" range="0.0055 0.0285"/>
-          <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+          <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
           <site name="vasti_r_vas_int_r-P3" pos="0 0 0"/>
         </body>
         <body name="gastroc_r_med_gas_r-P2">
+          <inertial pos="0 0 0" mass="0.009301" diaginertia="1e-05 1e-05 1e-05"/>
           <joint name="gastroc_r_med_gas_r-P2_x" pos="0 0 0" axis="1 0 0" type="slide" range="-0.03 -0.019"/>
           <joint name="gastroc_r_med_gas_r-P2_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.4022 -0.3929"/>
           <joint name="gastroc_r_med_gas_r-P2_z" pos="0 0 0" axis="0 0 1" type="slide" range="-0.0258 -0.0235"/>
-          <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+          <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
           <site name="gastroc_r_med_gas_r-P2" pos="0 0 0"/>
         </body>
       </body>
@@ -179,29 +183,33 @@
             </body>
           </body>
           <body name="rect_fem_l_rect_fem_l-P3" pos="0 0 -0.001401">
+            <inertial pos="0 0 0" mass="0.003708" diaginertia="1e-05 1e-05 1e-05"/>
             <joint name="rect_fem_l_rect_fem_l-P3_x" pos="0 0 0" axis="1 0 0" type="slide" range="0.01558 0.0733"/>
             <joint name="rect_fem_l_rect_fem_l-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.06738 0.02531"/>
-            <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+            <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
             <site name="rect_fem_l_rect_fem_l-P3" pos="0 0 0"/>
           </body>
           <body name="vasti_l_vas_int_l-P4" pos="0 0 -0.001801">
+            <inertial pos="0 0 0" mass="0.003708" diaginertia="1e-05 1e-05 1e-05"/>
             <joint name="vasti_l_vas_int_l-P4_x" pos="0 0 0" axis="1 0 0" type="slide" range="0.008273 0.06844"/>
             <joint name="vasti_l_vas_int_l-P4_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.06857 0.02752"/>
-            <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+            <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
             <site name="vasti_l_vas_int_l-P4" pos="0 0 0"/>
           </body>
         </body>
         <body name="vasti_l_vas_int_l-P3" pos="0.0335 0 0">
+          <inertial pos="0 0 0" mass="0.009301" diaginertia="1e-05 1e-05 1e-05"/>
           <joint name="vasti_l_vas_int_l-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.403 -0.2084"/>
           <joint name="vasti_l_vas_int_l-P3_z" pos="0 0 0" axis="0 0 1" type="slide" range="-0.0285 -0.0055"/>
-          <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+          <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
           <site name="vasti_l_vas_int_l-P3" pos="0 0 0"/>
         </body>
         <body name="gastroc_l_med_gas_l-P2">
+          <inertial pos="0 0 0" mass="0.009301" diaginertia="1e-05 1e-05 1e-05"/>
           <joint name="gastroc_l_med_gas_l-P2_x" pos="0 0 0" axis="1 0 0" type="slide" range="-0.03 -0.019"/>
           <joint name="gastroc_l_med_gas_l-P2_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.4022 -0.3929"/>
           <joint name="gastroc_l_med_gas_l-P2_z" pos="0 0 0" axis="0 0 1" type="slide" range="0.0235 0.0258"/>
-          <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+          <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
           <site name="gastroc_l_med_gas_l-P2" pos="0 0 0"/>
         </body>
       </body>
@@ -214,17 +222,19 @@
         <geom name="torso_geom_4" type="mesh" rgba="1 1 1 1" mesh="torso_geom_4_hat_ribs"/>
       </body>
       <body name="iliopsoas_r_psoas_r-P3">
+        <inertial pos="0 0 0" mass="0.01" diaginertia="1e-05 1e-05 1e-05"/>
         <joint name="iliopsoas_r_psoas_r-P3_x" pos="0 0 0" axis="1 0 0" type="slide" range="-0.0288 -0.0238"/>
         <joint name="iliopsoas_r_psoas_r-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.0805 -0.057"/>
         <joint name="iliopsoas_r_psoas_r-P3_z" pos="0 0 0" axis="0 0 1" type="slide" range="0.0759 0.0816"/>
-        <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+        <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
         <site name="iliopsoas_r_psoas_r-P3" pos="0 0 0"/>
       </body>
       <body name="iliopsoas_l_psoas_l-P3">
+        <inertial pos="0 0 0" mass="0.01" diaginertia="1e-05 1e-05 1e-05"/>
         <joint name="iliopsoas_l_psoas_l-P3_x" pos="0 0 0" axis="1 0 0" type="slide" range="-0.0288 -0.0238"/>
         <joint name="iliopsoas_l_psoas_l-P3_y" pos="0 0 0" axis="0 1 0" type="slide" range="-0.0805 -0.057"/>
         <joint name="iliopsoas_l_psoas_l-P3_z" pos="0 0 0" axis="0 0 1" type="slide" range="-0.0816 -0.0759"/>
-        <geom size="0.0005" contype="2" conaffinity="2" rgba="0 0 1 0"/>
+        <geom size="0.0005" contype="0" conaffinity="0" rgba="0 0 1 0"/>
         <site name="iliopsoas_l_psoas_l-P3" pos="0 0 0"/>
       </body>
     </body>
@@ -255,30 +265,30 @@
     <joint joint1="knee_r_translation2" joint2="knee_angle_r" polycoef="-0.3957 0.003413 -0.005587 0.0006697 0.0005674" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="knee_l_translation1" joint2="knee_angle_l" polycoef="-0.003639 -0.006267 0.002807 0.00134 -0.0006776" solimp="0.9999 0.9999 0.001 0.5 2"/>
     <joint joint1="knee_l_translation2" joint2="knee_angle_l" polycoef="-0.3957 0.003413 -0.005587 0.0006697 0.0005674" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_x" joint2="hip_flexion_r" polycoef="-0.0288 0 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_y" joint2="hip_flexion_r" polycoef="-0.0805 0 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_r_psoas_r-P3_z" joint2="hip_flexion_r" polycoef="0.0816 0 -0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="rect_fem_r_rect_fem_r-P3_x" joint2="knee_angle_r" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="rect_fem_r_rect_fem_r-P3_y" joint2="knee_angle_r" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_r_vas_int_r-P3_y" joint2="knee_angle_r" polycoef="-0.2234 0.08578 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_r_vas_int_r-P3_z" joint2="knee_angle_r" polycoef="0.02673 0.01014 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_r_vas_int_r-P4_x" joint2="knee_angle_r" polycoef="0.05647 0.04555 0.01393 -0.007247 -0.004235" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_r_vas_int_r-P4_y" joint2="knee_angle_r" polycoef="0.02476 -0.006322 -0.00661 -0.003684 -0.0008973" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_r_med_gas_r-P2_x" joint2="knee_angle_r" polycoef="-0.02915 -0.004849 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_r_med_gas_r-P2_y" joint2="knee_angle_r" polycoef="-0.4015 -0.0041 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_r_med_gas_r-P2_z" joint2="knee_angle_r" polycoef="-0.02562 -0.001014 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_x" joint2="hip_flexion_l" polycoef="-0.0288 0 0.00114 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_y" joint2="hip_flexion_l" polycoef="-0.0805 0 0.005359 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="iliopsoas_l_psoas_l-P3_z" joint2="hip_flexion_l" polycoef="-0.0816 0 0.0013 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="rect_fem_l_rect_fem_l-P3_x" joint2="knee_angle_l" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="rect_fem_l_rect_fem_l-P3_y" joint2="knee_angle_l" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_l_vas_int_l-P3_y" joint2="knee_angle_l" polycoef="-0.2234 0.08578 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_l_vas_int_l-P3_z" joint2="knee_angle_l" polycoef="-0.02673 -0.01014 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_l_vas_int_l-P4_x" joint2="knee_angle_l" polycoef="0.05647 0.04555 0.01393 -0.007247 -0.004235" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="vasti_l_vas_int_l-P4_y" joint2="knee_angle_l" polycoef="0.02476 -0.006322 -0.00661 -0.003684 -0.0008973" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_l_med_gas_l-P2_x" joint2="knee_angle_l" polycoef="-0.02915 -0.004849 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_l_med_gas_l-P2_y" joint2="knee_angle_l" polycoef="-0.4015 -0.0041 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
-    <joint joint1="gastroc_l_med_gas_l-P2_z" joint2="knee_angle_l" polycoef="0.02562 0.001014 0 0 0" solimp="0.9999 0.9999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_x" joint2="hip_flexion_r" polycoef="-0.0288 0 0.00114 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_y" joint2="hip_flexion_r" polycoef="-0.0805 0 0.005359 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_r_psoas_r-P3_z" joint2="hip_flexion_r" polycoef="0.0816 0 -0.0013 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="rect_fem_r_rect_fem_r-P3_x" joint2="knee_angle_r" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="rect_fem_r_rect_fem_r-P3_y" joint2="knee_angle_r" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_r_vas_int_r-P3_y" joint2="knee_angle_r" polycoef="-0.2234 0.08578 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_r_vas_int_r-P3_z" joint2="knee_angle_r" polycoef="0.02673 0.01014 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_r_vas_int_r-P4_x" joint2="knee_angle_r" polycoef="0.05647 0.04555 0.01393 -0.007247 -0.004235" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_r_vas_int_r-P4_y" joint2="knee_angle_r" polycoef="0.02476 -0.006322 -0.00661 -0.003684 -0.0008973" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_r_med_gas_r-P2_x" joint2="knee_angle_r" polycoef="-0.02915 -0.004849 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_r_med_gas_r-P2_y" joint2="knee_angle_r" polycoef="-0.4015 -0.0041 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_r_med_gas_r-P2_z" joint2="knee_angle_r" polycoef="-0.02562 -0.001014 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_x" joint2="hip_flexion_l" polycoef="-0.0288 0 0.00114 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_y" joint2="hip_flexion_l" polycoef="-0.0805 0 0.005359 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="iliopsoas_l_psoas_l-P3_z" joint2="hip_flexion_l" polycoef="-0.0816 0 0.0013 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="rect_fem_l_rect_fem_l-P3_x" joint2="knee_angle_l" polycoef="0.06259 0.04199 0.01152 -0.007248 -0.004008" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="rect_fem_l_rect_fem_l-P3_y" joint2="knee_angle_l" polycoef="0.02032 -0.01159 -0.008624 -0.002308 -0.0002292" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_l_vas_int_l-P3_y" joint2="knee_angle_l" polycoef="-0.2234 0.08578 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_l_vas_int_l-P3_z" joint2="knee_angle_l" polycoef="-0.02673 -0.01014 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_l_vas_int_l-P4_x" joint2="knee_angle_l" polycoef="0.05647 0.04555 0.01393 -0.007247 -0.004235" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="vasti_l_vas_int_l-P4_y" joint2="knee_angle_l" polycoef="0.02476 -0.006322 -0.00661 -0.003684 -0.0008973" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_l_med_gas_l-P2_x" joint2="knee_angle_l" polycoef="-0.02915 -0.004849 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_l_med_gas_l-P2_y" joint2="knee_angle_l" polycoef="-0.4015 -0.0041 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
+    <joint joint1="gastroc_l_med_gas_l-P2_z" joint2="knee_angle_l" polycoef="0.02562 0.001014 0 0 0" solref="0.01 1" solimp="0.99999 0.99999 0.001 0.5 2"/>
   </equality>
   <tendon>
     <spatial name="hamstrings_r_tendon">

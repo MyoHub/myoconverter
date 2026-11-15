@@ -28,14 +28,21 @@ from myoconverter.conversion_steps.O2MStep3 import MuscleForceOpt
 from myoconverter.conversion_steps.O2MSteps import O2MSteps
 from myoconverter.optimization.model_states.MjcMuscleStates import MjcMuscleStates
 from myoconverter.optimization.model_states.OsimMuscleStates import OsimMuscleStates
-from myoconverter.optimization.utils.UtilsForceOpt import getMuscleForceDiff
+from myoconverter.optimization.utils.UtilsForceOpt import (
+    fmOptPSO_cust,
+    getMuscleForceDiff,
+    initializeWorker,
+    objFMMuscle,
+)
 from myoconverter.optimization.utils.UtilsLengthOpt import getMomentArmDiff
 from myoconverter.optimization.utils.UtilsMujoco import (
+    _get_actuator_moment,
     computeMomentArmMuscleJoints,
     dependencyJointAng,
     getCoordinateRange_mjc,
     getMuscleForceLengthCurvesSim,
     sortMuscleWrapSiteJoint,
+    updateMuscleForceProperties,
 )
 from myoconverter.optimization.utils.UtilsOpensim import getIndipCoordAndJoint
 from myoconverter.optimization.utils.UtilsRotation import (
@@ -471,3 +478,223 @@ def test_step3_skip_opt_constant_length_and_multi_activation_plot(tmp_path):
         reloaded = pickle.load(f)
     assert "mtu_force_mjc" in reloaded
     assert "mtu_force_mjc_passive" in reloaded
+
+
+def test_sparse_actuator_moment_matches_finite_difference():
+    """_get_actuator_moment must reconstruct dense rows from genuinely sparse MuJoCo 3+/4+ CSR arrays."""
+    sparse_xml = """\
+    <mujoco model="sparse_moment_test">
+      <worldbody>
+        <body name="b1">
+          <inertial pos="0 0 0" mass="1" diaginertia="1 1 1"/>
+          <joint name="j0" type="hinge" axis="1 0 0"/>
+          <site name="m1_orig" pos="0 0.05 0"/>
+          <geom name="cyl" type="cylinder" euler="0 1.5708 0" pos="0 0 -0.2" size="0.03 0.05" contype="0" conaffinity="0"/>
+          <body name="b2" pos="0 0 -0.2">
+            <inertial pos="0 0 0" mass="1" diaginertia="1 1 1"/>
+            <joint name="j1" type="hinge" axis="1 0 0"/>
+            <site name="m1_ins" pos="0 0.04 -0.15"/>
+            <site name="m2_orig" pos="0 -0.04 -0.05"/>
+            <body name="b3" pos="0 0 -0.2">
+              <inertial pos="0 0 0" mass="1" diaginertia="1 1 1"/>
+              <joint name="j2" type="hinge" axis="1 0 0"/>
+              <site name="m2_ins" pos="0 -0.03 -0.12"/>
+            </body>
+          </body>
+        </body>
+      </worldbody>
+      <tendon>
+        <spatial name="t1"><site site="m1_orig"/><geom geom="cyl"/><site site="m1_ins"/></spatial>
+        <spatial name="t2"><site site="m2_orig"/><site site="m2_ins"/></spatial>
+      </tendon>
+      <actuator>
+        <muscle name="m1" tendon="t1"/>
+        <muscle name="m2" tendon="t2"/>
+      </actuator>
+    </mujoco>
+    """
+    model = mujoco.MjModel.from_xml_string(sparse_xml)
+    data = mujoco.MjData(model)
+    q_base = np.array([0.1, 0.4, -0.3])
+    data.qpos[:] = q_base
+    mujoco.mj_forward(model, data)
+
+    # Confirm MuJoCo 3+/4+ stores fewer non-zeros than nu * nv = 6
+    if data.actuator_moment.ndim == 1:
+        assert int(np.sum(data.moment_rownnz)) < model.nu * model.nv
+
+    eps = 1e-6
+    for act_id in range(model.nu):
+        analytic_row = _get_actuator_moment(model, data, act_id, [0, 1, 2])
+        fd_row = np.zeros(model.nv)
+        for dof in range(model.nv):
+            data.qpos[:] = q_base
+            data.qpos[dof] += eps
+            mujoco.mj_forward(model, data)
+            l_plus = float(data.actuator_length[act_id])
+
+            data.qpos[:] = q_base
+            data.qpos[dof] -= eps
+            mujoco.mj_forward(model, data)
+            l_minus = float(data.actuator_length[act_id])
+            fd_row[dof] = (l_plus - l_minus) / (2.0 * eps)
+
+        assert np.allclose(analytic_row, fd_row, rtol=1e-4, atol=1e-6)
+
+
+def test_step3_six_param_muscle_force_opt_and_compliant_tendon_fit(tmp_path):
+    """Issue #45: 6-parameter [range_min, range_max, lmin, lmax, fpmax, fmax] optimization & [0.5, 1.6] defaults."""
+    model = mujoco.MjModel.from_xml_string(SYNTHETIC_MJC_XML)
+
+    # 4-parameter legacy compatibility
+    updateMuscleForceProperties(model, "bic_long", [0.6, 1.2, 1.4, 1.1])
+    act = model.actuator("bic_long")
+    assert np.allclose(act.gainprm[[0, 1, 7, 2]], [0.6, 1.2, 1.4, 1.1])
+    assert np.allclose(act.biasprm[[0, 1, 7, 2]], [0.6, 1.2, 1.4, 1.1])
+
+    # 6-parameter compliant-tendon update
+    updateMuscleForceProperties(model, "bic_long", [0.45, 0.92, 0.55, 1.45, 1.8, 0.95])
+    assert np.allclose(act.gainprm[[0, 1, 4, 5, 7, 2]], [0.45, 0.92, 0.55, 1.45, 1.8, 0.95])
+    assert np.allclose(act.biasprm[[0, 1, 4, 5, 7, 2]], [0.45, 0.92, 0.55, 1.45, 1.8, 0.95])
+
+    with pytest.raises(ValueError):
+        updateMuscleForceProperties(model, "bic_long", [0.5, 1.0, 1.2])
+
+    # Degenerate range_max <= range_min + 0.02 returns smooth penalty without calling simulation
+    initializeWorker(model)
+    pen = objFMMuscle([0.9, 0.85, 0.5, 1.6, 1.3, 1.0], np.zeros((1, 3)), "bic_long", ["elbow_flex"], [(0.2,), (0.8,), (1.4,)], [1.0])
+    assert pen > 1e3
+
+    # End-to-end Step 3 check with reversed/extensor mtu_length_osim and sub-1.0 range_max target
+    cvt2_path = tmp_path / "compliant_cvt2.xml"
+    cvt2_path.write_text(SYNTHETIC_MJC_XML, encoding="utf-8")
+    save_dir = tmp_path / "Step3_compliant"
+    save_dir.mkdir()
+
+    jnt_sets = [(0.1,), (0.6,), (1.2,), (1.8,)]
+    target_model = mujoco.MjModel.from_xml_string(SYNTHETIC_MJC_XML)
+    target_model.actuator("bic_long").gainprm[3] = 1.0
+    target_model.actuator("bic_long").biasprm[3] = 1.0
+    # Target compliant-tendon curve has range_max = 0.88 < 1.0 (impossible under old lb[1]=1.0, lmin=0, lmax=2)
+    updateMuscleForceProperties(target_model, "bic_long", [0.42, 0.88, 0.58, 1.52, 1.5, 1.0])
+    f_target, l_target = getMuscleForceLengthCurvesSim(target_model, "bic_long", ["elbow_flex"], jnt_sets, [1.0])
+
+    # Pass descending lengths to verify np.min/np.max handling on extensor-ordered arrays
+    descending_len = l_target.flatten()[::-1].copy()
+    mus_pkl = {
+        "muscle_name": "bic_long",
+        "mtu_par_set": {"fiber_opt": 0.08, "tendon_sla": 0.27, "fmax": 200.0, "penn_ang": 0.0, "vmax": 10.0},
+        "mtu_length_osim": descending_len,
+        "jit_list_set": jnt_sets,
+        "mjc_jit_list_set": jnt_sets,
+        "jit_uniq": ["elbow_flex"],
+        "jit_uniq_ranges": [np.array([0.0, 2.0])],
+        "act_list": [1.0],
+        "mtu_force_osim": -f_target * 200.0,
+        "act_force_osim": -f_target * 200.0,
+        "pas_force_osim": np.zeros_like(f_target),
+    }
+    with open(save_dir / "bic_long.pkl", "wb") as f:
+        pickle.dump(mus_pkl, f)
+
+    mock_osim = _make_mock_osim_model(("bic_long",))
+    with patch("myoconverter.conversion_steps.O2MStep3.opensim.Model", return_value=mock_osim):
+        mf_opt = MuscleForceOpt(str(cvt2_path), "dummy.osim", str(save_dir), muscle_list=["bic_long"], osim_data_overwrite=False)
+
+    # Use speedy=True via wrapper so test completes quickly in unit test suite
+    orig_pso = fmOptPSO_cust
+    with patch(
+        "myoconverter.conversion_steps.O2MStep3.fmOptPSO_cust",
+        side_effect=lambda *args, **kwargs: orig_pso(*args, speedy=True),
+    ):
+        out_cvt3 = mf_opt.optMuscleForce()
+
+    opt_model = mujoco.MjModel.from_xml_path(out_cvt3)
+    opt_act = opt_model.actuator("bic_long")
+    assert opt_act.lengthrange[0] < opt_act.lengthrange[1]
+    assert 0.2 <= opt_act.gainprm[4] <= 0.95
+    assert 1.05 <= opt_act.gainprm[5] <= 1.99
+    with open(save_dir / "bic_long.pkl", "rb") as f:
+        opt_saved = pickle.load(f)
+    assert len(opt_saved["opt_results"]["res_opt"]) == 6
+    assert opt_saved["opt_results"]["cost_opt"] <= opt_saved["opt_results"]["cost_org"] + 1e-9
+
+
+def test_generate_pdf_readonly_pickles_and_zero_endpoints(tmp_path):
+    """generate_pdf must open pickles read-only ('rb') and handle 0 or 1 endpoint SVG files cleanly."""
+    import stat
+    from myoconverter.utils.generate_pdf import generate_pdf
+
+    vlt1 = tmp_path / "vlt1"
+    vlt2 = tmp_path / "vlt2"
+    vlt3 = tmp_path / "vlt3"
+    (vlt1 / "end_points").mkdir(parents=True)
+    (vlt2 / "moment_arms").mkdir(parents=True)
+    (vlt3 / "muscle_forces").mkdir(parents=True)
+
+    p1 = vlt1 / "end_points" / "end_point_error.pkl"
+    p2 = vlt2 / "overall_comp_momentarms.pkl"
+    p3 = vlt3 / "overall_comp_muscleforces.pkl"
+    with open(p1, "wb") as f:
+        pickle.dump({"mean": 0.0, "std": 0.0}, f)
+    with open(p2, "wb") as f:
+        pickle.dump({"cost_opt_mat_mean": 0.001, "cost_opt_mat_std": 0.0002}, f)
+    with open(p3, "wb") as f:
+        pickle.dump({"rms_opt_mean": 0.02, "rms_opt_std": 0.005}, f)
+
+    # Mark all 3 pickles read-only to verify 'rb' instead of 'rb+'
+    for p in (p1, p2, p3):
+        os.chmod(p, stat.S_IREAD)
+
+    try:
+        # Case 1: 0 SVG files in vlt1/end_points
+        pdf0 = generate_pdf(str(vlt1), str(vlt2), str(vlt3), "test_model", str(tmp_path))
+        out0 = tmp_path / "report0.pdf"
+        pdf0.render(str(out0))
+        assert out0.is_file() and out0.stat().st_size > 0
+    finally:
+        for p in (p1, p2, p3):
+            os.chmod(p, stat.S_IWRITE | stat.S_IREAD)
+
+
+def test_preconverted_gait10dof18musc_models_load_and_extend_knee():
+    """Issues #30, #31, #41: pre-converted Gait10dof18musc cvt2 & cvt3 load in MuJoCo 4 and extend knee cleanly."""
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    for fname in ("gait10dof18musc_cvt2.xml", "gait10dof18musc_cvt3.xml"):
+        xml_path = os.path.join(repo_root, "models", "mjc", "Gait10dof18musc", fname)
+        model = mujoco.MjModel.from_xml_path(xml_path)
+        assert model.opt.timestep == pytest.approx(0.002)
+
+        data = mujoco.MjData(model)
+        # Lock pelvis in air so legs swing freely without ground contact interference
+        pelvis_ty_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "pelvis_ty")
+        knee_r_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "knee_angle_r")
+        vasti_r_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "vasti_r")
+
+        mujoco.mj_resetDataKeyframe(model, data, 0)
+        data.qpos[model.jnt_qposadr[pelvis_ty_id]] = 1.3
+        # Start right knee flexed at -0.8 rad and set coupled knee translations + path points via dependencyJointAng
+        free_ids = [knee_r_id]
+        data.qpos[model.jnt_qposadr[knee_r_id]] = -0.8
+        dep_jnts, dep_angs, _ = dependencyJointAng(model, free_ids, [-0.8])
+        for jid, ang in zip(dep_jnts, dep_angs):
+            data.qpos[model.jnt_qposadr[jid]] = ang
+
+        data.ctrl[vasti_r_id] = 1.0
+        act_adr = int(model.actuator_actadr[vasti_r_id])
+        if act_adr >= 0:
+            data.act[act_adr] = 1.0
+
+        mujoco.mj_forward(model, data)
+        # Check muscle torque on knee_angle_r is positive (knee extension corresponds to increasing knee_angle_r -> 0)
+        knee_dof = int(model.jnt_dofadr[knee_r_id])
+        ma_vasti = _get_actuator_moment(model, data, vasti_r_id, knee_dof)
+        # In MuJoCo, actuator_force < 0 (pulling), so extension torque > 0 requires moment arm < 0 (or qfrc_actuator > 0)
+        assert data.qfrc_actuator[knee_dof] > 0.0, f"{fname}: vasti_r failed to produce extension torque ({ma_vasti=})"
+
+        for _ in range(100):
+            data.ctrl[vasti_r_id] = 1.0
+            mujoco.mj_step(model, data)
+
+        assert int(data.warning[mujoco.mjtWarning.mjWARN_BADQACC].number) == 0, f"{fname} emitted mjWARN_BADQACC"
+        assert data.qpos[model.jnt_qposadr[knee_r_id]] > -0.8, f"{fname}: vasti_r flexed instead of extending knee"

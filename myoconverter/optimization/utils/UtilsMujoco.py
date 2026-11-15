@@ -612,17 +612,40 @@ def getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr):
 def updateMuscleForceProperties(mjc_model, muscle, res):
     """
     Update mujoco muscle property parameters with optimization results.
+
+    Supports both:
+    - 6-parameter optimization: [range_min, range_max, lmin, lmax, fpmax, fmax]
+      -> gainprm/biasprm indices [0, 1, 4, 5, 7, 2]
+    - 4-parameter legacy optimization: [range_min, range_max, fpmax, fmax]
+      -> gainprm/biasprm indices [0, 1, 7, 2]
     """
-    
-    mjc_model.actuator(muscle).biasprm[2] = res[3]
-    mjc_model.actuator(muscle).biasprm[0] = res[0]
-    mjc_model.actuator(muscle).biasprm[1] = res[1]
-    mjc_model.actuator(muscle).biasprm[7] = res[2]
-    
-    mjc_model.actuator(muscle).gainprm[2] = res[3]
-    mjc_model.actuator(muscle).gainprm[0] = res[0]
-    mjc_model.actuator(muscle).gainprm[1] = res[1]
-    mjc_model.actuator(muscle).gainprm[7] = res[2]
-    
+    act = mjc_model.actuator(muscle)
+    if len(res) == 6:
+        act.biasprm[0] = res[0]
+        act.biasprm[1] = res[1]
+        act.biasprm[4] = res[2]
+        act.biasprm[5] = res[3]
+        act.biasprm[7] = res[4]
+        act.biasprm[2] = res[5]
+
+        act.gainprm[0] = res[0]
+        act.gainprm[1] = res[1]
+        act.gainprm[4] = res[2]
+        act.gainprm[5] = res[3]
+        act.gainprm[7] = res[4]
+        act.gainprm[2] = res[5]
+    elif len(res) == 4:
+        act.biasprm[0] = res[0]
+        act.biasprm[1] = res[1]
+        act.biasprm[7] = res[2]
+        act.biasprm[2] = res[3]
+
+        act.gainprm[0] = res[0]
+        act.gainprm[1] = res[1]
+        act.gainprm[7] = res[2]
+        act.gainprm[2] = res[3]
+    else:
+        raise ValueError(f"Expected 4 or 6 muscle force parameters, got {len(res)}")
+
     return mjc_model
 

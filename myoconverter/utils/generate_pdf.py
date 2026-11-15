@@ -103,7 +103,7 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
         
         # load the end point data from the saved files
         if os.path.isfile(mjc_vlt1_path + '/end_points/end_point_error.pkl'):
-          with open(mjc_vlt1_path + '/end_points/end_point_error.pkl', "rb+") as endpoint_error_file:
+          with open(mjc_vlt1_path + '/end_points/end_point_error.pkl', "rb") as endpoint_error_file:
               endpoint_error = pickle.load(endpoint_error_file)
 
           pdf['error_content1'] = 'Mean error:' + str(round(endpoint_error['mean']*100, 4)) + " cm" + \
@@ -114,7 +114,7 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
 
         # load the moment arm error data from the saved files
         if os.path.isfile(mjc_vlt2_path + '/overall_comp_momentarms.pkl'):
-          with open(mjc_vlt2_path + '/overall_comp_momentarms.pkl', "rb+") as momentarm_error_file:
+          with open(mjc_vlt2_path + '/overall_comp_momentarms.pkl', "rb") as momentarm_error_file:
             momentarm_error = pickle.load(momentarm_error_file)
 
           pdf['error_content2'] = 'Mean error:' + str(round(momentarm_error['cost_opt_mat_mean']*100, 4)) + " cm" + \
@@ -124,7 +124,7 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
         pdf['list_content3'] = 'Check muscle force-length relationship as indication of how similar of them in generating forces'
         # load the muscle force error data from the saved files
         if os.path.isfile(mjc_vlt3_path + '/overall_comp_muscleforces.pkl'):
-          with open(mjc_vlt3_path + '/overall_comp_muscleforces.pkl', "rb+") as muscleforce_error_file:
+          with open(mjc_vlt3_path + '/overall_comp_muscleforces.pkl', "rb") as muscleforce_error_file:
             muscleforce_error = pickle.load(muscleforce_error_file)
 
           pdf['error_content3'] = 'Mean error:' + str(round(muscleforce_error['rms_opt_mean'], 4)) + " Fmax" + \
@@ -156,8 +156,9 @@ def generate_pdf(mjc_vlt1_path:str, mjc_vlt2_path:str, mjc_vlt3_path:str, model_
 
         # Scan the end_points folder to find all .svg files and add the overall comparison to the pdf report
         vlt1_plot_list = [os.path.split(f)[1][0:-4] for f in glob.glob(mjc_vlt1_path + "/end_points/*.svg")]
+        marker_plot_list = [p for p in vlt1_plot_list if "overall_comp" not in p]
 
-        if len(vlt1_plot_list) == 1:  # only empty overall_comp plot generated, no end point plots
+        if len(vlt1_plot_list) <= 1 and len(marker_plot_list) == 0:  # 0 plots or only empty overall_comp plot
             pdf.add_page()
             pdf['step_title'] = "NO End Points found in the model."
             

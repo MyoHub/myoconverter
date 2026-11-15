@@ -51,6 +51,10 @@ def objFMMuscle(x, osim_fm, muscle: str, joints: List[str], jnt_arr, act_arr):
             the RMS value of muscle force map differences
     """
 
+    # Guard against degenerate or inverted normalized operating range (range_max <= range_min + 0.02)
+    if len(x) in (4, 6) and x[1] <= x[0] + 0.02:
+        return 1e3 + 1e3 * float(x[0] + 0.02 - x[1])
+
     global mjc_model
     mjc_model = updateMuscleForceProperties(mjc_model, muscle, x)
     
@@ -144,6 +148,20 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
     similar_particles = 0  # number of similar particles, this will be used as an cretiria to stop the optimization
 
     shared_model = mujoco.MjModel.from_xml_path(mjc_model_path)
+
+    # Seed first particle with current analytic model parameters so PSO never degrades cost_org
+    act = shared_model.actuator(muscle)
+    if dimensions == 6:
+        init_vec = np.array(
+            [act.gainprm[0], act.gainprm[1], act.gainprm[4], act.gainprm[5], act.gainprm[7], act.gainprm[2]],
+            dtype=float,
+        )
+        x[0] = np.clip(init_vec, optParam_lb, optParam_ub)
+        p[0] = x[0].copy()
+    elif dimensions == 4:
+        init_vec = np.array([act.gainprm[0], act.gainprm[1], act.gainprm[7], act.gainprm[2]], dtype=float)
+        x[0] = np.clip(init_vec, optParam_lb, optParam_ub)
+        p[0] = x[0].copy()
 
     with mp.Pool(initializer=initializeWorker, initargs=(shared_model,)) as pool:
         
