@@ -80,13 +80,13 @@ def objMAMuscle(x, side_id, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wr
     # check the list length
     if len(osim_ma) != len(mjc_ma):
         logger.debug("osim and mjc models have different number wrapping coordinates of this wrapping object")
-        raise('osim and mjc models have different number wrapping coordinates of this wrapping object')
+        raise ValueError('osim and mjc models have different number wrapping coordinates of this wrapping object')
         
     rms_ma = 0
        
     if len(np.array(osim_ma).flatten()) != len(np.array(mjc_ma).flatten()):
         logger.debug("osim and mjc models have different evalN numbers")
-        raise('osim and mjc models have different evalN numbers\n')
+        raise ValueError('osim and mjc models have different evalN numbers\n')
        
     # calculate moment arm differences
     # osim and mjc has opposite sign in MA, so 'add' is used ...
@@ -95,7 +95,7 @@ def objMAMuscle(x, side_id, wrap_type, wrap_id, pos_wrap, size_wrap, rotation_wr
     
     return rms_ma
 
-@logger.catch
+@logger.catch(reraise=True)
 def getMomentArmDiff(mjc_model, muscle, joints, jnt_motion_range, osim_ma_joints, evalN):
     '''
     Check if the moment arm differences between the osim and mjc models are beyond
@@ -119,7 +119,7 @@ def getMomentArmDiff(mjc_model, muscle, joints, jnt_motion_range, osim_ma_joints
     # check the list length
     if len(osim_ma_joints) != len(mjc_ma_joints):
         logger.debug("osim and mjc models have different number of muscles of this wrapping object")
-        raise RuntimeError('osim and mjc models have different number of muscles of this wrapping object')
+        raise ValueError('osim and mjc models have different number of muscles of this wrapping object')
         
     obj_org = 0
     # calculate differences  
@@ -223,7 +223,7 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
     # the best cost function for each particle is initilized as 0
     obj_b = np.zeros(n_particles)
     
-    p = x  # assign the particle values
+    p = x.copy()  # assign the particle values
 
     obj_g = []  # initilize an empty global cost function value
     obj_g_old = []  # old cost function value
@@ -255,19 +255,19 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
             
             # update the local and global optimal
             if itera == 0:
-                obj_b = obj_list
-                obj_g = min(obj_list)
+                obj_b = np.array(obj_list, dtype=float)
+                obj_g = float(np.min(obj_b))
                 obj_g_old = obj_g
-                g = x[obj_list.index(obj_g)]
+                g = x[int(np.argmin(obj_b))].copy()
             else:
                 for iobj, obj in enumerate(obj_list):
                     if obj < obj_b[iobj]:
                         obj_b[iobj] = obj
-                        p[iobj] = x[iobj]
+                        p[iobj] = x[iobj].copy()
 
                     if obj < obj_g:
-                        obj_g = obj
-                        g = x[iobj]
+                        obj_g = float(obj)
+                        g = x[iobj].copy()
 
             logger.info(f"        PSO iteration: {itera} ; {round(similar_particles*100/n_particles)} percentage similarities; Best obj: {np.round(obj_g, 5)}")
                     
@@ -285,7 +285,8 @@ def maOptPSO_cust(mjc_model_path, muscle, joints, joint_ranges, side_id, wrap_ty
                 
             itera = itera + 1 # increase the iteration number
             
-            similar_particles = len(np.where((obj_b - min(obj_b))/min(obj_b) < 0.01)[0])
+            min_obj_b = max(float(np.min(obj_b)), 1e-12)
+            similar_particles = len(np.where((obj_b - np.min(obj_b)) / min_obj_b < 0.01)[0])
             
             # break if certain percentage of particles have similar objective values
             if similar_particles > break_threshold*n_particles:  

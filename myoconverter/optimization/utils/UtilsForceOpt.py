@@ -27,7 +27,7 @@ def initializeWorker(shared_model) -> None:
     global mjc_model
     mjc_model = shared_model
 
-@logger.catch
+@logger.catch(reraise=True)
 def objFMMuscle(x, osim_fm, muscle: str, joints: List[str], jnt_arr, act_arr):
     """
     Calculate the muscle force differences between osim and mjc models.
@@ -59,7 +59,7 @@ def objFMMuscle(x, osim_fm, muscle: str, joints: List[str], jnt_arr, act_arr):
     # calculate moment arm differences, osim and mjc has opposite sign in MA
     return np.sqrt(np.sum((np.array(osim_fm).flatten() + np.array(mjc_fm).flatten())**2)/len(np.array(mjc_fm).flatten())) 
 
-@logger.catch
+@logger.catch(reraise=True)
 def getMuscleForceDiff(mjc_model, muscles, joints, jnt_arr, act_arr, osim_fp_muscle_joints):
     '''
     Check if the muscle force differences between the osim and mjc models are beyond
@@ -75,7 +75,7 @@ def getMuscleForceDiff(mjc_model, muscles, joints, jnt_arr, act_arr, osim_fp_mus
     
     if len(osim_fp_muscles_joints_array) != len(mjc_fp_muscles_joints_array):
         logger.debug("osim and mjc models have different moment arm sizes")
-        raise('osim and mjc models have different moment arm sizes')
+        raise ValueError('osim and mjc models have different moment arm sizes')
     
     obj_org = np.sqrt(np.sum((osim_fp_muscles_joints_array + mjc_fp_muscles_joints_array)**2)/len(mjc_fp_muscles_joints_array))
         
@@ -86,14 +86,16 @@ def getMuscleForceDiff(mjc_model, muscles, joints, jnt_arr, act_arr, osim_fp_mus
     
     rel_err = abs((osim_fp_muscles_joints_array + mjc_fp_muscles_joints_array)/(osim_fp_muscles_joints_array_nonzeros))
     
-    # check if absolulte error larger than 0.001 and relative error larger than 5%
-    err_ind.append(list(set(np.where(abs_err > 0.001)[0]) & set(np.where(rel_err > 0.05)[0])))
+    # check if absolute error larger than 0.001 and relative error larger than 5%
+    exceeding = sorted(set(np.where(abs_err > 0.001)[0]) & set(np.where(rel_err > 0.05)[0]))
+    if exceeding:
+        err_ind.extend(exceeding)
     
     return err_ind, length_mtu, obj_org
 
 
 # optimize muscle forces using the self-developed PSO Optimizer
-@logger.catch
+@logger.catch(reraise=True)
 def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
                       osim_fm, optParam_lb, optParam_ub, cost_org, speedy = False):
     
@@ -131,7 +133,7 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
     # the best cost function for each particle is initilized as 0
     obj_b = np.zeros(n_particles)
     
-    p = x  # assign the particle values
+    p = x.copy()  # assign the particle values
 
     obj_g = []  # initilize an empty global cost function value
     obj_g_old = []  # old cost function value
@@ -161,18 +163,18 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
             
             # update the local and global optimal
             if itera == 0:
-                obj_b = obj_list
-                obj_g = min(obj_list)
-                g = x[obj_list.index(obj_g)]
+                obj_b = np.array(obj_list, dtype=float)
+                obj_g = float(np.min(obj_b))
+                g = x[int(np.argmin(obj_b))].copy()
             else:
                 for iobj, obj in enumerate(obj_list):
                     if obj < obj_b[iobj]:
                         obj_b[iobj] = obj
-                        p[iobj] = x[iobj]
+                        p[iobj] = x[iobj].copy()
 
                     if obj < obj_g:
-                        obj_g = obj
-                        g = x[iobj]
+                        obj_g = float(obj)
+                        g = x[iobj].copy()
         
             # two random values to increase intersection between particles
             r1 = np.random.rand(1)
@@ -190,7 +192,8 @@ def fmOptPSO_cust(mjc_model_path, muscle, joints, jnt_arr, act_arr,\
                 
             itera = itera + 1 # increase the iteration number
             
-            similar_particles = len(np.where((obj_b - min(obj_b))/min(obj_b) < 0.01)[0])
+            min_obj_b = max(float(np.min(obj_b)), 1e-12)
+            similar_particles = len(np.where((obj_b - np.min(obj_b)) / min_obj_b < 0.01)[0])
                 
             # break if certain percentage of particles have similar objective values
             if similar_particles > break_threshold*n_particles:

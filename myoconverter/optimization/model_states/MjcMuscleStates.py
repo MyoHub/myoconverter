@@ -5,12 +5,10 @@ Created on Sun Feb 20 21:43:21 2022
 
 @author: hwang
 """
-import sys
-sys.path.append('../utils')
-
+import mujoco
 import numpy as np
 from loguru import logger
-from myoconverter.optimization.utils.UtilsMujoco import computeMomentArmMusclesJoints, getMuscleForceLengthCurvesSim
+from myoconverter.optimization.utils.UtilsMujoco import computeMomentArmMuscleJoints, getMuscleForceLengthCurvesSim
         
 
 class MjcMuscleStates:
@@ -69,28 +67,33 @@ class MjcMuscleStates:
         """ 
 
 
+        all_actuator_names = [
+            mujoco.mj_id2name(self.mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, i)
+            for i in range(self.mjc_model.nu)
+        ]
+
         # if muscle list is not provided, then explore all muscles that included
         # in the MuJoCo model.
         if not self.muscle_list:
             # update the global muscle list variable with all muscle names inside
             # the mjc model, only the type of muscle actuator
-            self.muscle_list = [list(self.mjc_model.actuator_names)[i] \
-                                for i, val in enumerate(self.mjc_model.actuator_trntype)\
-                                if val == 3]
+            self.muscle_list = [
+                all_actuator_names[i]
+                for i, val in enumerate(self.mjc_model.actuator_trntype)
+                if val == 3
+            ]
             
         else:
             # if the muscle list is provided, check if they are included in the mjc model
-            mjc_muscle_list = list(self.mjc_model.actuator_names)
-            
             for muscle in self.muscle_list:
-                if muscle not in mjc_muscle_list:
-                    raise('The provided muscle ' + muscle + ' is not included in the mjc model')
+                if muscle not in all_actuator_names:
+                    raise ValueError('The provided muscle ' + muscle + ' is not included in the mjc model')
 
         # check if the provided or extracted mjc muscle list be covered by the
         # wrapping_coordinates that extracted from the opensim model
         for muscle in self.muscle_list:
             if muscle not in self.wrapping_coordinate.keys():
-                raise('The muscle ' + muscle + ' is not included in the provided wrapping_coordinate')
+                raise ValueError('The muscle ' + muscle + ' is not included in the provided wrapping_coordinate')
         
         return self.wrapping_coordinate
     
@@ -115,7 +118,10 @@ class MjcMuscleStates:
 
         self.coordinate_range = {}
         
-        jnt_names = self.mjc_model.joint_names
+        jnt_names = [
+            mujoco.mj_id2name(self.mjc_model, mujoco.mjtObj.mjOBJ_JOINT, i)
+            for i in range(self.mjc_model.njnt)
+        ]
         jnt_ranges = self.mjc_model.jnt_range
             
         # go through a for loop of each joint to to formulate a dictionary
@@ -185,7 +191,7 @@ class MjcMuscleStates:
                 # calculate moment arms for this muscle and joints
                 # and save it to a list
                 
-                muscle_moment_arms.append(computeMomentArmMusclesJoints(self.mjc_model,\
+                muscle_moment_arms.append(computeMomentArmMuscleJoints(self.mjc_model,\
                                                                  muscle, joints,\
                                                                  motion_range, evalN))
                     

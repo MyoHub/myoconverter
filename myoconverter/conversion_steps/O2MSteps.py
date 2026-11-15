@@ -4,7 +4,6 @@ from myoconverter.conversion_steps.O2MStep2 import MomentArmOpt
 from myoconverter.conversion_steps.O2MStep3 import MuscleForceOpt
 from myoconverter.utils.generate_pdf import generate_pdf
 import os
-from fpdf import Template
 
 class O2MSteps:
     """
@@ -180,8 +179,9 @@ class O2MSteps:
                 else:
                     logger.debug("xxx_cvt1 model file does not exist either, stopped!")
                     logger.debug("Please run [1] first to get the xxx_cvt1 model")
-                    raise('xxx_cvt1 model file does not exist, cannot process following' + 
-                        'steps .. \n')
+                    raise FileNotFoundError(
+                        "xxx_cvt1 model file does not exist, cannot process following steps."
+                    )
     	    
     		# step 2 saving path
             path_step2 = self.mjc_target_folder + '/Step2_muscleKinematics'
@@ -242,8 +242,9 @@ class O2MSteps:
                 else:
                     logger.debug("xxx_cvt2 model file does not exist either, stopped!")
                     logger.debug("Please run [2] first to get the xxx_cvt2 model")
-                    raise('xxx_cvt2 model file does not exist, cannot process following' + 
-                        'steps .. \n')
+                    raise FileNotFoundError(
+                        "xxx_cvt2 model file does not exist, cannot process following steps."
+                    )
     		
     		# step 3 saving path
             path_step3 = self.mjc_target_folder + '/Step3_muscleKinetics'
@@ -290,5 +291,3 @@ class O2MSteps:
 
             # generate pdf
             pdf.render(self.mjc_target_folder + '/' + model_name + '.pdf')
-
-            logger
