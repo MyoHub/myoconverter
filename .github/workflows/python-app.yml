@@ -78,7 +78,7 @@ jobs:
         with:
           installation-dir: ${{ runner.temp }}/miniforge3
           activate-environment: ""
-          auto-activate-base: false
+          auto-activate: false
           auto-update-conda: false
           miniforge-variant: ${{ matrix.miniforge-variant }}
           miniforge-version: latest
@@ -92,8 +92,8 @@ jobs:
           conda activate myoconverter
           ${{ matrix.conda-cmd }} info
           ${{ matrix.conda-cmd }} list
-          ${{ matrix.conda-cmd }} config --show-sources
-          ${{ matrix.conda-cmd }} config --show
+          conda config --show-sources
+          conda config --show
       - name: Set PYTHONPATH
         run: |
           echo "PYTHONPATH=${{ github.workspace }}" >> "$GITHUB_ENV"

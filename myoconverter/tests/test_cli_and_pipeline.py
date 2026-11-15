@@ -178,3 +178,5 @@ def test_conda_env_and_ci_workflow_configuration():
     assert '"docs/**"' in workflow_text
     assert "env create -n myoconverter -f conda_env.yml" in workflow_text
     assert "installation-dir: ${{ runner.temp }}/miniforge3" in workflow_text
+    assert "conda config --show-sources" in workflow_text
+    assert "${{ matrix.conda-cmd }} config --show-sources" not in workflow_text
