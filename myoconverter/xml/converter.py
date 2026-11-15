@@ -126,8 +126,8 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
                            root_body=root_body)
 
     # Move to next joint
-    parent_name = socket_child_frame.find('socket_parent').text
-    _add_bodies_and_joints(parent_name, next_body)
+    child_name = socket_child_frame.find('socket_parent').text
+    _add_bodies_and_joints(child_name, next_body)
 
 def _parse_ground():
   """ Parse OpenSim `Ground`.
@@ -186,8 +186,9 @@ def _copy_credits():
   credits = cfg.OPENSIM.find("credits")
 
   # Add as comment if they exist
-  if credits is not None:
-    comment = etree.Comment(f" Credits from the original OpenSim model. Note! If the following has any license information, it applies to the original OpenSim model. Credits: {credits.text} ")
+  if credits is not None and credits.text is not None:
+    safe_credits = credits.text.replace("--", "- -").rstrip("-")
+    comment = etree.Comment(f" Credits from the original OpenSim model. Note! If the following has any license information, it applies to the original OpenSim model. Credits: {safe_credits} ")
     cfg.MUJOCO.insert(0, comment)
 
   # Add our credits as a comment too

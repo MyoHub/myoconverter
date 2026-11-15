@@ -8,7 +8,7 @@ from lxml import etree
 from loguru import logger
 
 from myoconverter.xml.parsers import IParser
-from myoconverter.xml.utils import val2str, filter_nan_values, filter_keys
+from myoconverter.xml.utils import str2bool, val2str, filter_nan_values, filter_keys
 from myoconverter.xml import config as cfg
 
 
@@ -21,6 +21,10 @@ class CoordinateActuator(IParser):
     :param xml: OpenSim `CoordinateActuator` XML element
     :return: None
     """
+
+    # Skip disabled actuators
+    if xml.find("appliesForce") is not None and not str2bool(xml.find("appliesForce").text):
+      return
 
     # Collect params/attributes
     params = {"name": xml.attrib["name"]}
@@ -46,6 +50,7 @@ class CoordinateActuator(IParser):
     if joint is None:
       logger.critical(f"Joint {params['joint']} was not found in the converted MuJoCo model, but it is needed for "
                       f"CoordinateActuator {xml.attrib['name']}")
+      return
 
     # TODO how does optimal_force parameter relate to mujoco parameters? gear, gainprm, dynprm, biasprm?
     params["_optimal_force"] = xml.find("optimal_force")
@@ -56,5 +61,5 @@ class CoordinateActuator(IParser):
     # Add motor to MuJoCo model; must be located before muscles in the xml file
     # Find first muscle element, and add the motor just before that. This keeps the order of the actuators the same
     first_muscle = cfg.M_ACTUATOR.find("muscle")
-    idx = len(cfg.M_ACTUATOR.getchildren()) if first_muscle is None else cfg.M_ACTUATOR.index(first_muscle)
+    idx = len(cfg.M_ACTUATOR) if first_muscle is None else cfg.M_ACTUATOR.index(first_muscle)
     cfg.M_ACTUATOR.insert(idx, etree.Element("motor", attrib=val2str(filter_nan_values(filter_keys(params)))))

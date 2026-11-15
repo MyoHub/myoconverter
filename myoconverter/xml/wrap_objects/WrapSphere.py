@@ -36,10 +36,10 @@ class WrapSphere(WrapObject):
     self._sidesite_pos = \
       {"+x": np.array([self.sidesite_dist()+self._params["size"], 0, 0]),
        "x": np.array([self.sidesite_dist()+self._params["size"], 0, 0]),
-       "-x": np.array([-self.sidesite_dist()+self._params["size"], 0, 0]),
+       "-x": np.array([-(self.sidesite_dist()+self._params["size"]), 0, 0]),
        "+y": np.array([0, self.sidesite_dist()+self._params["size"], 0]),
        "y": np.array([0, self.sidesite_dist()+self._params["size"], 0]),
-       "-y": np.array([0, -self.sidesite_dist()+self._params["size"], 0]),
+       "-y": np.array([0, -(self.sidesite_dist()+self._params["size"]), 0]),
        "+z": np.array([0, 0, self.sidesite_dist()+self._params["size"]]),
        "z": np.array([0, 0, self.sidesite_dist()+self._params["size"]]),
-       "-z": np.array([0, 0, -self.sidesite_dist()+self._params["size"]])}
+       "-z": np.array([0, 0, -(self.sidesite_dist()+self._params["size"])])}

@@ -37,17 +37,17 @@ class CoordinateCouplerConstraint(IParser):
     dependent_coordinate_name = xml.find("dependent_coordinate_name").text
 
     # Get independent coordinate
-    independent_coordinate_names = xml.find("independent_coordinate_names").text
+    independent_coordinate_names = xml.find("independent_coordinate_names").text.strip()
 
     # Make sure there's only one independent coordinate. Not sure how they would be separated since I haven't ever seen
-    # a case with multiple independent coordinates. Try splitting with a space or a comma
-    if len(independent_coordinate_names.split(" ")) > 2 or len(independent_coordinate_names.split(",")) > 2:
+    # a case with multiple independent coordinates. Try splitting with whitespace or a comma
+    if len(independent_coordinate_names.split()) > 1 or len([c for c in independent_coordinate_names.split(",") if c.strip()]) > 1:
       logger.critical(f"Multiple independent coordinates not supported (CoordinateCouplerConstraint "
                        f"{xml.attrib['name']})")
       raise RuntimeError
 
     # Get the dependency
-    coupled_coordinates_function = xml.find("coupled_coordinates_function").getchildren()[0]
+    coupled_coordinates_function = xml.find("coupled_coordinates_function")[0]
     if coupled_coordinates_function.tag in ["SimmSpline", "NaturalCubicSpline"]:
 
       # Get x and y values that define the spline
@@ -86,11 +86,13 @@ class CoordinateCouplerConstraint(IParser):
       raise NotImplementedError
 
     # Create a constraint
+    is_enforced = xml.find("isEnforced")
+    active = "true" if is_enforced is None or is_enforced.text is None else is_enforced.text.strip().lower()
     etree.SubElement(cfg.M_EQUALITY, "joint",
                      name=xml.attrib["name"],
                      joint1=dependent_coordinate_name,
                      joint2=independent_coordinate_names,
-                     active=xml.find("isEnforced").text,
+                     active=active,
                      polycoef=vec2str(polycoef),
                      solimp="0.9999 0.9999 0.001 0.5 2")
 

@@ -263,7 +263,8 @@ class CustomJoint(Joint):
     for coordinate_name in coordinates.keys():
       if coordinate_name not in dof_designated:
         c = cfg.M_EQUALITY.find(f"joint[@joint1='{coordinate_name}']")
-        cfg.M_EQUALITY.remove(c)
+        if c is not None:
+          cfg.M_EQUALITY.remove(c)
 
     return all_joints, all_params
 

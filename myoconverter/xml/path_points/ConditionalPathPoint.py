@@ -63,7 +63,7 @@ class ConditionalPathPoint(IParser):
     parent = xml.getparent()
 
     # Find index of this ConditionalPathPoint
-    children = parent.getchildren()
+    children = list(parent)
     this_idx = parent.index(xml)
 
     # Check if previous PathPoint exists and is located in the same body
@@ -130,7 +130,8 @@ class ConditionalPathPoint(IParser):
 
           # Get the polycoef representing the approximation
           polycoef = np.zeros((5,))
-          polycoef[:fit.coef.shape[0]] = fit.convert().coef
+          converted_coef = fit.convert().coef
+          polycoef[:converted_coef.shape[0]] = converted_coef
 
           # For plotting
           y_approx = fit(x_ideal)

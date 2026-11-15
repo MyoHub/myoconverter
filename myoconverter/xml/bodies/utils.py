@@ -36,19 +36,20 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
   :return: Name of mesh, filename of converted stl mesh file
   :raises NotImplementedError: if given mesh file is not vtk or stl
   """
-  mesh_name = mesh_file[:-4]
+  mesh_name, ext = os.path.splitext(mesh_file)
+  ext_lower = ext.lower()
   stl_filename = mesh_name + ".stl"
   stl_filepath = os.path.join(output_geometry_folder, stl_filename)
 
   # Transform a vtk file into an stl file and repair the mesh
-  if mesh_file[-3:] == "vtp":
+  if ext_lower == ".vtp":
 
     # Read the vtp file with pyvista
     pymesh = pyvista.read(os.path.join(geometry_folder, mesh_file))
 
     # Convert into trimesh (see https://github.com/pyvista/pyvista/discussions/2268)
     pymesh = pymesh.extract_surface().triangulate()
-    faces_as_array = pymesh.faces.reshape((pymesh.n_faces_strict, 4))[:, 1:]
+    faces_as_array = pymesh.faces.reshape((-1, 4))[:, 1:]
     tmesh = trimesh.Trimesh(pymesh.points, faces_as_array)
 
     # Repair the mesh
@@ -60,7 +61,7 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
     tmesh.export(stl_filepath)
 
   # Just copy the stl file
-  elif mesh_file[-3:] == "stl":
+  elif ext_lower == ".stl":
     copyfile(os.path.join(geometry_folder, mesh_file), stl_filepath)
 
   else:

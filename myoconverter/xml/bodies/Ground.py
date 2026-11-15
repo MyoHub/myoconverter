@@ -5,7 +5,6 @@
 
 from scipy.spatial.transform import Rotation
 from lxml import etree
-import os
 
 from myoconverter.xml.parsers import IParser
 from myoconverter.xml import config as cfg
@@ -65,7 +64,7 @@ class Ground(IParser):
       mesh_name, mesh_file = copy_mesh_file(mesh.find("mesh_file").text, cfg.GEOMETRY_FOLDER, cfg.OUTPUT_GEOMETRY_FOLDER)
       etree.SubElement(cfg.M_ASSET, "mesh",
                        name=f"{mesh.attrib['name']}_{mesh_name}",
-                       file=os.path.join("Geometry", mesh_file),
+                       file=f"Geometry/{mesh_file}",
                        scale=mesh.find("scale_factors").text)
       etree.SubElement(cfg.M_GROUND, "geom",
                        name=mesh.attrib["name"],

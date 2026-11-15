@@ -198,6 +198,30 @@ def create_transformation_matrix(pos=None, quat=None, rotation_matrix=None, eule
 
   return T
 
+def _element_transformation_matrix(xml):
+  """ Build 4x4 local homogeneous transformation matrix for a MuJoCo XML element. """
+  pos = str2vec(xml.attrib.get("pos", "0 0 0"))
+  quat = str2vec(xml.attrib["quat"]) if "quat" in xml.attrib else None
+  euler = str2vec(xml.attrib["euler"]) if "euler" in xml.attrib else None
+  return create_transformation_matrix(pos=pos, quat=quat, euler=euler)
+
+def calculate_mujoco_transformation(tag, name, M_WORLDBODY):
+  """ Calculate 4x4 worldbody transformation matrix of an element in MuJoCo model.
+
+  :param tag: Tag of an element
+  :param name: Name of an element
+  :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody`
+  :return: 4x4 transformation matrix of the element in `worldbody` frame (in default pose)
+  """
+  xml = M_WORLDBODY.find(f".//{tag}[@name='{name}']")
+  T = _element_transformation_matrix(xml)
+
+  while xml.getparent().tag != "worldbody":
+    xml = xml.getparent()
+    T = np.matmul(_element_transformation_matrix(xml), T)
+
+  return T
+
 def calculate_mujoco_position(tag, name, M_WORLDBODY):
   """ Calculate position of an element in MuJoCo model
 
@@ -206,23 +230,7 @@ def calculate_mujoco_position(tag, name, M_WORLDBODY):
   :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody`
   :return: Position of the element in MuJoCo model (when in default pose)
   """
-
-  # Find element
-  xml = M_WORLDBODY.find(f".//{tag}[@name='{name}']")
-
-  # Get position (if doesn't exist, use default pos='0 0 0')
-  pos = str2vec(xml.attrib.get("pos", "0 0 0"))
-  T = np.linalg.inv(create_transformation_matrix(pos=pos))
-
-  # Go upwards in the kinematic tree until root body ("worldbody") and calculate position
-  while xml.getparent().tag != "worldbody":
-    xml = xml.getparent()
-    pos = str2vec(xml.attrib.get("pos", "0 0 0"))
-    T_ = create_transformation_matrix(pos=pos)
-    T = np.matmul(T, np.linalg.inv(T_))
-
-  T = np.linalg.inv(T)
-  return T[:3, 3]
+  return calculate_mujoco_transformation(tag, name, M_WORLDBODY)[:3, 3]
 
 def is_linear(polycoef):
   """ Check if polycoef represents a linear function.
