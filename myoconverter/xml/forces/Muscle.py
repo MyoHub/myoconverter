@@ -62,6 +62,9 @@ class Muscle(IParser):
     if xml.find("appliesForce") is not None and not str2bool(xml.find("appliesForce").text):
       return
 
+    # Reset per-muscle parameter dictionary so optional keys (e.g. ctrlrange) do not bleed across muscles
+    self._params = dict()
+
     # Collect attributes in a dict
     self._params["name"] = xml.attrib["name"]
 

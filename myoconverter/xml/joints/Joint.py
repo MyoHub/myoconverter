@@ -5,10 +5,12 @@
 
 from abc import abstractmethod
 from typing import final
+import numpy as np
 
 from myoconverter.xml.parsers import IParser
 from myoconverter.xml import config as cfg
 from myoconverter.xml.joints.utils import lock_joint
+from myoconverter.xml.utils import str2vec, vec2str
 
 
 class Joint(IParser):
@@ -42,6 +44,16 @@ class Joint(IParser):
 
     # Do joint specific parsing
     m_joints, params = self._parse(xml, socket_parent_frame, socket_child_frame, pointer)
+
+    # Set joint pivot offset in child body frame if socket_child_frame has a non-zero translation
+    child_translation = socket_child_frame.find("translation")
+    if child_translation is not None and child_translation.text is not None:
+      child_pos = str2vec(child_translation.text)
+      if not np.allclose(child_pos, 0):
+        pos_str = vec2str(child_pos)
+        for j in m_joints:
+          if "pos" not in j.attrib:
+            j.attrib["pos"] = pos_str
 
     # Create an equality constraint if the joint (or any of the subjoints) is locked
     for p in params:

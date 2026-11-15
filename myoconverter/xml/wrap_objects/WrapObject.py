@@ -63,6 +63,10 @@ class WrapObject(IParser):
     :raises: NotImplementedError if an unknown quadrant is defined for this wrapping object
     """
 
+    # Reset per-object dictionaries so attributes cannot leak across wrap objects
+    self._params = dict()
+    self._sidesite_pos = dict()
+
     # Get sidesite quadrant
     self._params["_quadrant"] = xml.find("quadrant").text.lower()
     if self._params["_quadrant"] not in {"all", "+x", "x", "-x", "+y", "y", "-y", "+z", "z", "-z"}:
@@ -90,6 +94,6 @@ class WrapObject(IParser):
       T = create_transformation_matrix(pos=self._params["pos"], euler=self._params["euler"])
       site_pos = np.matmul(T, np.concatenate([self._sidesite_pos[self._params["_quadrant"]], np.array([1])]))
       etree.SubElement(m_body, "site",
-                       name=f"{xml.attrib['name']}_sidesite",
+                       name=f"{xml.attrib['name']}_{self._osim_type}_sidesite",
                        pos=vec2str(site_pos[:3]),
                        size=f"{0.5*WrapObject.sidesite_dist()}")
