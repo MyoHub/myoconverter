@@ -169,8 +169,12 @@ def test_conda_env_and_ci_workflow_configuration():
     conda_text = (REPO_ROOT / "conda_env.yml").read_text(encoding="utf-8")
     assert "- networkx" in conda_text
     assert "- scipy" in conda_text
+    assert "- opensim>=4.0" in conda_text
+    assert "opensim=>4.0" not in conda_text
 
     workflow_text = (REPO_ROOT / ".github" / "workflows" / "python-app.yml").read_text(encoding="utf-8")
     assert '" feature/*"' not in workflow_text
     assert '"development"' in workflow_text
     assert '"docs/**"' in workflow_text
+    assert "env create -n myoconverter -f conda_env.yml" in workflow_text
+    assert "installation-dir: ${{ runner.temp }}/miniforge3" in workflow_text
