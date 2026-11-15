@@ -38,8 +38,8 @@ def cartesian2spherical(wrap_centre, site_pose):
         
     """
 
-    # calculate the radius first
-    r = np.sum((site_pose - wrap_centre)**2)
+    # calculate the Euclidean radius first
+    r = np.sqrt(np.sum((site_pose - wrap_centre)**2))
 
     if r != 0:   # calculate theta and phi, if r != 0
         theta = np.arctan2(np.sqrt(np.sum((site_pose[0:2] - wrap_centre[0:2])**2)),\
@@ -273,7 +273,7 @@ def euler_change_sequence(oldSequence, old_angles, newSequence):
     rot = TaitBryanRotationMatrix(oldSequence, old_angles)
     	      
     if newSequence == 'xzy':
-        a_new = arctan(rot[3][1]/rot[1][1])
+        a_new = arctan(rot[2][1]/rot[1][1])
         b_new = arctan(-rot[0][1]/sqrt(1-rot[0][1]**2))
         r_new = arctan(rot[0][2]/rot[0][0])
     elif newSequence == 'xyz':
@@ -305,7 +305,7 @@ def euler_change_sequence_bodyRotationFirst(bodySequence, body_angle, oldSequenc
     
 
     if newSequence == 'xzy':
-        a_new = arctan(rot[3][1]/rot[1][1])
+        a_new = arctan(rot[2][1]/rot[1][1])
         b_new = arctan(-rot[0][1]/sqrt(1-rot[0][1]**2))
         r_new = arctan(rot[0][2]/rot[0][0])
     elif newSequence == 'xyz':

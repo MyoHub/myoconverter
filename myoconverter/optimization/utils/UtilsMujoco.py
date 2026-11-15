@@ -7,6 +7,28 @@ import itertools
 from myoconverter.optimization.utils.UtilsRotation import spherical2cartesian,\
      quaternionRotaion, cylindarical2cartesian
 
+
+def _get_eq_active(mjc_model):
+    """Return initial/current equality-constraint active array across MuJoCo 2.x and 3.x+."""
+    if hasattr(mjc_model, "eq_active"):
+        return mjc_model.eq_active
+    return mjc_model.eq_active0
+
+
+def _get_actuator_moment(mjc_model, mjc_data, muscle_idx, joints_idx):
+    """Extract moment arms for `muscle_idx` across `joints_idx` across MuJoCo 2.x (dense) and 3.x+ (sparse)."""
+    if mjc_data.actuator_moment.ndim == 2:
+        return mjc_data.actuator_moment[muscle_idx, joints_idx].copy()
+    dense_moment = np.zeros((mjc_model.nu, mjc_model.nv))
+    mujoco.mju_sparse2dense(
+        dense_moment,
+        mjc_data.actuator_moment,
+        mjc_data.moment_rownnz,
+        mjc_data.moment_rowadr,
+        mjc_data.moment_colind,
+    )
+    return dense_moment[muscle_idx, joints_idx].copy()
+
 # get all independed joint coordinate range
 def getCoordinateRange_mjc(mjc_model):
     
@@ -49,11 +71,10 @@ def calculateEndPoints_mjc(mjc_model_path, end_points, n_eval):
         endpoint locations
     """
     
-    mjc_model  = mujoco.MjModel.from_xml_path(mjc_model_path) # load mj model
+    mjc_model = mujoco.MjModel.from_xml_path(mjc_model_path)  # load mj model
 
-        # set up simulations
+    # set up kinematic evaluation data without mutating model timestep
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.001 ## same time step as opensim
     
     # extract independed joint names and ranges
     ang_ranges, free_jnt_id = getCoordinateRange_mjc(mjc_model)
@@ -94,17 +115,17 @@ def calculateEndPoints_mjc(mjc_model_path, end_points, n_eval):
         mjc_data.qvel[:] = np.zeros(len(mjc_data.qvel),)
         mjc_data.ctrl[:] = np.zeros(len(mjc_data.ctrl),)
 
-        # simulate and extract end point position
-        mujoco.mj_step(mjc_model, mjc_data)
+        # compute static forward kinematics at the prescribed posture
+        mujoco.mj_forward(mjc_model, mjc_data)
 
         end_pos.append(mjc_data.site_xpos[end_id].copy())
-    
+
     return ang_ranges, end_pos
 
 def dependencyJointAng(mjc_model, free_jnt_id_array, jnt_ang_array):
     
     couplingJnt = mjc_model.eq_type == 2
-    activeEqu = mjc_model.eq_active == 1
+    activeEqu = _get_eq_active(mjc_model) == 1
     
     dependencyJntAngs = []
     dependencyJnts = []
@@ -136,7 +157,7 @@ def dependencyJointAng(mjc_model, free_jnt_id_array, jnt_ang_array):
                 else:
                     continue
                     
-                freeJntAng = jnt_ang_array[np.where(free_jnt_id_array == freeJnt)[0][0]]
+                freeJntAng = jnt_ang_array[np.where(np.asarray(free_jnt_id_array) == freeJnt)[0][0]]
                 
                 poly_gains = mjc_model.eq_data[ind]
                 
@@ -157,7 +178,7 @@ def lockedJointAng(mjc_model):
     """
 
     # find locked constraints that satisfy all three conditions
-    lockedCons = np.logical_and(np.logical_and(mjc_model.eq_type == 2, mjc_model.eq_active == 1), mjc_model.eq_obj2id == -1)
+    lockedCons = np.logical_and(np.logical_and(mjc_model.eq_type == 2, _get_eq_active(mjc_model) == 1), mjc_model.eq_obj2id == -1)
 
     lockedJnts = []
     lockedJntAngs = []
@@ -251,7 +272,7 @@ def sortMuscleWrapSiteJoint(mjc_model, muscle_para_osim):
                             WrapTypes[mjc_model.wrap_type[i]],
                             []]
 
-                if mjc_model.wrap_prm[i] != 0:  # if so, and there is side site
+                if mjc_model.wrap_prm[i] >= 0:  # valid MuJoCo site IDs are >= 0 (-1 means no sidesite)
                     site_side_id = int(mjc_model.wrap_prm[i])                
                     siteInfo = [site_side_id, copy.deepcopy(mjc_model.site_pos[site_side_id])]
 
@@ -301,14 +322,14 @@ def sortMuscleWrapSiteJoint(mjc_model, muscle_para_osim):
                     # calculate the difference
                     ma_aft_nonzeros = np.maximum(abs(ma_aft.flatten()), 1e-3)
                     if sum(abs((ma_pnt.flatten() - ma_aft.flatten())/ma_aft_nonzeros)) > 1e-3:
-                        wrapInfo[-1].append(siteInfo[0])
-                        wrapInfo[-1].append(siteInfo[1])
+                        wrap_entry = copy.deepcopy(wrapInfo)
+                        wrap_entry[-1] = [siteInfo[0], copy.deepcopy(siteInfo[1])]
 
                         # only save the wrapping objects and sites when both of them has effects
                         # on the joint moment arms. Here we ASSUME, at most only one wrapping object
                         # and one corresponding wrapping point for each muscle affecting on the checking
                         # joints
-                        muscle_para_osim['wrapping_info'][i_jnts] = (wrapInfo)
+                        muscle_para_osim['wrapping_info'][i_jnts] = wrap_entry
 
                     else:
                         print('Wrapping sidesite does not affect moment arm, not saving...\n')
@@ -353,7 +374,6 @@ def computeMomentArmMuscleJoints(mjc_model, muscle, joints, ang_ranges, evalN):
         joints = [joints]
     
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.001 ## same time step as opensim
     
     muscles_idx = mujoco.mj_name2id(mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, muscle)  # muscle index
         
@@ -382,9 +402,9 @@ def computeMomentArmMuscleJoints(mjc_model, muscle, joints, ang_ranges, evalN):
         lockedJnts, lockedJointAngs = lockedJointAng(mjc_model)
         mjc_data.qpos[lockedJnts] = lockedJointAngs
 
-        mujoco.mj_step(mjc_model, mjc_data)
+        mujoco.mj_forward(mjc_model, mjc_data)
             
-        mom_arm_sub = mjc_data.actuator_moment[muscles_idx, joints_idx].copy()
+        mom_arm_sub = _get_actuator_moment(mjc_model, mjc_data, muscles_idx, joints_idx)
         
         # if dependencyJnts: 
         #     # if there are dependency joint, then calculate moment arm using
@@ -554,31 +574,36 @@ def getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr):
     # mjc_model.actuator_dyntype[muscle_id] = 0 # no activation dynamics
     
     mjc_data = mujoco.MjData(mjc_model)
-    mjc_model.opt.timestep = 0.005 ## same time step as opensim
+    act_adr = int(mjc_model.actuator_actadr[muscle_id])
+    has_act_state = (mjc_model.actuator_dyntype[muscle_id] != mujoco.mjtDyn.mjDYN_NONE) and (act_adr >= 0)
 
     for ia, act in enumerate(act_arr):
-        mjc_data.ctrl[muscle_id] = act    # set control signal to 1
-        mujoco.mj_step(mjc_model, mjc_data)
-        
         for ij, setAngleDofs in enumerate(jnt_arr):
-            
-            mjc_data.qpos[:] = np.zeros(len(mjc_data.qpos),)
-            mjc_data.qvel[:] = np.zeros(len(mjc_data.qvel),)
+            mjc_data.qpos[:] = 0.0
+            mjc_data.qvel[:] = 0.0
+            mjc_data.ctrl[:] = 0.0
+            if mjc_model.na > 0:
+                mjc_data.act[:] = 0.0
+
             mjc_data.qpos[joints_idx] = setAngleDofs
-            
-            dependencyJnts, dependencyJntAngs, freeJnts =\
+
+            dependencyJnts, dependencyJntAngs, freeJnts = \
                 dependencyJointAng(mjc_model, joints_idx, setAngleDofs)
             mjc_data.qpos[dependencyJnts] = dependencyJntAngs
 
-            # find the self-locked joints and assign the contraint values
+            # find the self-locked joints and assign the constraint values
             lockedJnts, lockedJntAngs = lockedJointAng(mjc_model)
             mjc_data.qpos[lockedJnts] = lockedJntAngs
 
-            # sim.data.act[actuator_id] = act  # directly assign activation to 1
-            mujoco.mj_step(mjc_model, mjc_data)
-            
-            force_mtu[ia, ij] = mjc_data.actuator_force[muscle_id].copy()
-            length_mtu[ia, ij] = mjc_data.actuator_length[muscle_id].copy()
+            # Directly assign steady-state activation and control without mutating timestep or stepping dynamics
+            mjc_data.ctrl[muscle_id] = act
+            if has_act_state:
+                mjc_data.act[act_adr] = act
+
+            mujoco.mj_forward(mjc_model, mjc_data)
+
+            force_mtu[ia, ij] = float(mjc_data.actuator_force[muscle_id])
+            length_mtu[ia, ij] = float(mjc_data.actuator_length[muscle_id])
     
     # mjc_model.actuator_dyntype[muscle_id] = 3 # change back to activation dynamics 3
         
@@ -587,17 +612,40 @@ def getMuscleForceLengthCurvesSim(mjc_model, muscle, joints, jnt_arr, act_arr):
 def updateMuscleForceProperties(mjc_model, muscle, res):
     """
     Update mujoco muscle property parameters with optimization results.
+
+    Supports both:
+    - 6-parameter optimization: [range_min, range_max, lmin, lmax, fpmax, fmax]
+      -> gainprm/biasprm indices [0, 1, 4, 5, 7, 2]
+    - 4-parameter legacy optimization: [range_min, range_max, fpmax, fmax]
+      -> gainprm/biasprm indices [0, 1, 7, 2]
     """
-    
-    mjc_model.actuator(muscle).biasprm[2] = res[3]
-    mjc_model.actuator(muscle).biasprm[0] = res[0]
-    mjc_model.actuator(muscle).biasprm[1] = res[1]
-    mjc_model.actuator(muscle).biasprm[7] = res[2]
-    
-    mjc_model.actuator(muscle).gainprm[2] = res[3]
-    mjc_model.actuator(muscle).gainprm[0] = res[0]
-    mjc_model.actuator(muscle).gainprm[1] = res[1]
-    mjc_model.actuator(muscle).gainprm[7] = res[2]
-    
+    act = mjc_model.actuator(muscle)
+    if len(res) == 6:
+        act.biasprm[0] = res[0]
+        act.biasprm[1] = res[1]
+        act.biasprm[4] = res[2]
+        act.biasprm[5] = res[3]
+        act.biasprm[7] = res[4]
+        act.biasprm[2] = res[5]
+
+        act.gainprm[0] = res[0]
+        act.gainprm[1] = res[1]
+        act.gainprm[4] = res[2]
+        act.gainprm[5] = res[3]
+        act.gainprm[7] = res[4]
+        act.gainprm[2] = res[5]
+    elif len(res) == 4:
+        act.biasprm[0] = res[0]
+        act.biasprm[1] = res[1]
+        act.biasprm[7] = res[2]
+        act.biasprm[2] = res[3]
+
+        act.gainprm[0] = res[0]
+        act.gainprm[1] = res[1]
+        act.gainprm[7] = res[2]
+        act.gainprm[2] = res[3]
+    else:
+        raise ValueError(f"Expected 4 or 6 muscle force parameters, got {len(res)}")
+
     return mjc_model
 

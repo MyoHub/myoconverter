@@ -27,10 +27,13 @@ class OsimMuscleStates:
         
         # initilize the input osim model as the global variables
         self.osim_model = osim_model
-        if type(muscle_list) != list:
+        if muscle_list is None:
+            osim_muscles = self.osim_model.getMuscles()
+            self.muscle_list = [osim_muscles.get(i).getName() for i in range(osim_muscles.getSize())]
+        elif isinstance(muscle_list, str):
             self.muscle_list = [muscle_list]
         else:
-            self.muscle_list = muscle_list
+            self.muscle_list = list(muscle_list)
 
         # dictionary for storing calculated moment arms and force properties
         self.moment_arms = dict()

@@ -82,9 +82,8 @@ class MomentArmOpt:
         # saving path has to be valid
         try:
             os.makedirs(save_path, exist_ok = True)
-         
-        except OSError:
-            raise("Please provide a valid saving path")
+        except OSError as exc:
+            raise ValueError("Please provide a valid saving path") from exc
             
         self.save_path = save_path
         self.speedy = speedy
@@ -258,7 +257,7 @@ class MomentArmOpt:
                         # the wrapping object, which is sphere. Just save empty results
 
                         # save opt results
-                        opt_res_list[i_jnt] = [{'cost_org': cost_org, 'cost_opt': cost_org, 'par_opt': side_pos}]
+                        opt_res_list[i_jnt] = {'cost_org': cost_org, 'cost_opt': cost_org, 'par_opt': side_pos}
 
                         continue
 
@@ -267,8 +266,7 @@ class MomentArmOpt:
 
                         # save the updated model
                         cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
-                        with open(cvt2_model_path, 'w+') as xml_file:
-                            mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
+                        mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
 
                         wrap_type_opt = 'CYLINDER'
                                 
@@ -296,8 +294,7 @@ class MomentArmOpt:
 
                         # save the updated model                      
                         cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
-                        with open(cvt2_model_path, 'w+') as xml_file:
-                            mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
+                        mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
 
                         wrap_type_opt = 'SPHERE'
                                      
@@ -331,8 +328,7 @@ class MomentArmOpt:
 
                             # save the updated model                            
                             cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
-                            with open(cvt2_model_path, 'w+') as xml_file:
-                                mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
+                            mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
                             
                             wrap_type_opt = 'ELLIPSOID_CYLINDER'
 
@@ -372,8 +368,7 @@ class MomentArmOpt:
 
                             # save the updated model
                             cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
-                            with open(cvt2_model_path, 'w+') as xml_file:
-                                mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
+                            mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
                         
                             wrap_type_opt = 'ELLIPSOID_SPHERE'
                         
@@ -406,8 +401,8 @@ class MomentArmOpt:
                             opt_res_list[i_jnt] = opt_site  # save opt results
 
                     else:
-                        logger.debug("Unknow wrapping type detected, error occur")
-                        raise('Unknow wrapping type detected, error occur, please check... \n')
+                        logger.debug("Unknown wrapping type detected, error occurred")
+                        raise ValueError('Unknown wrapping type detected, error occurred, please check.')
 
             muscle_para['opt_results'] = opt_res_list
 
@@ -417,8 +412,7 @@ class MomentArmOpt:
 
         # save the updated model
         cvt2_model_path = self.mjc_model_path[0:-8] + 'cvt2.xml'
-        with open(cvt2_model_path, 'w+') as xml_file:
-            mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
+        mujoco.mj_saveLastXML(cvt2_model_path, self.mjc_model)
 
         return cvt2_model_path
     
@@ -450,7 +444,12 @@ class MomentArmOpt:
             muscle_list = self.muscle_list  # if selected muscle given, only validate these
         else:
             # Scan the result folder to find all the <muscle_name>.pkl files and plot all of them
-            muscle_list = [os.path.split(f)[1][0:-4] for f in glob.glob(self.save_path + "/*.pkl")]
+            excluded_pkls = {"config", "overall_comp_momentarms"}
+            muscle_list = [
+                os.path.split(f)[1][0:-4]
+                for f in glob.glob(self.save_path + "/*.pkl")
+                if os.path.split(f)[1][0:-4] not in excluded_pkls
+            ]
 
         # find all the joints from mjc model
         joint_list = [mujoco.mj_id2name(mjc_model, mujoco.mjtObj.mjOBJ_JOINT, idx) for idx in range(mjc_model.njnt)]
@@ -463,50 +462,53 @@ class MomentArmOpt:
         
         for i_mus, muscle in enumerate(muscle_list):
             # load the mus_para data from the saved files
-            with open(self.save_path + '/' + muscle + '.pkl', "rb+") as muscle_file:
+            with open(self.save_path + '/' + muscle + '.pkl', "rb") as muscle_file:
                 muscle_para_opt = pickle.load(muscle_file)
 
-                # Generate the moment arm curves for comparison plots. Moment arm of Osim model
-                # will just use the reference data that pre-generated for optimization. Moment arm
-                # of Mjc model will be regenerated to increase the mesh density. This is to check
-                # if there are any random jumpping paths (that were not covered by the optimization)
+            # Generate the moment arm curves for comparison plots. Moment arm of Osim model
+            # will just use the reference data that pre-generated for optimization. Moment arm
+            # of Mjc model will be regenerated to increase the mesh density. This is to check
+            # if there are any random jumpping paths (that were not covered by the optimization)
 
-                mjc_ma_data= []
+            mjc_ma_data = []
 
-                for ij, joints in enumerate(muscle_para_opt['wrapping_coordinates']):
+            for ij, joints in enumerate(muscle_para_opt['wrapping_coordinates']):
 
-                    nEval = muscle_para_opt['evalN'][ij]
-                    nJnt = len(joints)
-                    jntRanges_mjc = muscle_para_opt['mjc_coordinate_ranges'][ij]
-                    jntRanges_osim = muscle_para_opt['osim_coordinate_ranges'][ij]
+                nEval = muscle_para_opt['evalN'][ij]
+                nJnt = len(joints)
+                jntRanges_mjc = muscle_para_opt['mjc_coordinate_ranges'][ij]
+                jntRanges_osim = muscle_para_opt['osim_coordinate_ranges'][ij]
 
-                    # sort the osim moment arms into matrices
-                    ma_mat_osim = self.maVectorSort(muscle_para_opt['osim_ma_data'][ij], nJnt, nEval)
+                # sort the osim moment arms into matrices
+                ma_mat_osim = self.maVectorSort(muscle_para_opt['osim_ma_data'][ij], nJnt, nEval)
 
-                    # calculate mujoco moment arms and sort it into matrices
-                    ma_vec_mjc = computeMomentArmMuscleJoints(mjc_model, muscle, joints,\
-                                                        jntRanges_mjc, nEval)
-                    
-                    ma_mat_mjc = self.maVectorSort(ma_vec_mjc, nJnt, nEval)
+                # calculate mujoco moment arms and sort it into matrices
+                ma_vec_mjc = computeMomentArmMuscleJoints(mjc_model, muscle, joints,\
+                                                    jntRanges_mjc, nEval)
+                
+                ma_mat_mjc = self.maVectorSort(ma_vec_mjc, nJnt, nEval)
 
-                    # plot the moment arm plots
-                    self.individualMuscleMAPlot(muscle, joints, nJnt, jntRanges_osim, jntRanges_mjc, \
-                                                ma_mat_osim, ma_mat_mjc, nEval, nEval)
-                    
-                    mjc_ma_data.append(ma_vec_mjc)
-                            
-                    for joint in joints:
-                        if not joint in joint_list:
-                            joint_list.append(joint)
+                # plot the moment arm plots
+                self.individualMuscleMAPlot(muscle, joints, nJnt, jntRanges_osim, jntRanges_mjc, \
+                                            ma_mat_osim, ma_mat_mjc, nEval, nEval)
+                
+                mjc_ma_data.append(ma_vec_mjc)
+                        
+                for joint in joints:
+                    if joint not in joint_list:
+                        joint_list.append(joint)
+                        cost_org_mat = np.pad(cost_org_mat, ((0, 0), (0, 1)), mode='constant')
+                        cost_opt_mat = np.pad(cost_opt_mat, ((0, 0), (0, 1)), mode='constant')
 
-                        jnt_index = joint_list.index(joint)
+                    jnt_index = joint_list.index(joint)
 
-                        if muscle_para_opt['opt_results'][ij]:  # if results exist
-                            cost_org_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_org']
-                            cost_opt_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_opt']
+                    if muscle_para_opt['opt_results'][ij]:  # if results exist
+                        cost_org_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_org']
+                        cost_opt_mat[i_mus, jnt_index] = muscle_para_opt['opt_results'][ij]['cost_opt']
 
-                muscle_para_opt['mjc_ma_data'] = mjc_ma_data
+            muscle_para_opt['mjc_ma_data'] = mjc_ma_data
 
+            with open(self.save_path + '/' + muscle + '.pkl', "wb") as muscle_file:
                 pickle.dump(muscle_para_opt, muscle_file)
 
         # save the overall rms differences between moment arms
@@ -514,8 +516,8 @@ class MomentArmOpt:
         rms_saving['cost_org_mat'] = cost_org_mat
         rms_saving['cost_opt_mat'] = cost_opt_mat
         nonzero_error_array = cost_opt_mat[cost_opt_mat != 0]
-        rms_saving['cost_opt_mat_mean'] = np.mean(nonzero_error_array)
-        rms_saving['cost_opt_mat_std'] = np.std(nonzero_error_array)
+        rms_saving['cost_opt_mat_mean'] = float(np.mean(nonzero_error_array)) if nonzero_error_array.size > 0 else 0.0
+        rms_saving['cost_opt_mat_std'] = float(np.std(nonzero_error_array)) if nonzero_error_array.size > 0 else 0.0
 
         # save the data based to the muscle parameter file
         with open(self.save_path + '/overall_comp_momentarms.pkl', 'wb') as rms_saving_file:

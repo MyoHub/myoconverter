@@ -55,38 +55,31 @@ class BasicModelConvert:
         """
 
         # check model file and path
-        try: 
-            os.path.isfile(osim_model_file)
-        
-        except OSError:
-            raise("Cannot find the osim file, please check the model path & name")
+        if not os.path.isfile(osim_model_file):
+            raise FileNotFoundError("Cannot find the osim file, please check the model path & name")
 
-        try: 
-            os.path.isdir(geometry_path)
-            
-        except OSError:
-            raise("Cannot find the geometry path folder")
-        
+        if not os.path.isdir(geometry_path):
+            raise FileNotFoundError("Cannot find the geometry path folder")
+
         try:
-            os.makedirs(saving_path, exist_ok = True) 
-         
-        except OSError:
-            raise("Please provide a valid saving path")
-        
+            os.makedirs(saving_path, exist_ok = True)
+        except OSError as exc:
+            raise ValueError("Please provide a valid saving path") from exc
+
         self.osim_model_file = osim_model_file
         self.geometry_path = geometry_path
         self.saving_path = saving_path
         self.add_ground_geom = add_ground_geom
         self.treat_as_normal_path_point = treat_as_normal_path_point
-        
+        self.converted_mjc_model_file = None
+
     def cvt1_ModelConvert(self):
         """ 
             Convert the osim model into mujoco using the functions in xml folder
         """
-        
+
         # define the model saving path
-        model_saving_path = self.saving_path[0:self.saving_path.rfind('/')]
-        osim_file_name = self.osim_model_file[self.osim_model_file.rfind('/'):]
+        model_saving_path = os.path.dirname(os.path.normpath(self.saving_path))
 
         kwargs = {}  # define kwargs inputs
         kwargs['geometry_folder'] = self.geometry_path
@@ -125,10 +118,10 @@ class BasicModelConvert:
 
         # if mjc model not provided, then use the converted model
         if not mjc_model_path:
-            if self.converted_mjc_model_file:
+            if getattr(self, "converted_mjc_model_file", None):
                 mjc_model_path = self.converted_mjc_model_file
             else:
-                raise('Cvt 1 model path not provided, please either run Cvt1, or provide the Cvt1 model path.')
+                raise ValueError('Cvt 1 model path not provided, please either run Cvt1, or provide the Cvt1 model path.')
 
         # add '_marker' to the osim marker names for mujoco model
         end_points_mjc = []
@@ -152,7 +145,7 @@ class BasicModelConvert:
         logger.info("Check if the joint motion ranges are the same between Osim and Mjc models")
         if not set(jnt_ranges_osim.keys()) == set(jnt_ranges_mjc.keys()):
             logger.debug("Joint names are not matching")
-            raise('\nJoints in OpenSim and MuJoCo are different for the evaluation\n')
+            raise RuntimeError('Joints in OpenSim and MuJoCo are different for the evaluation')
         
         else:
             
@@ -210,7 +203,7 @@ class BasicModelConvert:
             # convert to array
             mjc_mr = np.array(mjc_mr)
             
-            mr_rms.append((np.sqrt((osim_mr - [1, 1, -1]*mjc_mr[:, [0, 2, 1]])**2)).sum(axis=1)) 
+            mr_rms.append(np.sqrt(((osim_mr - [1, 1, -1]*mjc_mr[:, [0, 2, 1]])**2).sum(axis=1)))
             
             x = np.linspace(1, len(mjc_mr[:, 0]), len(mjc_mr[:, 0]))
         
@@ -244,8 +237,8 @@ class BasicModelConvert:
 
         # save mean and std of the overall endpoint errors
         end_point_error = {}
-        end_point_error['mean'] = np.mean(mr_rms)
-        end_point_error['std'] = np.std(mr_rms)
+        end_point_error['mean'] = float(np.mean(mr_rms)) if len(mr_rms) > 0 else 0.0
+        end_point_error['std'] = float(np.std(mr_rms)) if len(mr_rms) > 0 else 0.0
 
         with open(self.saving_path + '/end_points/end_point_error.pkl', 'wb') as end_point_error_file:
             pickle.dump(end_point_error, end_point_error_file)
@@ -253,26 +246,22 @@ class BasicModelConvert:
         ## plot error bar of the end points at different testing points
         subPlotMarkerNum = 10
 
-        logger.info(f"Generate overall error Bar plot")
+        logger.info("Generate overall error Bar plot")
 
         figname2 = self.saving_path + '/end_points/overall_comp_error_bar.svg'
         barPlot = plt.figure(figsize=(10, 8))
         numSubPlot = int(np.ceil(marNum/subPlotMarkerNum))
-        resSubPlotMar = marNum % subPlotMarkerNum
 
         for subPlot in range(numSubPlot):
             axx = barPlot.add_subplot(numSubPlot, 1, subPlot+1)
-            if subPlot == numSubPlot - 1:
-                if not resSubPlotMar == 0:  # if resSubPlotMarker is not 0.
-                    plt.boxplot(mr_rms[subPlot*subPlotMarkerNum:])
-                    plt.xticks(np.linspace(1, resSubPlotMar, resSubPlotMar, dtype=int), end_points[subPlot*subPlotMarkerNum:(subPlot+1)*subPlotMarkerNum])
-            else:
-                plt.boxplot(mr_rms[subPlot*subPlotMarkerNum:(subPlot+1)*subPlotMarkerNum])
-                plt.xticks(np.linspace(1, subPlotMarkerNum, subPlotMarkerNum, dtype=int), end_points[subPlot*subPlotMarkerNum:(subPlot+1)*subPlotMarkerNum])
+            chunk = mr_rms[subPlot*subPlotMarkerNum:(subPlot+1)*subPlotMarkerNum]
+            labels = end_points[subPlot*subPlotMarkerNum:(subPlot+1)*subPlotMarkerNum]
+            plt.boxplot(chunk)
+            plt.xticks(np.arange(1, len(labels) + 1, dtype=int), labels)
             # plt.xticks(rotation=90)
             if subPlot == 0:
                 plt.title('RMS errors of end points at checking postures')
             plt.ylabel('m')
         barPlot.savefig(figname2, format = "svg")
-        plt.close()
+        plt.close(barPlot)
         

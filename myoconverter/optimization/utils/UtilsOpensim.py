@@ -359,31 +359,31 @@ def getIndipCoordAndJoint(osimModel, constraint_coord_name):
         print(f"{constraint_coord.getName} is not a constrained coordinate.")
         return ([],[])
 
+    ind_coord_name = []
+    ind_coord_joint_name = []
+
     # otherwise search through the constraints
     for n in range(osimModel.getConstraintSet().getSize()):
 
-    # get current constraint
+        # get current constraint
         curr_constr = osimModel.getConstraintSet().get(n)
 
-    # this function assumes that the constraint will be a coordinate
-    # coupler contraint ( Arnold's model and LLLM uses this)
-    # cast down constraint
+        # cast down constraint
         curr_constr_casted = opensim.CoordinateCouplerConstraint.safeDownCast(curr_constr)
+        if curr_constr_casted is None:
+            continue
 
-    # get dep coordinate and check if it is the coord of interest
+        # get dep coordinate and check if it is the coord of interest
         dep_coord_name = curr_constr_casted.getDependentCoordinateName()
 
         if constraint_coord_name == dep_coord_name:
-    # if curr_constr_casted.getIndependentCoordinateNames().getSize
             ind_coord_name_set = curr_constr_casted.getIndependentCoordinateNames()
 
-    # extract independent coordinate and independent joint to which the
-    # coordinate refers
+            # extract independent coordinate and independent joint to which the coordinate refers
             if ind_coord_name_set.getSize() == 1:
                 ind_coord_name = curr_constr_casted.getIndependentCoordinateNames().get(0)
                 ind_coord_joint_name = osimModel.getCoordinateSet().get(ind_coord_name).getJoint().getName()
-    #  return ([],[])
-            elif ind_coord_name_set.getSize>1:
+            elif ind_coord_name_set.getSize() > 1:
                 print('getIndipCoordAndJoint.m. The CoordinateCouplerConstraint has more than one indipendent coordinate and this is not managed by this function yet.')
 
     return [ind_coord_name, ind_coord_joint_name]
@@ -406,8 +406,11 @@ def getModelJointDefinitions(osimModel):
     jointStructure={}
     for j in range(numJoints):
         tempJoint = modelJointSet.get(j)
-        jointStructure[tempJoint.getName()]={}
-        jointStructure[tempJoint.getName()]={'childFrame': tempJoint.getChildFrame().getName().replace('_offset',''),'parentFrame': tempJoint.getParentFrame().getName().replace('_offset','')}
+        child_frame = tempJoint.getChildFrame()
+        parent_frame = tempJoint.getParentFrame()
+        child_name = child_frame.findBaseFrame().getName() if hasattr(child_frame, "findBaseFrame") else child_frame.getName().replace('_offset', '')
+        parent_name = parent_frame.findBaseFrame().getName() if hasattr(parent_frame, "findBaseFrame") else parent_frame.getName().replace('_offset', '')
+        jointStructure[tempJoint.getName()] = {'childFrame': child_name, 'parentFrame': parent_name}
     return jointStructure
 
 

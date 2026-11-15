@@ -76,10 +76,9 @@ class MuscleForceOpt:
 
         # saving path has to be provided and valid
         try:
-            os.makedirs(saving_path, exist_ok = True) 
-         
-        except OSError:
-            raise("Please provide a valid saving path")
+            os.makedirs(saving_path, exist_ok = True)
+        except OSError as exc:
+            raise ValueError("Please provide a valid saving path") from exc
 
         self.save_path = saving_path
 
@@ -173,7 +172,7 @@ class MuscleForceOpt:
                         if not (np.abs(osim_range - mjc_range) < 0.005):
 
                             # change all the joint list set of cooresponding joint
-                            for i_set in len(muscle_para_mf['mjc_jit_list_set']):
+                            for i_set in range(len(muscle_para_mf['mjc_jit_list_set'])):
 
                                 jit_set_list = list(muscle_para_mf['mjc_jit_list_set'][i_set])
 
@@ -223,25 +222,23 @@ class MuscleForceOpt:
             
             fiber_len_range = np.zeros(2)
             
-            # use the osim mtu lengths to calcualte the mujoco muscle parameters
-            osim_mtu_len_arr = muscle_para['mtu_length_osim']
+            # use the osim mtu lengths to calculate the mujoco muscle parameters
+            osim_mtu_len_arr = np.array(muscle_para['mtu_length_osim'], copy=True)
 
-            # if the muscle length is constant, then separate them a bit, since mjc cannot handle equal bounds
-            if osim_mtu_len_arr[0] == osim_mtu_len_arr[-1]:
-                osim_mtu_len_arr[0] = osim_mtu_len_arr[0] - 0.005
-                osim_mtu_len_arr[1] = osim_mtu_len_arr[1] + 0.005
+            # extract true min/max across all sampled postures (handles extensor & multi-DOF muscles)
+            min_osim_mtu_len = float(np.min(osim_mtu_len_arr))
+            max_osim_mtu_len = float(np.max(osim_mtu_len_arr))
+            if min_osim_mtu_len == max_osim_mtu_len:
+                min_osim_mtu_len -= 0.005
+                max_osim_mtu_len += 0.005
             
             # calculate relative fiber lengths
-            fiber_len_range[0] = (osim_mtu_len_arr[0] - tendon_slack)/fiber_opt
-            fiber_len_range[1] = (osim_mtu_len_arr[-1] - tendon_slack)/fiber_opt
+            fiber_len_range[0] = (min_osim_mtu_len - tendon_slack)/fiber_opt
+            fiber_len_range[1] = (max_osim_mtu_len - tendon_slack)/fiber_opt
             
-            # make sure that the fiber length range is between [0.01, 1.99], which
-            # is reasonable
-            if fiber_len_range[0] < 0.01:
-                fiber_len_range[0] = 0.01
-            
-            if fiber_len_range[1] > 1.99:
-                fiber_len_range[1] = 1.99
+            # make sure that the fiber length range is ordered and within [0.01, 1.99]
+            fiber_len_range[0] = np.clip(fiber_len_range[0], 0.01, 1.95)
+            fiber_len_range[1] = np.clip(fiber_len_range[1], max(fiber_len_range[0] + 0.02, 0.05), 1.99)
             
             muscle_inst = self.mjc_model.actuator(muscle) #mujoco.mj_name2id(self.mjc_model, mujoco.mjtObj.mjOBJ_ACTUATOR, muscle)
             
@@ -250,18 +247,18 @@ class MuscleForceOpt:
             osimFP = muscle_para['mtu_force_osim']/fmax
             
             # actual muscle length
-            muscle_inst.lengthrange[0] = osim_mtu_len_arr[0]
-            muscle_inst.lengthrange[1] = osim_mtu_len_arr[-1]
+            muscle_inst.lengthrange[0] = min_osim_mtu_len
+            muscle_inst.lengthrange[1] = max_osim_mtu_len
             
             # operation range (nomalized by L0)
             muscle_inst.gainprm[0:2] = fiber_len_range
 
-            # set lmin and lmax equal 0.0 and 2.0
-            muscle_inst.gainprm[4] = 0.0
-            muscle_inst.gainprm[5] = 2.0
+            # initialize physiological Hill active force-length curve bounds [0.5, 1.6]
+            muscle_inst.gainprm[4] = 0.5
+            muscle_inst.gainprm[5] = 1.6
       
             # biasprm also NEEDS to be updated
-            muscle_inst.biasprm = muscle_inst.gainprm
+            muscle_inst.biasprm[:] = muscle_inst.gainprm
                     
             err_ind, mjc_mtu_length, cost_org = getMuscleForceDiff(self.mjc_model, muscle,\
                                                               joints_uniq, mjc_jnt_arr,\
@@ -284,32 +281,18 @@ class MuscleForceOpt:
                 muscle_inst.lengthrange[0] = min_mjc_mtu_length
                 muscle_inst.lengthrange[1] = max_mjc_mtu_length
                 
-                # set lmin and lmax as 0 and 1.8
-                muscle_inst.gainprm[4:6] = [0, 2]
-                muscle_inst.biasprm[4:6] = [0, 2]
+                # initialize lmin and lmax at physiological Hill defaults [0.5, 1.6]
+                muscle_inst.gainprm[4:6] = [0.5, 1.6]
+                muscle_inst.biasprm[4:6] = [0.5, 1.6]
 
                 # save current mujoco model into cvt3...
                 cvt3_model_path = self.mjc_model_path[0:-8] + 'cvt3.xml'
-                with open(cvt3_model_path, 'w+') as xml_file:
-                    mujoco.mj_saveLastXML(cvt3_model_path, self.mjc_model)
+                mujoco.mj_saveLastXML(cvt3_model_path, self.mjc_model)
 
-                # TODO: 
-                # set the muscle activation shift from 0 to 1
-                # act_list = np.linspace(0, 1, 5)
-                
-                
-                # only optimize when activation = 1
-
-                # generate parameter bounds
-                # If the range value equals the muscle extrem operation length, may cause
-                # negative muscle forces, therefore the force-length curve range must be
-                # larger the operation range. Adding/Substracting a small number (0.1) to 
-                # ensure this.
-
-                optParam_lb = [0.01, 1,\
-                               0.01, 0.5]  # lower bounds of lmin, lmax, fpmax, fmax
-                optParam_ub = [1, 1.99,\
-                               5, 2]  # upper bounds of lmin, lmax, fpmax, fmax
+                # Jointly optimize [range_min, range_max, lmin, lmax, fpmax, fmax_scale]
+                # so compliant-tendon muscles are not pinned at range[1] >= 1.0 or lmin=0, lmax=2 (#45)
+                optParam_lb = [0.01, 0.05, 0.2, 1.05, 0.01, 0.5]
+                optParam_ub = [1.90, 1.99, 0.95, 1.99, 5.0, 2.0]
                 
                 opt_results, self.mjc_model = fmOptPSO_cust(cvt3_model_path, muscle, joints_uniq,\
                                                        mjc_jnt_arr, act_arr, osimFP,\
@@ -332,10 +315,10 @@ class MuscleForceOpt:
             # extract muscle instance again.
             muscle_inst = self.mjc_model.actuator(muscle)
             
-            # change fmax back to normalized value
-            if len(muscle_para['opt_results']['res_opt']) > 0:
-                muscle_inst.gainprm[2] = muscle_para['opt_results']['res_opt'][3]*fmax
-               
+            # change fmax back to unnormalized force
+            res_opt = muscle_para['opt_results']['res_opt']
+            if res_opt is not None and len(res_opt) > 0:
+                muscle_inst.gainprm[2] = res_opt[-1]*fmax
             else:
                 muscle_inst.gainprm[2] = fmax
                 
@@ -344,12 +327,11 @@ class MuscleForceOpt:
             muscle_inst.gainprm[8] = 1.4
             
             # copy the parameter from gainprm to biasprm
-            muscle_inst.biasprm = muscle_inst.gainprm
+            muscle_inst.biasprm[:] = muscle_inst.gainprm
 
         # save the updated model
         cvt3_model_path = self.mjc_model_path[0:-8] + 'cvt3.xml'
-        with open(cvt3_model_path, 'w+') as xml_file:
-            mujoco.mj_saveLastXML(cvt3_model_path, self.mjc_model)
+        mujoco.mj_saveLastXML(cvt3_model_path, self.mjc_model)
             
         return cvt3_model_path 
             
@@ -373,46 +355,52 @@ class MuscleForceOpt:
             muscle_list = self.muscle_list
         else:
             # Scan the result folder to find all the <muscle_name>.pkl files and plot all of them
-            muscle_list = [os.path.split(f)[1][0:-4] for f in glob.glob(self.save_path + "/*.pkl")]
+            excluded_pkls = {"config", "overall_comp_muscleforces"}
+            muscle_list = [
+                os.path.split(f)[1][0:-4]
+                for f in glob.glob(self.save_path + "/*.pkl")
+                if os.path.split(f)[1][0:-4] not in excluded_pkls
+            ]
 
         rms_org = []
         rms_opt = []
 
         for i_mus, muscle in enumerate(muscle_list):
             # load the mus_para data from the saved files
-            with open(self.save_path + '/' + muscle + '.pkl', "rb+") as muscle_file:
+            with open(self.save_path + '/' + muscle + '.pkl', "rb") as muscle_file:
                 muscle_para_opt = pickle.load(muscle_file)
 
-                # generate force-length comparison plot for each muscle
-                mtu_force_osim = muscle_para_opt['mtu_force_osim']
-                mtu_force_osim_passive = muscle_para_opt['pas_force_osim']
-                mtu_length_osim = muscle_para_opt['mtu_length_osim']
-                joints = muscle_para_opt['jit_uniq']
-                # osim_jnt_arr = muscle_para_opt['jit_list_set']
-                mjc_jnt_arr = muscle_para_opt['mjc_jit_list_set']
-                act_arr = muscle_para_opt['act_list']
+            # generate force-length comparison plot for each muscle
+            mtu_force_osim = muscle_para_opt['mtu_force_osim']
+            mtu_force_osim_passive = muscle_para_opt['pas_force_osim']
+            mtu_length_osim = muscle_para_opt['mtu_length_osim']
+            joints = muscle_para_opt['jit_uniq']
+            # osim_jnt_arr = muscle_para_opt['jit_list_set']
+            mjc_jnt_arr = muscle_para_opt['mjc_jit_list_set']
+            act_arr = muscle_para_opt['act_list']
 
-                # generate muscle force length curves in mujoco
-                mtu_force_mjc, mtu_length_mjc =\
-                getMuscleForceLengthCurvesSim(mjc_model, muscle,\
-                                            joints, mjc_jnt_arr, act_arr)
-                                            
-                # get the passive muscle force length curves in mujoco
-                mtu_force_mjc_passive, mtu_length_mjc_passive =\
-                getMuscleForceLengthCurvesSim(mjc_model, muscle,\
-                                            joints, mjc_jnt_arr, [0])                             
+            # generate muscle force length curves in mujoco
+            mtu_force_mjc, mtu_length_mjc =\
+            getMuscleForceLengthCurvesSim(mjc_model, muscle,\
+                                        joints, mjc_jnt_arr, act_arr)
                                         
-                # plot the force comparison curves
-                self.curveplotForceLength(muscle, mtu_length_osim, mtu_force_osim,\
-                                        mtu_force_osim_passive, mtu_length_mjc, mtu_length_mjc_passive,\
-                                        mtu_force_mjc, mtu_force_mjc_passive, act_arr)
-                
-                # save mjc forve lenth curve as well
-                muscle_para_opt['mtu_force_mjc'] = mtu_force_mjc
-                muscle_para_opt['mtu_force_mjc_passive'] = mtu_force_mjc_passive
-                muscle_para_opt['mtu_length_mjc'] = mtu_length_mjc
-                muscle_para_opt['mtu_length_mjc_passive'] = mtu_length_mjc_passive
+            # get the passive muscle force length curves in mujoco
+            mtu_force_mjc_passive, mtu_length_mjc_passive =\
+            getMuscleForceLengthCurvesSim(mjc_model, muscle,\
+                                        joints, mjc_jnt_arr, [0])                             
+                                    
+            # plot the force comparison curves
+            self.curveplotForceLength(muscle, mtu_length_osim, mtu_force_osim,\
+                                    mtu_force_osim_passive, mtu_length_mjc, mtu_length_mjc_passive,\
+                                    mtu_force_mjc, mtu_force_mjc_passive, act_arr)
+            
+            # save mjc forve lenth curve as well
+            muscle_para_opt['mtu_force_mjc'] = mtu_force_mjc
+            muscle_para_opt['mtu_force_mjc_passive'] = mtu_force_mjc_passive
+            muscle_para_opt['mtu_length_mjc'] = mtu_length_mjc
+            muscle_para_opt['mtu_length_mjc_passive'] = mtu_length_mjc_passive
 
+            with open(self.save_path + '/' + muscle + '.pkl', "wb") as muscle_file:
                 pickle.dump(muscle_para_opt, muscle_file)
 
             # plot the overall comparison results when 'opt_results' exists.
@@ -463,9 +451,6 @@ class MuscleForceOpt:
         for c in range(actMesh):
             line_color = tuple([c, c, actMesh]/np.sqrt(2*c**2 + actMesh**2))
 
-            mjc_accend_index = np.argsort(length_mtu_mjc[c])
-            mjc_accend_passive_index = np.argsort(mtu_length_mjc_passive[c])
-
             ax1.plot(length_mtu_osim[osim_accend_index]*100, mtu_force_osim[c][osim_accend_index], marker = "s", color=line_color)
             ax1.plot(length_mtu_osim[osim_accend_index]*100, mtu_force_osim_passive[c][osim_accend_index], linestyle = "dashed",\
                         marker = "o", color=line_color)
@@ -478,8 +463,11 @@ class MuscleForceOpt:
 
         for c in range(actMesh):
             line_color = tuple([c, c, actMesh]/np.sqrt(2*c**2 + actMesh**2))
+            mjc_accend_index = np.argsort(length_mtu_mjc[c])
+            pas_idx = c if c < len(mtu_length_mjc_passive) else 0
+            mjc_accend_passive_index = np.argsort(mtu_length_mjc_passive[pas_idx])
             ax2.plot(length_mtu_mjc[c][mjc_accend_index]*100, -mjc_force_mjc[c][mjc_accend_index], marker = "s", color=line_color)
-            ax2.plot(mtu_length_mjc_passive[c][mjc_accend_passive_index]*100, -mtu_force_mjc_passive[c][mjc_accend_index], linestyle = "dashed",\
+            ax2.plot(mtu_length_mjc_passive[pas_idx][mjc_accend_passive_index]*100, -mtu_force_mjc_passive[pas_idx][mjc_accend_passive_index], linestyle = "dashed",\
                         marker = "o", color=line_color)
 
         plt.legend(["Total force", "Passive force"])
