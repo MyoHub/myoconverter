@@ -6,7 +6,7 @@
 import numpy as np
 from lxml import etree
 
-from myoconverter.xml.utils import calculate_mujoco_position, vec2str
+from myoconverter.xml.utils import calculate_mujoco_position, calculate_mujoco_transformation, vec2str
 from myoconverter.xml.wrap_objects.WrapObject import WrapObject
 
 
@@ -53,8 +53,10 @@ def add_wrapping_site(idx, sites, muscle_name, wrap_object_name, wrap_object_pos
     else:
       pos = points[point_idx]
 
-    # Get position relative to wrap object parent body position
-    pos = vec2str(pos - wrap_object_body_pos)
+    # Get position in wrap object parent body local frame
+    T_body = calculate_mujoco_transformation("body", wrap_object_body.attrib["name"], M_WORLDBODY)
+    local_pos = np.matmul(np.linalg.inv(T_body), np.append(pos, 1.0))[:3]
+    pos = vec2str(local_pos)
 
   else:
 
@@ -135,8 +137,10 @@ def maybe_add_wrapping_site(idx, sites, muscle_name, wrap_object_name, wrap_obje
       else:
         pos = points[closest_dist_idx]
 
-      # Get position relative to wrap object parent body position
-      pos = vec2str(pos - wrap_object_body_pos)
+      # Get position in wrap object parent body local frame
+      T_body = calculate_mujoco_transformation("body", wrap_object_body.attrib["name"], M_WORLDBODY)
+      local_pos = np.matmul(np.linalg.inv(T_body), np.append(pos, 1.0))[:3]
+      pos = vec2str(local_pos)
 
     else:
 

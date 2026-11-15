@@ -87,12 +87,13 @@ def get_moving_path_point_dependency(path_point, coordinate_name, socket_name, c
   """
 
   # Make sure the coordinate exists
-  if path_point.find(coordinate_name) is None:
+  coord_elem = path_point.find(coordinate_name)
+  if coord_elem is None:
     logger.critical(f"Coordinate f{coordinate_name} was not found in path point {path_point.attrib['name']}")
     raise RuntimeError
 
   # Check if the function is wrapped in a multiplier function
-  mult_fn = path_point.find(f"{coordinate_name}/MultiplierFunction")
+  mult_fn = coord_elem.find("MultiplierFunction")
   multiplier = 1
   if mult_fn is not None:
     multiplier = float(mult_fn.find("scale").text)
@@ -100,16 +101,24 @@ def get_moving_path_point_dependency(path_point, coordinate_name, socket_name, c
       logger.warning(f"Encountered a MultiplierFunction with scale != 1 in path point {path_point.attrib['name']}."
              f"This implementation has not been tested/validated, you better check it out yourself")
 
-  # Parse x and y values
-  if path_point.find(".//x") is None:
-    logger.critical(f"Path point {path_point.attrib['name']} is not formatted as expected")
+  # Support Constant coordinate axis on a MovingPathPoint (e.g., constant z_location with spline x/y)
+  const_elem = coord_elem.find(".//Constant")
+  if const_elem is not None and const_elem.find("value") is not None:
+    val = float(const_elem.find("value").text) * multiplier
+    return None, np.array([val, 0.0, 0.0, 0.0, 0.0]), np.array([val, val])
+
+  # Parse x and y values within this specific coordinate element
+  x_elem = coord_elem.find(".//x")
+  y_elem = coord_elem.find(".//y")
+  if x_elem is None or y_elem is None:
+    logger.critical(f"Path point {path_point.attrib['name']} coordinate {coordinate_name} is not formatted as expected")
     raise NotImplementedError
 
-  x_values = str2vec(path_point.find(f".//{coordinate_name}//x").text)
-  y_values = str2vec(path_point.find(f".//{coordinate_name}//y").text) * multiplier
+  x_values = str2vec(x_elem.text)
+  y_values = str2vec(y_elem.text) * multiplier
 
   # Figure out function type
-  function_type = path_point.find(".//x").getparent().tag
+  function_type = x_elem.getparent().tag
 
   if function_type not in {"SimmSpline", "NaturalCubicSpline", "PiecewiseLinearFunction"}:
     logger.critical(f"Function type {function_type} not implemented (in {path_point.tag} {path_point.attrib['name']}). "

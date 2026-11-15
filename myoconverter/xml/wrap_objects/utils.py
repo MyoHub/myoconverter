@@ -95,7 +95,7 @@ def find_wrap_path(xml, body, tendon, center):
   tendon_site_locations = []
   tendon_site_names = []
   tendon_site_idxs = []
-  tendon_children = tendon.getchildren()
+  tendon_children = list(tendon)
   for child_idx, tendon_child in enumerate(tendon_children):
 
     # We're only interested in sites

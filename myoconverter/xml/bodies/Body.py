@@ -4,7 +4,6 @@
 """
 
 from lxml import etree
-import os
 from scipy.spatial.transform import Rotation
 
 from myoconverter.xml.parsers import IParser
@@ -30,13 +29,15 @@ class Body(IParser):
     # Get position and orientation of body
     parent_position = str2vec(socket_parent_frame.find("translation").text)
     parent_orientation = str2vec(socket_parent_frame.find("orientation").text)
+    parent_rotation = Rotation.from_euler("XYZ", parent_orientation)
 
-    # Translate/rotate body position if needed
+    # Translate/rotate body position if needed: T_{Bp, Bc} = T_{Bp, Fp} * T_{Bc, Fc}^{-1}
     child_position = str2vec(socket_child_frame.find("translation").text)
-    parent_position -= child_position
     child_orientation = str2vec(socket_child_frame.find("orientation").text)
     child_rotation = Rotation.from_euler("XYZ", child_orientation)
-    parent_orientation = (child_rotation.inv() * Rotation.from_euler("XYZ", parent_orientation)).as_euler("XYZ")
+    rel_rotation = parent_rotation * child_rotation.inv()
+    parent_position = parent_position - rel_rotation.apply(child_position) + 0.0
+    parent_orientation = rel_rotation.as_euler("XYZ") + 0.0
 
     if root_body:
       # Does this apply to all models? Looks like it. Need to rotate by 90 degrees along x axis
@@ -64,7 +65,7 @@ class Body(IParser):
       mesh_name, mesh_file = copy_mesh_file(mesh.find("mesh_file").text, cfg.GEOMETRY_FOLDER, cfg.OUTPUT_GEOMETRY_FOLDER)
       etree.SubElement(cfg.M_ASSET, "mesh",
                        name=f"{mesh.attrib['name']}_{mesh_name}",
-                       file=os.path.join("Geometry", mesh_file),
+                       file=f"Geometry/{mesh_file}",
                        scale=mesh.find("scale_factors").text)
       etree.SubElement(next_body, "geom",
                        name=mesh.attrib["name"],

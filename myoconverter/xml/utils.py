@@ -198,6 +198,30 @@ def create_transformation_matrix(pos=None, quat=None, rotation_matrix=None, eule
 
   return T
 
+def _element_transformation_matrix(xml):
+  """ Build 4x4 local homogeneous transformation matrix for a MuJoCo XML element. """
+  pos = str2vec(xml.attrib.get("pos", "0 0 0"))
+  quat = str2vec(xml.attrib["quat"]) if "quat" in xml.attrib else None
+  euler = str2vec(xml.attrib["euler"]) if "euler" in xml.attrib else None
+  return create_transformation_matrix(pos=pos, quat=quat, euler=euler)
+
+def calculate_mujoco_transformation(tag, name, M_WORLDBODY):
+  """ Calculate 4x4 worldbody transformation matrix of an element in MuJoCo model.
+
+  :param tag: Tag of an element
+  :param name: Name of an element
+  :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody`
+  :return: 4x4 transformation matrix of the element in `worldbody` frame (in default pose)
+  """
+  xml = M_WORLDBODY.find(f".//{tag}[@name='{name}']")
+  T = _element_transformation_matrix(xml)
+
+  while xml.getparent().tag != "worldbody":
+    xml = xml.getparent()
+    T = np.matmul(_element_transformation_matrix(xml), T)
+
+  return T
+
 def calculate_mujoco_position(tag, name, M_WORLDBODY):
   """ Calculate position of an element in MuJoCo model
 
@@ -206,23 +230,7 @@ def calculate_mujoco_position(tag, name, M_WORLDBODY):
   :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody`
   :return: Position of the element in MuJoCo model (when in default pose)
   """
-
-  # Find element
-  xml = M_WORLDBODY.find(f".//{tag}[@name='{name}']")
-
-  # Get position (if doesn't exist, use default pos='0 0 0')
-  pos = str2vec(xml.attrib.get("pos", "0 0 0"))
-  T = np.linalg.inv(create_transformation_matrix(pos=pos))
-
-  # Go upwards in the kinematic tree until root body ("worldbody") and calculate position
-  while xml.getparent().tag != "worldbody":
-    xml = xml.getparent()
-    pos = str2vec(xml.attrib.get("pos", "0 0 0"))
-    T_ = create_transformation_matrix(pos=pos)
-    T = np.matmul(T, np.linalg.inv(T_))
-
-  T = np.linalg.inv(T)
-  return T[:3, 3]
+  return calculate_mujoco_transformation(tag, name, M_WORLDBODY)[:3, 3]
 
 def is_linear(polycoef):
   """ Check if polycoef represents a linear function.
@@ -236,8 +244,97 @@ def is_linear(polycoef):
   else:
     return False
 
+def _find_opensim_frame(OPENSIM, frame_ref):
+  """ Resolve an OpenSim frame reference (absolute path, relative path, or bare name) to an XML element. """
+  tokens = [t for t in frame_ref.strip().split("/") if t]
+  if not tokens or OPENSIM is None:
+    return None
+
+  cur = OPENSIM
+  for tok in tokens:
+    nxt = cur.find(f"*[@name='{tok}']")
+    if nxt is None:
+      for container_tag in ("objects", "components", "frames"):
+        container = cur.find(container_tag)
+        if container is not None:
+          nxt = container.find(f"*[@name='{tok}']")
+          if nxt is not None:
+            break
+    if nxt is None:
+      cur = None
+      break
+    if nxt.tag in {"BodySet", "JointSet", "ForceSet", "ConstraintSet", "MarkerSet"} and nxt.find("objects") is not None:
+      cur = nxt.find("objects")
+    else:
+      cur = nxt
+
+  if cur is not None and cur is not OPENSIM:
+    return cur
+
+  last = tokens[-1]
+  for tag in ("Body", "Ground", "PhysicalOffsetFrame"):
+    found = OPENSIM.find(f".//{tag}[@name='{last}']")
+    if found is not None:
+      return found
+  return None
+
+
+def get_body_and_transform(OPENSIM, M_WORLDBODY, parent_socket_frame):
+  """ Resolve an OpenSim `Body`, `Ground`, or `PhysicalOffsetFrame` reference to `(mujoco_body, T_offset_in_body)`.
+
+  :param OPENSIM: Pointer to OpenSim XML model
+  :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody` element
+  :param parent_socket_frame: Parent frame socket path or name
+  :return: Tuple `(mujoco_body, T_offset)` where `T_offset` is a 4x4 SE(3) matrix in `mujoco_body` coordinates
+  :raises RuntimeError: If a body with given name is not found in the MuJoCo model
+  """
+  tokens = [t for t in parent_socket_frame.strip().split("/") if t]
+  if not tokens:
+    logger.critical(f"Empty frame reference: '{parent_socket_frame}'")
+    raise RuntimeError
+
+  frame = _find_opensim_frame(OPENSIM, parent_socket_frame)
+  T_offset = np.eye(4)
+
+  visited = set()
+  while frame is not None and frame.tag == "PhysicalOffsetFrame" and id(frame) not in visited:
+    visited.add(id(frame))
+    trans_el = frame.find("translation")
+    orient_el = frame.find("orientation")
+    p = str2vec(trans_el.text) if trans_el is not None and trans_el.text is not None else np.zeros(3)
+    eul = str2vec(orient_el.text) if orient_el is not None and orient_el.text is not None else np.zeros(3)
+    T_offset = np.matmul(create_transformation_matrix(pos=p, euler=eul), T_offset)
+
+    sp_el = frame.find("socket_parent")
+    if sp_el is None or sp_el.text is None:
+      break
+    sp_text = sp_el.text.strip()
+    if sp_text == "..":
+      parent_el = frame.getparent()
+      while parent_el is not None and parent_el.tag in {"components", "frames", "objects"}:
+        parent_el = parent_el.getparent()
+      frame = parent_el
+    else:
+      tokens = [t for t in sp_text.split("/") if t]
+      frame = _find_opensim_frame(OPENSIM, sp_text)
+
+  body_name = frame.attrib["name"] if frame is not None and "name" in frame.attrib else tokens[-1]
+  mujoco_body = M_WORLDBODY.find(f".//body[@name='{body_name}']")
+  if mujoco_body is None:
+    if body_name.lower() == "ground":
+      ground_body = M_WORLDBODY.find("body[@name='ground']")
+      mujoco_body = ground_body if ground_body is not None else M_WORLDBODY
+    elif M_WORLDBODY.find(f"geom[@name='{body_name}']") is not None:
+      mujoco_body = M_WORLDBODY
+    else:
+      logger.critical(f"Body {tokens} not found in MuJoCo model")
+      raise RuntimeError
+
+  return mujoco_body, T_offset
+
+
 def get_body(OPENSIM, M_WORLDBODY, parent_socket_frame):
-  """ Get MuJoCo `body` corresponding to and OpenSim `Body`.
+  """ Get MuJoCo `body` corresponding to an OpenSim `Body`, `Ground`, or `PhysicalOffsetFrame`.
 
   :param OPENSIM: Pointer to OpenSim XML model
   :param M_WORLDBODY: Pointer to MuJoCo XML `worldbody` element
@@ -245,29 +342,7 @@ def get_body(OPENSIM, M_WORLDBODY, parent_socket_frame):
   :return: MuJoCo XML element corresponding to `Body`
   :raises: RuntimeError: If a body with given name is not found in the MuJoCo model
   """
-
-  # Make sure the frame name has two elements: first correspond to bodyset, the second to a body name
-  names = parent_socket_frame.split("/")[1:]
-
-  # Find opensim frame
-  frame = OPENSIM
-  for name in names:
-    frame = frame.find(f"*[@name='{name}']")
-    if frame.tag == "BodySet":
-      frame = frame.find("objects")
-
-  # Find the mujoco body; note that there is a special case when the frame may refer to worldbody/ground
-  mujoco_body = M_WORLDBODY.find(f".//body[@name='{frame.attrib['name']}']")
-  if mujoco_body is None:
-    # Check whether the frame refers to worldbody/ground
-    if M_WORLDBODY.find(f"geom[@name='{frame.attrib['name']}']") is not None:
-      mujoco_body = M_WORLDBODY
-    else:
-      logger.critical(f"Body {names} not found in MuJoCo model")
-      raise RuntimeError
-
-  # Return body
-  return mujoco_body
+  return get_body_and_transform(OPENSIM, M_WORLDBODY, parent_socket_frame)[0]
 
 def create_keyframe(MUJOCO, M_WORLDBODY, M_EQUALITY):
   """ Create a keyframe for the MuJoCo model.

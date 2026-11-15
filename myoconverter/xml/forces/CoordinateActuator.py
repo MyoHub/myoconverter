@@ -7,8 +7,9 @@ from lxml import etree
 
 from loguru import logger
 
+from myoconverter.xml.forces.TorqueActuator import TorqueActuator
 from myoconverter.xml.parsers import IParser
-from myoconverter.xml.utils import val2str, filter_nan_values, filter_keys
+from myoconverter.xml.utils import str2bool, val2str, filter_nan_values, filter_keys
 from myoconverter.xml import config as cfg
 
 
@@ -22,21 +23,15 @@ class CoordinateActuator(IParser):
     :return: None
     """
 
+    # Skip disabled actuators
+    if xml.find("appliesForce") is not None and not str2bool(xml.find("appliesForce").text):
+      return
+
     # Collect params/attributes
     params = {"name": xml.attrib["name"]}
 
-    # Get min/max control
-    min_control = xml.find("min_control")
-    min_control = "-inf" if min_control is None else min_control.text.lower()
-    max_control = xml.find("max_control")
-    max_control = "inf" if max_control is None else max_control.text.lower()
-
-    # If either is -inf/inf set ctrllimited=false, not sure if only one can be inf?
-    if min_control == "-inf" or max_control == "inf":
-      params["ctrllimited"] = False
-    else:
-      params["ctrllimited"] = True
-      params["ctrlrange"] = min_control + " " + max_control
+    # Parse min/max control safely (including equal min==max bounds)
+    TorqueActuator._parse_control_limits(xml, params)
 
     # Find out which joint is actuated
     params["joint"] = xml.find("coordinate").text
@@ -46,6 +41,7 @@ class CoordinateActuator(IParser):
     if joint is None:
       logger.critical(f"Joint {params['joint']} was not found in the converted MuJoCo model, but it is needed for "
                       f"CoordinateActuator {xml.attrib['name']}")
+      return
 
     # TODO how does optimal_force parameter relate to mujoco parameters? gear, gainprm, dynprm, biasprm?
     params["_optimal_force"] = xml.find("optimal_force")
@@ -56,5 +52,5 @@ class CoordinateActuator(IParser):
     # Add motor to MuJoCo model; must be located before muscles in the xml file
     # Find first muscle element, and add the motor just before that. This keeps the order of the actuators the same
     first_muscle = cfg.M_ACTUATOR.find("muscle")
-    idx = len(cfg.M_ACTUATOR.getchildren()) if first_muscle is None else cfg.M_ACTUATOR.index(first_muscle)
+    idx = len(cfg.M_ACTUATOR) if first_muscle is None else cfg.M_ACTUATOR.index(first_muscle)
     cfg.M_ACTUATOR.insert(idx, etree.Element("motor", attrib=val2str(filter_nan_values(filter_keys(params)))))

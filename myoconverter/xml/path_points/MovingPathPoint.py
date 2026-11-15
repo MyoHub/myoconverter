@@ -9,10 +9,11 @@ import os
 
 from loguru import logger
 
+from scipy.spatial.transform import Rotation
+
 from myoconverter.xml.parsers import IParser
-from myoconverter.xml.utils import vec2str
+from myoconverter.xml.utils import get_body_and_transform, vec2str
 from myoconverter.xml.path_points.utils import get_moving_path_point_dependency
-from myoconverter.xml.utils import get_body
 from myoconverter.xml.path_points.PathPoint import PathPoint
 from myoconverter.xml import config as cfg
 
@@ -63,19 +64,28 @@ class MovingPathPoint(IParser):
     # Get socket parent frame
     socket_parent_frame = xml.find("socket_parent_frame").text
 
-    # Get the mujoco body socket_parent_frame references to
-    body = get_body(cfg.OPENSIM, cfg.M_WORLDBODY, socket_parent_frame)
+    # Get the mujoco body socket_parent_frame references to (and any PhysicalOffsetFrame transform)
+    body, T_frame = get_body_and_transform(cfg.OPENSIM, cfg.M_WORLDBODY, socket_parent_frame)
 
     # Create a new "imaginary" body for this moving site. Need to be careful with setting the body name, there can be
     # multiple MovingPathPoints with the same name in the same body. Use muscle name to create a unique name.
     new_body = etree.SubElement(body, "body", name=f"{force_name}_{xml.attrib['name']}")
 
-    # Add an invisible geom with no collision properties; required so that mass/inertial properties are saved when xml
-    # file is saved in later optimisation stages. Set contype=2 and conaffinity=2 so that these won't collide
-    # with other geoms. Note! They can still collide with each other. But the position of the imaginary bodies are
-    # controlled by equality constraints so shouldn't be a problem? Also, the bodies are likely to be far enough from
-    # each other.
-    etree.SubElement(new_body, "geom", size="0.0005 0.0005 0.0005", rgba="0.0 0.0 1.0 0.0", contype="2", conaffinity="2")
+    # Give the auxiliary body an explicit <inertial> element so mj_saveLastXML in Steps 2 and 3 preserves a
+    # physically well-conditioned mass/inertia instead of dropping boundmass/boundinertia to ~5e-7 kg (#41).
+    parent_inertial = body.find("inertial")
+    if parent_inertial is not None and "mass" in parent_inertial.attrib:
+      mpp_mass = float(np.clip(0.001 * float(parent_inertial.attrib["mass"]), 1e-4, 0.01))
+    else:
+      mpp_mass = 0.005
+    mpp_inertia = max(1e-6, 0.002 * mpp_mass)
+    etree.SubElement(new_body, "inertial",
+                     pos="0 0 0",
+                     mass=f"{mpp_mass:.6g}",
+                     diaginertia=f"{mpp_inertia:.6g} {mpp_inertia:.6g} {mpp_inertia:.6g}")
+
+    # Invisible helper geom with collisions disabled (contype=0, conaffinity=0) so sibling moving sites never collide.
+    etree.SubElement(new_body, "geom", size="0.0005 0.0005 0.0005", rgba="0.0 0.0 1.0 0.0", contype="0", conaffinity="0")
 
     # Add joints and respective joint constraints -- unless the range is very small (less than 1 mm), in which case just
     # modify the position of the new body
@@ -99,7 +109,11 @@ class MovingPathPoint(IParser):
     else:
       self._add_joint(new_body, f"{force_name}_{xml.attrib['name']}_z", joint_z, polycoef_z, range_z, "0 0 1")
 
-    # Set pos of new_body
+    # Set pos (and euler if attached via a rotated PhysicalOffsetFrame) of new_body
+    if not np.allclose(T_frame, np.eye(4)):
+      pos = (T_frame @ np.append(pos, 1.0))[:3]
+      if not np.allclose(T_frame[:3, :3], np.eye(3)):
+        new_body.attrib["euler"] = vec2str(Rotation.from_matrix(T_frame[:3, :3]).as_euler("XYZ"))
     new_body.attrib["pos"] = vec2str(pos)
 
     # Add this path point to the body, and to the given tendon
@@ -126,7 +140,8 @@ class MovingPathPoint(IParser):
                      joint1=name,
                      joint2=joint,
                      polycoef=vec2str(polycoef),
-                     solimp="0.9999 0.9999 0.001 0.5 2")
+                     solref="0.01 1",
+                     solimp="0.99999 0.99999 0.001 0.5 2")
 
   def _small_range(self, vec):
     """ Check whether the range is very small.
