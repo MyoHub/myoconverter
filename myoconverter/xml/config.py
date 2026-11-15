@@ -73,7 +73,7 @@ def initialise(xml_file, output_folder, **kwargs):
     OUTPUT_PLOT_FOLDER
   OUTPUT_FOLDER = output_folder
   OUTPUT_GEOMETRY_FOLDER = os.path.join(OUTPUT_FOLDER, "Geometry")
-  MODEL_NAME = os.path.split(xml_file)[1][:-5]
+  MODEL_NAME = os.path.splitext(os.path.basename(xml_file))[0]
   OUTPUT_XML_FILE = os.path.join(OUTPUT_FOLDER, MODEL_NAME + "_cvt1.xml")
   # OUTPUT_LOG_FILE = os.path.join(OUTPUT_FOLDER, f"{MODEL_NAME}-conversion.log")
   OUTPUT_PLOT_FOLDER = os.path.join(OUTPUT_FOLDER, "Step1_xmlConvert")
@@ -108,6 +108,8 @@ def initialise(xml_file, output_folder, **kwargs):
   global OPENSIM, O_GROUND, O_BODYSET, O_JOINTSET, O_FORCESET, O_CONSTRAINTSET, O_MARKERSET
   OPENSIM = etree.parse(xml_file, parser).getroot().find("Model")
   O_GROUND = OPENSIM.find("Ground")
+  if O_GROUND is None:
+    O_GROUND = etree.Element("Ground", name="ground")
   O_BODYSET = OPENSIM.find("BodySet/objects")
   O_BODYSET = [] if O_BODYSET is None else O_BODYSET
   O_JOINTSET = OPENSIM.find("JointSet/objects")

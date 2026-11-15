@@ -64,6 +64,11 @@ def copy_mesh_file(mesh_file, geometry_folder, output_geometry_folder):
   elif ext_lower == ".stl":
     copyfile(os.path.join(geometry_folder, mesh_file), stl_filepath)
 
+  # Convert obj or ply meshes into stl via trimesh
+  elif ext_lower in {".obj", ".ply"}:
+    tmesh = trimesh.load(os.path.join(geometry_folder, mesh_file), force="mesh")
+    tmesh.export(stl_filepath)
+
   else:
     logger.critical("Geom file is not vtp or stl!")
     raise NotImplementedError

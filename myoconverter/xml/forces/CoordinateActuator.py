@@ -7,6 +7,7 @@ from lxml import etree
 
 from loguru import logger
 
+from myoconverter.xml.forces.TorqueActuator import TorqueActuator
 from myoconverter.xml.parsers import IParser
 from myoconverter.xml.utils import str2bool, val2str, filter_nan_values, filter_keys
 from myoconverter.xml import config as cfg
@@ -29,18 +30,8 @@ class CoordinateActuator(IParser):
     # Collect params/attributes
     params = {"name": xml.attrib["name"]}
 
-    # Get min/max control
-    min_control = xml.find("min_control")
-    min_control = "-inf" if min_control is None else min_control.text.lower()
-    max_control = xml.find("max_control")
-    max_control = "inf" if max_control is None else max_control.text.lower()
-
-    # If either is -inf/inf set ctrllimited=false, not sure if only one can be inf?
-    if min_control == "-inf" or max_control == "inf":
-      params["ctrllimited"] = False
-    else:
-      params["ctrllimited"] = True
-      params["ctrlrange"] = min_control + " " + max_control
+    # Parse min/max control safely (including equal min==max bounds)
+    TorqueActuator._parse_control_limits(xml, params)
 
     # Find out which joint is actuated
     params["joint"] = xml.find("coordinate").text

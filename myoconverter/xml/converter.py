@@ -80,6 +80,27 @@ def _parse_bodies_and_joints():
   logger.info("Starting to parse bodies, wrapping objects, and joints")
   _add_bodies_and_joints(f"/{cfg.O_GROUND.attrib['name']}", cfg.M_WORLDBODY, root_body=True)
 
+def _resolve_joint_frame(joint, tag_name):
+  """ Resolve `socket_parent_frame` or `socket_child_frame` on an OpenSim Joint, supporting both inline `<frames>` and direct body/frame paths. """
+  frame_ref = joint.find(tag_name).text.strip()
+  short_name = frame_ref.split("/")[-1]
+  frames = joint.find("frames")
+  if frames is not None:
+    local_frame = frames.find(f".//*[@name='{short_name}']")
+    if local_frame is not None:
+      return local_frame
+
+  ext_frame = cfg.OPENSIM.find(f".//PhysicalOffsetFrame[@name='{short_name}']")
+  if ext_frame is not None and (frame_ref == short_name or frame_ref.endswith(f"/{short_name}")):
+    return ext_frame
+
+  synth = etree.Element("PhysicalOffsetFrame", name=f"{short_name}_synth")
+  etree.SubElement(synth, "socket_parent").text = frame_ref
+  etree.SubElement(synth, "translation").text = "0 0 0"
+  etree.SubElement(synth, "orientation").text = "0 0 0"
+  return synth
+
+
 def _add_bodies_and_joints(parent_name, current_body, root_body=False):
   """ Add OpenSim `Body` and related `Joint`s to MuJoCo model in a recurrent fashion.
 
@@ -88,28 +109,26 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
   :param root_body: Boolean to indicate whether current body is the root of the kinematic chain or not
   :return: None
   """
+  if len(cfg.O_JOINTSET) == 0:
+    return
 
-  # Find ALL frames with 'parent_name' as socket parent. This will contain some incorrect frames as well,
-  # we'll need to cut them by checking whether they are socket_parent_frames or socket_child_frames
-  socket_parent = cfg.O_JOINTSET.xpath(f".//socket_parent[text()='{parent_name}']")
+  parent_short = parent_name.strip().split("/")[-1]
 
-  for s in socket_parent:
+  for joint in cfg.O_JOINTSET:
+    socket_parent_frame = _resolve_joint_frame(joint, "socket_parent_frame")
+    socket_child_frame = _resolve_joint_frame(joint, "socket_child_frame")
 
-    # Get parent until WeldJoint, CustomJoint, etc
-    frames = s.getparent().getparent()
-    joint = frames.getparent()
+    p_ref = socket_parent_frame.find("socket_parent").text.strip()
+    c_ref = socket_child_frame.find("socket_parent").text.strip()
 
-    # Get parent and child socket frames (can be PhysicalOffsetFrame, or PhysicalFrame? Let's use wildcard
-    # in the find so we don't need to care about the tag)
-    socket_parent_frame = frames.find(f".//*[@name='{joint.find('socket_parent_frame').text}']")
-    socket_child_frame = frames.find(f".//*[@name='{joint.find('socket_child_frame').text}']")
-
-    # Ignore child socket frames
-    if socket_child_frame.find("socket_parent").text == parent_name:
+    if p_ref.split("/")[-1] != parent_short or c_ref.split("/")[-1] == parent_short:
       continue
 
-    # Find child body of joint
-    child_body = find_element_by_name(cfg.OPENSIM, split_name(socket_child_frame.find("socket_parent").text))
+    # Find child body of joint (supports both '/bodyset/name' paths and bare body names)
+    c_tokens = [t for t in c_ref.split("/") if t]
+    child_body = find_element_by_name(cfg.OPENSIM, c_tokens) if len(c_tokens) >= 2 else None
+    if child_body is None:
+      child_body = cfg.OPENSIM.find(f".//Body[@name='{c_tokens[-1]}']")
 
     # Parse body
     next_body = cfg.BODY_PARSER.parse(child_body,
@@ -126,8 +145,7 @@ def _add_bodies_and_joints(parent_name, current_body, root_body=False):
                            root_body=root_body)
 
     # Move to next joint
-    child_name = socket_child_frame.find('socket_parent').text
-    _add_bodies_and_joints(child_name, next_body)
+    _add_bodies_and_joints(c_ref, next_body)
 
 def _parse_ground():
   """ Parse OpenSim `Ground`.

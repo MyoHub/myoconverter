@@ -6,13 +6,12 @@
             inertiagrouprange="0 1">
     <lengthrange inttotal="50" useexisting="true"/>
   </compiler>
-  <option collision="predefined"/>
   <visual>
     <scale framelength="0.5" framewidth="0.01"/>
   </visual>
   <default>
     <joint limited="true" damping="0.05" armature="0.00001" stiffness="0"/>
-    <geom rgba="0.8 0.6 .4 1" margin="0.001"/>
+    <geom contype="0" conaffinity="0" rgba="0.8 0.6 .4 1" margin="0.001"/>
     <site size="0.001"/>
     <tendon width="0.005" rgba=".95 .3 .3 1" limited="false"/>
     <default class="muscle">
@@ -25,7 +24,7 @@
   <option timestep="0.002"/>
   <!-- nuser_jnt=1, the parameter is used to store default value of the joint, and nkey=1 to store keyframe with
    default joint positions set !-->
-  <size njmax="1000" nconmax="400" nuser_jnt="1" nkey="1"/>
+  <size nuser_jnt="1" nkey="1"/>
   <worldbody>
       <!-- The converter script assumes a body named 'ground' exists as a child element of worldbody -->
     <body name="ground"/>
