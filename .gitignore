@@ -70,6 +70,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/build/
 
 # PyBuilder
 .pybuilder/
@@ -148,6 +149,10 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+# Ruff & MuJoCo logs
+.ruff_cache/
+MUJOCO_LOG.TXT
 
 # Cython debug symbols
 cython_debug/

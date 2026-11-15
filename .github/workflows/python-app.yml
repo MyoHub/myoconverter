@@ -1,14 +1,14 @@
 on:
   push:
-    branches: ["main", "dev*", " feature/*"]
+    branches: ["main", "development", "dev*", "feature/*"]
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**/README.md"
 
   pull_request:
-    branches: ["main", "dev/*", "feature/*"]
+    branches: ["main", "development", "dev*", "feature/*"]
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**/README.md"
 
 permissions:
@@ -25,72 +25,83 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-22.04"]
+        os: ["ubuntu-22.04", "ubuntu-latest"]
 #        os: ["ubuntu-22.04", "ubuntu-latest", "windows-latest"]
         python-version: ["3.11"]
         include:
           - os: ubuntu-22.04
+            python-version: "3.11"
             use-mamba: false
             miniforge-variant: Miniforge3
             conda-cmd: conda
           - os: ubuntu-latest
+            python-version: "3.11"
             use-mamba: true
-            miniforge-variant: Mambaforge
+            miniforge-variant: Miniforge3
             conda-cmd: mamba
 #          - os: windows-latest
 #            use-mamba: true
-#            miniforge-variant: Mambaforge
+#            miniforge-variant: Miniforge3
 #            conda-cmd: mamba
     steps:
       - name: Checkout repository and submodules
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install ruff pytest
+      - name: Lint syntax and undefined names with Ruff
+        run: |
+          ruff check . --select=E9,F63,F7,F82 --statistics --exclude myoconverter/xml/forces/CoordinateLimitForce.py
       - name: Install mesa and patchelf
         if: ${{ runner.os == 'Linux' }}
         run: |
+          sudo apt-get update
           sudo apt-get install -y \
+              build-essential \
+              libgl1 \
               libgl1-mesa-dev \
-              libgl1-mesa-glx \
               libglew-dev \
               libosmesa6-dev \
               libglfw3 \
               libosmesa6 \
+              patchelf \
               software-properties-common
-          sudo apt-get install -y patchelf
-          sudo apt install build-essential
       - name: Setup ${{ matrix.miniforge-variant }}
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: myoConverter
-          auto-activate-base: false
-          auto-update-conda: true
-          environment-file: conda_env.yml
+          installation-dir: ${{ runner.temp }}/miniforge3
+          activate-environment: ""
+          auto-activate: false
+          auto-update-conda: false
           miniforge-variant: ${{ matrix.miniforge-variant }}
           miniforge-version: latest
-          python-version: ${{ matrix.python-version }}
-          use-mamba: ${{ matrix.use-mamba }}
-          channels: conda-forge
+          channels: conda-forge,opensim-org
           channel-priority: flexible
+      - name: Create myoconverter environment
+        run: |
+          ${{ matrix.conda-cmd }} env create -n myoconverter -f conda_env.yml
       - name: Output ${{ matrix.miniforge-variant }} information
         run: |
+          conda activate myoconverter
           ${{ matrix.conda-cmd }} info
           ${{ matrix.conda-cmd }} list
-          ${{ matrix.conda-cmd }} config --show-sources
-          ${{ matrix.conda-cmd }} config --show
+          conda config --show-sources
+          conda config --show
       - name: Set PYTHONPATH
         run: |
-          echo "PYTHONPATH=home/runner/work/myoConverter/myoConverter" >> $GITHUB_ENV
-          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+          echo "PYTHONPATH=${{ github.workspace }}" >> "$GITHUB_ENV"
+      - name: Run CLI and pipeline unit tests
+        run: |
+          conda activate myoconverter
+          python -m pytest myoconverter/tests/test_cli_and_pipeline.py -v
       - name: Test model conversion
         run: |
-          conda activate myoConverter
-          python myoconverter/tests/model_unit_test.py
+          conda activate myoconverter
+          MPLBACKEND=Agg MUJOCO_GL=osmesa python myoconverter/tests/model_unit_test.py

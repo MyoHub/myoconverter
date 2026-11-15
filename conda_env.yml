@@ -1,7 +1,5 @@
 name: myoconverter
 channels:
-  - anaconda
-  - defaults
   - conda-forge
   - opensim-org
 dependencies:
@@ -14,10 +12,14 @@ dependencies:
   - pyqt=5.15.10
   - python=3.11
   - qt-main=5.15
-  - opensim=>4.0
-  - lxml
+  - opensim>=4.0
+  - lxml<5
   - loguru
+  - networkx
+  - pytest
   - scikit-learn
+  - scipy
   - seaborn
   - trimesh
   - pyvista
+
